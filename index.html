@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Simulation</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="leaflet/leaflet.css" />
+    <script src="leaflet/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="toolbar">
+        <button data-action="tool1">工具1</button>
+        <button data-action="tool2">工具2</button>
+        <button data-action="tool3">工具3</button>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <button class="nav-button" data-submenu="submenu1">Radar</button>
+            <ul id="submenu1" class="submenu" style="display: none;">
+                <li draggable="true" data-type="radar">radar1</li>
+                <li draggable="true" data-type="radar">radar2</li>
+            </ul>
+            <button class="nav-button" data-submenu="submenu2">Object</button>
+            <ul id="submenu2" class="submenu" style="display: none;">
+                <li draggable="true" data-type="airplane">plane1</li>
+                <li draggable="true" data-type="airplane">plane2</li>
+            </ul>
+        </div>
+        <div class="map-container">
+            <div id="map" style="height: 100%; width: 100%;"></div>
+        </div>
+
+        <div id="context-menu" style="display:none; position: absolute; background-color: white; border: 1px solid #ccc; padding: 5px; z-index: 1000;">
+            <ul style="list-style-type: none; margin: 0; padding: 0;">
+                <li id="start-flight">飞行</li>
+                <li id="delete">删除</li>
+                <li id="start-scan">扫描</li>
+            </ul>
+        </div>
+        
+
+        <!-- 右侧雷达显示区域 -->
+        <div class="radar-display" id="radar-container">
+            <!-- 雷达组件将在这里动态生成 -->
+        </div>
+        
+    </div>
+
+    <!-- 引入各个模块的脚本 -->
+    <script src="js/utils.js"></script> 
+    <script src="js/ContextMenu.js"></script>
+    <script src="js/AirplaneContextMenu.js"></script>
+    <script src="js/RadarContextMenu.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/toolbar.js"></script>
+    <script src="js/mapController.js"></script>
+    <script src="js/airplane.js"></script>
+    <script src="js/radar.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
