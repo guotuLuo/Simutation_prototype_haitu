@@ -1,0 +1,63 @@
+/* 设置 body 和 html */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #222;
+}
+
+/* 雷达容器居中并自适应窗口 */
+.radar-container {
+    position: relative;
+    width: 60vmin; /* 使雷达容器的宽度根据视口大小自适应 */
+    height: 60vmin; /* 高度与宽度保持一致，确保是圆形 */
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #000;
+}
+
+/* 雷达背景（圆形背景） */
+.radar-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 255, 0, 0.1) 1%, rgba(0, 0, 0, 0.9) 50%);
+    z-index: 1;
+}
+
+/* 扫描线 */
+.radar-scanline {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background-color: rgba(0, 255, 0, 0.5);
+    transform-origin: 50% 0%;
+    animation: scanlineAnimation 4s linear infinite;
+}
+
+/* 动画：雷达扫描线 */
+@keyframes scanlineAnimation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 目标的样式 */
+.target {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    z-index: 2;
+}
