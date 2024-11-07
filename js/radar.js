@@ -6,10 +6,12 @@ class Radar {
         this.icon = icon;
         this.contextMenu = contextMenu;
         this.marker = this.createMarker();
-        this.radarCenter = this.marker.getLatLng; // 雷达中心的地理坐标
+        this.radarCenter = this.marker.getLatLng(); // 雷达中心的地理坐标
         this.scanRadius = 60000; // 扫描半径，单位为米
-        this.detectedPlanes = []; // 存储被检测到的飞机
+        this.detectedPoints = []; // 存储被检测到的飞机
         this.scanInterval = null; // 用于保存扫描的定时器
+        this.Points = [];
+        this.markerElement = []
     }
 
     createMarker() {
@@ -67,30 +69,44 @@ class Radar {
     startScan() {
         console.log("开始雷达扫描");
         // 创建扫描线动画
+
+        axios.get("http://127.0.0.1:8081/api/radars/scan")
+        .then(response => {
+            const data = response.data;
+            console.log("接收到的 HashMap:", data);
+
+            // 处理接收到的数据
+            this.Points = Object.entries(data).map(([key, airplaneData]) => {
+                return new Point(airplaneData.id, airplaneData.lat, airplaneData.lon);
+            });
+        })
+        .catch(error => {
+            console.error("请求失败:", error);
+        });
+
         const radarScanline = document.querySelector(".radar-scanline");
         radarScanline.classList.add("scanning"); // 为扫描线添加动画类
 
         // 开始定时扫描
         this.scanInterval = setInterval(() => {
-            // 清空上次扫描的结果
-            this.detectedPlanes.forEach(plane => plane.removeMarker());
-            this.detectedPlanes = [];
+            this.detectedPoints = [];
 
             // 遍历所有飞机，捕获范围内的飞机
-            allAirplanes.forEach(airplane => {
-                const planePosition = airplane.getLatLng();
-                const distance = this.map.distance(this.radarCenter, planePosition); // 计算距离
+            this.Points.forEach(point => {
+                const planePosition = point.getLatLng();
+                const distance = this.map.distance(this.radarCenter, planePosition)// 计算距离
 
                 if (distance <= this.scanRadius) {
                     // 如果在扫描范围内
-                    this.detectedPlanes.push(airplane);
-                    this.addPlaneToRadar(airplane); // 显示在雷达表盘上
+                    this.detectedPoints.push(point);
+                    this.addPlaneToRadar(point); // 显示在雷达表盘上
                 }
             });
 
-            console.log(`捕获到 ${this.detectedPlanes.length} 架飞机`);
+            console.log(`捕获到 ${this.detectedPoints.length} 架飞机`);
         }, 1000); // 每秒扫描一次
     }
+
 
     // 停止扫描
     stopScan() {
@@ -102,13 +118,13 @@ class Radar {
         radarScanline.classList.remove("scanning");
 
         // 清除雷达表盘上的飞机显示
-        this.detectedPlanes.forEach(plane => plane.removeMarker());
-        this.detectedPlanes = [];
+        this.detectedPoints.forEach(plane => plane.removeMarker());
+        this.detectedPoints = [];
     }
 
     // 将飞机添加到雷达表盘上
-    addPlaneToRadar(airplane) {
-        const planePosition = airplane.getLatLng();
+    addPlaneToRadar(point) {
+        const planePosition = point.getLatLng();
         const distance = this.map.distance(this.radarCenter, planePosition);
         const angle = this.calculateAngle(this.radarCenter, planePosition);
 
@@ -127,8 +143,8 @@ class Radar {
         planeMarker.style.left = `${x}px`;
         planeMarker.style.top = `${y}px`;
 
-        document.querySelector(".radar-container").appendChild(planeMarker);
-        airplane.markerElement = planeMarker; // 保存标记，以便清除时使用
+        document.getElementById("radar-container").appendChild(planeMarker);
+        this.markerElement.push(planeMarker); // 保存标记，以便清除时使用
     }
 
     // 计算两个地理坐标之间的角度
@@ -145,5 +161,7 @@ class Radar {
         if (radarItem) {
             radarItem.remove();
         }
+        const url = `http://127.0.0.1:8081/api/radars/delete?uuid=${encodeURIComponent(this.id)}`;
+        navigator.sendBeacon(url);
     }
 }

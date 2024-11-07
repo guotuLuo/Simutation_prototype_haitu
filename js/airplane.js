@@ -136,21 +136,18 @@ class Airplane {
 
     // 向后端发送坐标的方法
     sendCoordinates() {
-        fetch("http://127.0.0.1:8081/api/airplanes/upload", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                id: this.id,
-                lat: this.marker.getLatLng().lat,
-                lon: this.marker.getLatLng().lng
-            })
-        }).then(response => {
-            if (response.ok) {
-                console.log(`飞机 ${this.id} 坐标已成功上传到服务器`);
-            }
-        }).catch(error => {
+        axios.post("http://127.0.0.1:8081/api/airplanes/upload", {
+            id: this.id,
+            lat: this.marker.getLatLng().lat,
+            lon: this.marker.getLatLng().lng
+        })
+        .then(response => {
+            console.log(`飞机 ${this.id} 坐标已成功上传到服务器`);
+        })
+        .catch(error => {
             console.error(`飞机 ${this.id} 坐标上传失败:`, error);
         });
+        
     }
 
     // 启动定时任务，每秒发送一次
@@ -176,7 +173,11 @@ class Airplane {
         if (this.marker) {
             this.marker.remove();
         }
-    
+        console.log(this.id);
+        // 不能用一步axios，要不然关闭页面的时候来不及发送删除请求，
+        // 导致下一次打开页面的时候保存的飞机数量不对
+        const url = `http://127.0.0.1:8081/api/airplanes/delete?uuid=${encodeURIComponent(this.id)}`;
+        navigator.sendBeacon(url);
         console.log("飞机及其所有点迹已删除");
     }
     

@@ -30,6 +30,12 @@ public class AirplaneController {
         return ResponseEntity.ok("飞机坐标已接收");
     }
 
+    @PostMapping("/delete")
+    public void delete(@RequestParam String uuid){
+        System.out.println("删除飞机： " + uuid);
+        airplaneHashMap.remove(uuid);
+    }
+
 
     // 获取所有飞机的坐标数据（可选，用于前端查询）
 }
