@@ -133,12 +133,12 @@ body, html {
     }
 }
 
-/* 目标的样式 */
-.target {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: red;
-    z-index: 2;
+.plane-marker {
+    width: 10px;           /* 红点的宽度 */
+    height: 10px;          /* 红点的高度 */
+    background-color: red; /* 红点颜色 */
+    border-radius: 50%;    /* 使红点变为圆形 */
+    position: absolute;    /* 绝对定位，确保定位生效 */
+    z-index: 10;           /* 确保红点在其他元素上方 */
 }
+

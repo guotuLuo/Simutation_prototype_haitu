@@ -18,79 +18,68 @@ class Radar {
         this.id = generateUUID();
         const marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
         marker.bindPopup("雷达: " + this.id).openPopup();
-
+    
         // 绑定右键菜单显示事件
         marker.on('contextmenu', (event) => {
             event.originalEvent.preventDefault();
             this.contextMenu.show(event, this);
         });
-
-
-        // 生成 UUID
-
+    
         // 创建雷达组件容器
         const radarItem = document.createElement("div");
         radarItem.className = "radar-item";
         radarItem.id = this.id;
-
-        // 创建雷达背景
+    
+        // 创建雷达背景并设置唯一 id
         const radarBackground = document.createElement("div");
         radarBackground.className = "radar-background";
-
+        radarBackground.id = `radar-background-${this.id}`; // 设置唯一 id
+    
         // 创建扫描线
         const radarScanline = document.createElement("div");
         radarScanline.className = "radar-scanline";
-
-        // 创建目标点（示例位置，实际应用中可以根据需要动态定位）
-        const target = document.createElement("div");
-        target.className = "target";
-        target.style.top = "30px"; // 可以根据需要调整位置
-        target.style.left = "40px";
-
+    
         // 将扫描线和目标点添加到雷达背景
         radarBackground.appendChild(radarScanline);
-        radarBackground.appendChild(target);
-
+    
         // 创建 UUID 显示区域
         const radarText = document.createElement("p");
         radarText.textContent = `雷达 UUID: ${this.id}`;
-
+    
         // 将所有元素添加到雷达组件
         radarItem.appendChild(radarBackground);
         radarItem.appendChild(radarText);
-
+    
         // 将雷达组件添加到右侧容器中
         document.getElementById("radar-container").appendChild(radarItem);
-
-
+    
         return marker;
     }
+    
 
     startScan() {
         console.log("开始雷达扫描");
         // 创建扫描线动画
 
-        axios.get("http://127.0.0.1:8081/api/radars/scan")
-        .then(response => {
-            const data = response.data;
-            console.log("接收到的 HashMap:", data);
 
-            // 处理接收到的数据
-            this.Points = Object.entries(data).map(([key, airplaneData]) => {
-                return new Point(airplaneData.id, airplaneData.lat, airplaneData.lon);
-            });
-        })
-        .catch(error => {
-            console.error("请求失败:", error);
-        });
 
-        const radarScanline = document.querySelector(".radar-scanline");
-        radarScanline.classList.add("scanning"); // 为扫描线添加动画类
+        // const radarScanline = document.querySelector(".radar-scanline");
+        // radarScanline.classList.add("scanning"); // 为扫描线添加动画类
 
         // 开始定时扫描
         this.scanInterval = setInterval(() => {
             this.detectedPoints = [];
-
+            axios.get("http://127.0.0.1:8081/api/radars/scan")
+            .then(response => {
+                const data = response.data;
+                // 处理接收到的数据
+                this.Points = Object.entries(data).map(([key, airplaneData]) => {
+                    return new Point(airplaneData.id, airplaneData.lat, airplaneData.lon);
+                });
+            })
+            .catch(error => {
+                console.error("请求失败:", error);
+            });
             // 遍历所有飞机，捕获范围内的飞机
             this.Points.forEach(point => {
                 const planePosition = point.getLatLng();
@@ -102,7 +91,6 @@ class Radar {
                     this.addPlaneToRadar(point); // 显示在雷达表盘上
                 }
             });
-
             console.log(`捕获到 ${this.detectedPoints.length} 架飞机`);
         }, 1000); // 每秒扫描一次
     }
@@ -122,29 +110,36 @@ class Radar {
         this.detectedPoints = [];
     }
 
-    // 将飞机添加到雷达表盘上
     addPlaneToRadar(point) {
         const planePosition = point.getLatLng();
         const distance = this.map.distance(this.radarCenter, planePosition);
         const angle = this.calculateAngle(this.radarCenter, planePosition);
-
-        // 将地理距离转换为雷达表盘上的像素距离
-        const radarRadiusInPixels = 150; // 假设雷达表盘的半径为150像素
-        const distanceRatio = distance / this.scanRadius; // 距离比例
+    
+        // 转换距离到雷达表盘像素距离
+        const radarRadiusInPixels = 150;
+        const distanceRatio = distance / this.scanRadius;
         const displayDistance = distanceRatio * radarRadiusInPixels;
-
+    
         // 计算飞机在雷达表盘上的位置
         const x = Math.cos(angle) * displayDistance + radarRadiusInPixels;
         const y = Math.sin(angle) * displayDistance + radarRadiusInPixels;
-
+    
         // 创建飞机的显示标记
         const planeMarker = document.createElement("div");
-        planeMarker.classList.add("plane-marker");
+        planeMarker.className = "plane-marker";
         planeMarker.style.left = `${x}px`;
         planeMarker.style.top = `${y}px`;
-
-        document.getElementById("radar-container").appendChild(planeMarker);
-        this.markerElement.push(planeMarker); // 保存标记，以便清除时使用
+    
+        // 将飞机标记添加到对应的雷达背景中
+        const radarBackground = document.getElementById(`radar-background-${this.id}`);
+        if (radarBackground) {
+            radarBackground.appendChild(planeMarker);
+        }else{
+            console.log("查找失败");
+        }
+        
+        // 保存标记，以便清除时使用
+        this.markerElement.push(planeMarker);
     }
 
     // 计算两个地理坐标之间的角度
