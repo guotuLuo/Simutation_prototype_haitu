@@ -21,14 +21,11 @@ public class RadarController {
     @GetMapping ("/scan")
     public ResponseEntity<HashMap<String, Airplane>> coordinatesForRadar() {
         // 返回整个 HashMap，Spring 会自动将其序列化为 JSON 格式
-        for (String s : airplaneHashMap.keySet()) {
-            System.out.println(s);
-        }
         return ResponseEntity.ok(airplaneHashMap);
     }
 
-    @DeleteMapping("/delete")
-    public void delete(String uuid){
+    @PostMapping("/delete")
+    public void delete(@RequestParam String uuid){
         radarHashMap.remove(uuid);
     }
 }

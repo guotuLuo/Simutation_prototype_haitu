@@ -1,18 +1,23 @@
-// Airplane 类，用于管理飞机对象的创建、飞行和删除
+// Point 类，用于管理雷达点迹
 class Point {
     constructor(id, lat, lng) {
         this.id = id;
-        this.lat = parseFloat(lat); // 确保 lat 为数字类型
-        this.lng = parseFloat(lng); // 确保 lng 为数字类型
+        this.lat = parseFloat(lat);
+        this.lng = parseFloat(lng);
+        this.lastSeen = Date.now(); // 初始化为当前时间
+    }
+
+    updateTimestamp() {
+        this.lastSeen = Date.now(); // 更新为最新时间
     }
 
     getLatLng() {
         return {
-            lat: this.lat, 
-            lng: this.lng  
+            lat: this.lat,
+            lng: this.lng
         };
     }
-
+    
     getLat(){
         return this.lat;
     }

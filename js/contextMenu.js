@@ -4,6 +4,13 @@ class ContextMenu {
         this.map = map;
         this.menu = document.getElementById("context-menu");
         this.currentItem = null;
+        // 监听全局点击事件
+        document.addEventListener("click", (event) => {
+            if (this.menu.style.display === "block" && !this.menu.contains(event.target)) {
+                // 如果菜单是显示状态，且点击在菜单外部，则隐藏菜单
+                this.hide();
+            }
+        });
     }
 
     show(event, item) {
