@@ -33,6 +33,7 @@ class Airplane {
     
         // 添加当前 marker 的位置到路径中
         const initialPosition = this.marker.getLatLng();
+        
         this.routes.push([initialPosition.lat, initialPosition.lng]);
     
         // 添加初始位置的红色标记

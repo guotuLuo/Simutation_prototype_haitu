@@ -33,23 +33,23 @@ class MapController {
             })
             .catch(error => console.error("Error loading JSON:", error));
         // leftlet官方地图
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        // 使用高德的WMS服务
-        var layer = L.tileLayer('http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
-            subdomains: ['1', '2', '3', '4'],
-            minZoom: 1, // 最小放缩级别
-            maxZoom: 10 // 最大放缩级别
-        });
-        map.addLayer(layer);
-
-        // L.tileLayer('tiles/{z}/{x}/{y}.png', {
-        //     maxZoom: 10,
-        //     minZoom: 0,
-        //     attribution: 'map'
+        // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         // }).addTo(map);
+
+        // // 使用高德的WMS服务
+        // var layer = L.tileLayer('http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+        //     subdomains: ['1', '2', '3', '4'],
+        //     minZoom: 1, // 最小放缩级别
+        //     maxZoom: 10 // 最大放缩级别
+        // });
+        // map.addLayer(layer);
+
+        L.tileLayer('tiles/{z}/{x}/{y}.png', {
+            maxZoom: 10,
+            minZoom: 0,
+            attribution: 'map'
+        }).addTo(map);
         return map;
     }
 
