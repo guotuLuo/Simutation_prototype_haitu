@@ -1,7 +1,7 @@
-package com.example.demo.controller;
+package com.haitu.prototype.controller;
 
-import com.example.demo.domain.Airplane;
-import com.example.demo.domain.Radar;
+import com.haitu.prototype.dao.entity.Airplane;
+import com.haitu.prototype.dao.entity.Radar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

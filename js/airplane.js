@@ -10,7 +10,6 @@ class Airplane {
         this.routeMarkers = [];
         this.speed = 1500;
         this.moving = false;
-        
         this.startSendingCoordinates();
     }
 
@@ -154,7 +153,9 @@ class Airplane {
     // 启动定时任务，每秒发送一次
     startSendingCoordinates() {
         this.intervalId = setInterval(() => {
-            this.sendCoordinates();
+            if(this.moving){
+                this.sendCoordinates();
+            }
         }, 1000); // 每秒发送一次
     }
 
