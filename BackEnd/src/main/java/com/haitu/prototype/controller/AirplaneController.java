@@ -11,7 +11,6 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/airplanes")
 public class AirplaneController {
-
     /**
      * 使用 ConcurrentHashMap 来存储每个飞机的坐标信息
      * */
@@ -31,9 +30,6 @@ public class AirplaneController {
 
         System.out.println("接收到飞机 " + airplane.getId() + " 的坐标: "
                 + "纬度 = " + airplane.getLat() + ", 经度 = " + airplane.getLon());
-//        for (String s : airplaneHashMap.keySet()) {
-//            System.out.println(s);
-//        }
         return new Result<String>().setCode("0").setMessage("已接收到飞机坐标");
     }
 

@@ -26,6 +26,7 @@ public class RadarController {
 
     @PostMapping("/delete")
     public void delete(@RequestParam String uuid){
+        System.out.println("删除雷达： " + uuid);
         radarHashMap.remove(uuid);
     }
 }

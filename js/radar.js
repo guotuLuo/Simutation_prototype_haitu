@@ -6,7 +6,7 @@ class Radar {
         this.icon = icon;
         this.contextMenu = contextMenu;
         this.marker = this.createMarker();
-        this.scanRadius = 60000; // 扫描半径，单位为米
+        this.scanRadius = 20000; // 扫描半径，单位为米
         this.detectedPoints = []; // 存储被检测到的飞机
         this.scanInterval = null; // 用于保存扫描的定时器
         this.Points = [];
