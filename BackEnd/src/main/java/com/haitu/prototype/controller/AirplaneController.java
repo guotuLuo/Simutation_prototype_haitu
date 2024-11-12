@@ -1,10 +1,10 @@
 package com.haitu.prototype.controller;
 
+import com.haitu.prototype.common.convention.result.Result;
 import com.haitu.prototype.dao.entity.Airplane;
 import com.haitu.prototype.dto.request.PointRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 
@@ -21,10 +21,10 @@ public class AirplaneController {
     /**
      * 实时接收前端飞机上传的经纬度坐标
      * @param pointRequest
-     * @return ResponseEntity<String>
+     * @return Result<String>
      * */
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadCoordinates(@RequestBody PointRequest pointRequest) {
+    public Result<String> uploadCoordinates(@RequestBody PointRequest pointRequest) {
         // 存储或更新飞机的坐标信息
         Airplane airplane = new Airplane(pointRequest.getId(), pointRequest.getLat(), pointRequest.getLon());
         airplaneHashMap.put(airplane.getId(), airplane);
@@ -32,7 +32,7 @@ public class AirplaneController {
         System.out.println("接收到飞机 " + airplane.getId() + " 的坐标: "
                 + "纬度 = " + airplane.getLat() + ", 经度 = " + airplane.getLon());
 
-        return ResponseEntity.ok("飞机坐标已接收");
+        return new Result<String>().setCode("0").setMessage("已接收到飞机坐标");
     }
 
 
@@ -70,7 +70,7 @@ public class AirplaneController {
 
     }
 
-    @DeleteMapping("/deleteALLTrackPoint")
+    @DeleteMapping("/deleteAllTrackPoints")
     public void deleteALLTrackPoints(String uuid, String name){
 
     }

@@ -1,9 +1,9 @@
 package com.haitu.prototype.controller;
 
+import com.haitu.prototype.common.convention.result.Result;
 import com.haitu.prototype.dao.entity.Airplane;
 import com.haitu.prototype.dao.entity.Radar;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -19,9 +19,9 @@ public class RadarController {
     private HashMap<String, Radar> radarHashMap;
 
     @GetMapping ("/scan")
-    public ResponseEntity<HashMap<String, Airplane>> coordinatesForRadar() {
+    public Result<HashMap<String, Airplane>> coordinatesForRadar() {
         // 返回整个 HashMap，Spring 会自动将其序列化为 JSON 格式
-        return ResponseEntity.ok(airplaneHashMap);
+        return new Result<HashMap<String, Airplane>>().setData(airplaneHashMap);
     }
 
     @PostMapping("/delete")
