@@ -31,7 +31,9 @@ public class AirplaneController {
 
         System.out.println("接收到飞机 " + airplane.getId() + " 的坐标: "
                 + "纬度 = " + airplane.getLat() + ", 经度 = " + airplane.getLon());
-
+//        for (String s : airplaneHashMap.keySet()) {
+//            System.out.println(s);
+//        }
         return new Result<String>().setCode("0").setMessage("已接收到飞机坐标");
     }
 
@@ -56,20 +58,22 @@ public class AirplaneController {
     }
 
     /**
-     * 删除点迹的点迹
+     * 增加点迹
      * */
     @PostMapping("/addTrackPoint")
     public void addTrackPoint(@RequestBody PointRequest pointRequest){
 
     }
-
-
-
+    /**
+     * 删除点迹
+     * */
     @DeleteMapping("/deleteTrackPoint")
     public void deleteTrackPoint(String uuid, String name){
 
     }
-
+    /**
+     * 删除所有点迹
+     * */
     @DeleteMapping("/deleteAllTrackPoints")
     public void deleteALLTrackPoints(String uuid, String name){
 

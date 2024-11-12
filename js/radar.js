@@ -87,18 +87,17 @@ class Radar {
 
     startScan() {
         console.log("开始雷达扫描");
-    
         // 存储当前检测到的所有点，以 `id` 为键
         this.detectedPointsMap = new Map();
     
         this.scanInterval = setInterval(() => {
             axios.get("http://127.0.0.1:8081/api/radars/scan")
                 .then(response => {
-                    const data = response.data;
-                
+                    const data = response.data.data;
                     // 处理接收到的数据，更新 Points 和 detectedPointsMap
                     const currentPoints = Object.entries(data).map(([key, airplaneData]) => {
                         let point;
+                        
                         if (this.detectedPointsMap.has(airplaneData.id)) {
                             // 如果该点已存在，则更新其坐标和 lastSeen
                             point = this.detectedPointsMap.get(airplaneData.id);
@@ -112,20 +111,21 @@ class Radar {
                         }
                         return point;
                     });
-    
+                    
+
                     // 检查和更新雷达上的显示
                     this.updateRadarDisplay(currentPoints);
     
                     // 删除 5 秒内未更新的点
-                    const now = Date.now();
-                    for (let [id, point] of this.detectedPointsMap) {
-                        if (now - point.lastSeen > 5000) {
-                            // 超过 5 秒未更新，从 radar 和 detectedPointsMap 中删除
-                            this.removePointFromRadar(point);
-                            this.detectedPointsMap.delete(id);
-                        }
-                    }
-    
+                    // const now = Date.now();
+                    // for (let [id, point] of this.detectedPointsMap) {
+                    //     if (now - point.lastSeen > 5000) {
+                    //         // 超过 5 秒未更新，从 radar 和 detectedPointsMap 中删除
+                    //         this.removePointFromRadar(point);
+                    //         this.detectedPointsMap.delete(id);
+                    //     }
+                    // }
+                    console.log(currentPoints);
                     console.log(`当前捕获到 ${currentPoints.length} 架飞机`);
                 })
                 .catch(error => {
@@ -226,7 +226,12 @@ class Radar {
         const lat2 = point.lat * Math.PI / 180;
         const y = Math.sin(dLon) * Math.cos(lat2);
         const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-        return Math.atan2(y, x);
+
+        // 确保雷达表盘显示的飞机位置跟地图观感上一致
+        const angle = Math.atan2(y, x) - Math.PI / 2 ;
+    
+        // 确保角度在 0 到 2π 之间
+        return (angle + 2 * Math.PI) % (2 * Math.PI);
     }
     
 
@@ -236,6 +241,7 @@ class Radar {
         if (radarItem) {
             radarItem.remove();
         }
+        // 相比于使用axios发送前端请求，使用sendBeacon可以保证发送的请求在关闭当前标签的时候仍然可以成功发送
         const url = `http://127.0.0.1:8081/api/radars/delete?uuid=${encodeURIComponent(this.id)}`;
         navigator.sendBeacon(url);
     }
