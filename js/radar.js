@@ -6,24 +6,25 @@ class Radar {
         this.icon = icon;
         this.contextMenu = contextMenu;
         this.marker = this.createMarker();
-        this.scanRadius = 20000; // 扫描半径，单位为米
-        this.detectedPoints = []; // 存储被检测到的飞机
+        this.scanRadius = 30000; // 扫描半径，单位为米
         this.scanInterval = null; // 用于保存扫描的定时器
         this.Points = [];
         this.markerElement = [];
         this.initializeRadarCenter();
         this.radarGeoCenter = this.marker.getLatLng(); // 雷达中心的地理坐标
-
+        this.detectedPointsMap = new Map();  // 存储检测到的飞机
     }
 
 
     initializeRadarCenter() {
         const radarBackground = document.getElementById(`radar-background-${this.id}`);
         if (radarBackground) {
-            const rect = radarBackground.getBoundingClientRect();
+            // 假设 radarBackground 是一个固定大小的正方形容器
+            const width = radarBackground.offsetWidth;
+            const height = radarBackground.offsetHeight;
             this.radarCenter = {
-                x: rect.width / 2,
-                y: rect.height / 2
+                x: width / 2,
+                y: height / 2
             };
     
             // 添加中心标记用于调试
@@ -34,14 +35,18 @@ class Radar {
             radarCenterMarker.style.height = "4px";
             radarCenterMarker.style.backgroundColor = "blue";
             radarCenterMarker.style.borderRadius = "50%";
-            radarCenterMarker.style.left = `${this.radarCenter.x - 2}px`;
-            radarCenterMarker.style.top = `${this.radarCenter.y - 2}px`;
+            
+            // 使用相对位置设置中心标记
+            radarCenterMarker.style.left = "50%";
+            radarCenterMarker.style.top = "50%";
+            radarCenterMarker.style.transform = "translate(-50%, -50%)"; // 使标记居中于中心
     
             radarBackground.appendChild(radarCenterMarker);
         } else {
             console.error("雷达背景元素未找到，无法初始化中心坐标");
         }
     }
+    
 
     createMarker() {
         this.id = generateUUID();
@@ -67,7 +72,7 @@ class Radar {
         // 创建扫描线
         const radarScanline = document.createElement("div");
         radarScanline.className = "radar-scanline";
-    
+        radarScanline.id = `radar-scanline-${this.id}`;
         // 将扫描线和目标点添加到雷达背景
         radarBackground.appendChild(radarScanline);
     
@@ -84,55 +89,57 @@ class Radar {
         return marker;
     }
     
-
     startScan() {
         console.log("开始雷达扫描");
-        // 存储当前检测到的所有点，以 `id` 为键
-        this.detectedPointsMap = new Map();
     
+        // 初始化状态
+        this.detectedPointsMap = new Map();
+        this.scanAngle = 0;
+        this.scanStep = 0.2; // 扫描步长
+        const scanIntervalMs = 10; // 扫描间隔（毫秒）
+    
+        // 定时扫描
         this.scanInterval = setInterval(() => {
+            // 更新扫描线的当前角度
+            this.scanAngle = (this.scanAngle + this.scanStep) % 360;
+                // 先通过 ID 获取雷达背景元素
+            const scanline = document.querySelector(`#radar-scanline-${this.id}`);
+            scanline.style.transform = `rotate(${this.scanAngle}deg)`;
+        
+            // 获取新的数据并处理
             axios.get("http://127.0.0.1:8081/api/radars/scan")
                 .then(response => {
                     const data = response.data.data;
-                    // 处理接收到的数据，更新 Points 和 detectedPointsMap
-                    const currentPoints = Object.entries(data).map(([key, airplaneData]) => {
-                        let point;
-                        
-                        if (this.detectedPointsMap.has(airplaneData.id)) {
-                            // 如果该点已存在，则更新其坐标和 lastSeen
-                            point = this.detectedPointsMap.get(airplaneData.id);
-                            point.lat = parseFloat(airplaneData.lat);
-                            point.lng = parseFloat(airplaneData.lon);
-                            point.updateTimestamp();
-                        } else {
-                            // 新的点，添加到 detectedPointsMap
-                            point = new Point(airplaneData.id, airplaneData.lat, airplaneData.lon);
-                            this.detectedPointsMap.set(airplaneData.id, point);
-                        }
-                        return point;
-                    });
-                    
 
-                    // 检查和更新雷达上的显示
-                    this.updateRadarDisplay(currentPoints);
-    
-                    // 删除 5 秒内未更新的点
-                    // const now = Date.now();
-                    // for (let [id, point] of this.detectedPointsMap) {
-                    //     if (now - point.lastSeen > 5000) {
-                    //         // 超过 5 秒未更新，从 radar 和 detectedPointsMap 中删除
-                    //         this.removePointFromRadar(point);
-                    //         this.detectedPointsMap.delete(id);
-                    //     }
-                    // }
-                    console.log(currentPoints);
-                    console.log(`当前捕获到 ${currentPoints.length} 架飞机`);
+                    // 处理接收到的点并更新 `detectedPointsMap`
+                    Object.entries(data).forEach(([key, airplaneData]) => {
+                        const planeId = airplaneData.id;
+                        const point = new Point(planeId, airplaneData.lat, airplaneData.lon);
+
+                        // 检查点是否在扫描范围内
+                        const planePosition = point.getLatLng();
+                        const distance = this.map.distance(this.radarGeoCenter, planePosition);
+                        const angle = this.calculateAngle(this.radarGeoCenter, planePosition) * (180 / Math.PI); // 转换为度
+                        const angleDifference = (this.scanAngle - angle + 360) % 360;
+
+                        // 扇形区域内的点
+                        if (angleDifference <= 90 && distance <= this.scanRadius) {
+                            this.detectedPointsMap.set(planeId, point); // 更新或添加点
+                        }
+                    });
+
+                    // 更新雷达显示
+                    this.updateRadarDisplay(Array.from(this.detectedPointsMap.values()));
                 })
                 .catch(error => {
                     console.error("请求失败:", error);
                 });
-        }, 500); // 每秒扫描一次
+        }, scanIntervalMs);
     }
+    
+    
+    
+    
     
 
     updateRadarDisplay(points) {
