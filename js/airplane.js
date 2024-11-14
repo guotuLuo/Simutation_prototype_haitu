@@ -8,7 +8,7 @@ class Airplane {
         this.marker = this.createMarker();
         this.routes = [];
         this.routeMarkers = [];
-        this.speed = 1500;
+        this.speed = 300;
         this.moving = false;
         this.startSendingCoordinates();
     }
@@ -81,7 +81,6 @@ class Airplane {
         this.routeMarkers.push(marker); // 将标记添加到 routeMarkers 数组中
     }
 
-    // 开始按速度移动
     startFlight() {
         if (this.routes.length < 2) {
             console.log("路径点不足，无法移动");
@@ -115,7 +114,7 @@ class Airplane {
         const moveInterval = setInterval(() => {
             if (currentStep >= steps) {
                 clearInterval(moveInterval);
-                this.marker.setLatLng(endPoint);
+                this.marker.setLatLng(endPoint);  // 确保最终定位在目标点
                 this.currentRouteIndex++;
                 this.moveToNextPoint(); // 继续移动到下一个目标点
             } else {
@@ -125,7 +124,7 @@ class Airplane {
                 this.marker.setLatLng([newLat, newLng]);
                 currentStep++;
             }
-        }, 50);
+        }, 50); // 每 50ms 移动一次
     }
 
 
@@ -176,7 +175,7 @@ class Airplane {
             this.marker.remove();
         }
         console.log(this.id);
-        // 不能用一步axios，要不然关闭页面的时候来不及发送删除请求，
+        // 不能用异步axios，要不然关闭页面的时候来不及发送删除请求，
         // 导致下一次打开页面的时候保存的飞机数量不对
         const url = `http://127.0.0.1:8081/api/airplanes/delete?uuid=${encodeURIComponent(this.id)}`;
         navigator.sendBeacon(url);
