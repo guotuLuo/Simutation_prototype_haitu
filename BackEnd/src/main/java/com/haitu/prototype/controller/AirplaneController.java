@@ -1,36 +1,43 @@
 package com.haitu.prototype.controller;
 
 import com.haitu.prototype.common.convention.result.Result;
-import com.haitu.prototype.dao.entity.Airplane;
+import com.haitu.prototype.common.convention.result.Results;
+import com.haitu.prototype.dao.entity.Point;
 import com.haitu.prototype.dto.request.PointRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-
+import java.util.*;
 @RestController
+@Slf4j
+@RequiredArgsConstructor
+
+
+
+/**
+ * 实时接收前端飞机上传的经纬度坐标
+ * @param pointRequest
+ * @return Result<String>
+ * */
 @RequestMapping("/airplanes")
 public class AirplaneController {
-    /**
-     * 使用 ConcurrentHashMap 来存储每个飞机的坐标信息
-     * */
-    @Autowired
-    private HashMap<String, Airplane> airplaneHashMap;
 
     /**
-     * 实时接收前端飞机上传的经纬度坐标
-     * @param pointRequest
-     * @return Result<String>
      * */
+    private final HashMap<String, List<Point>> pointList;
     @PostMapping("/upload")
     public Result<String> uploadCoordinates(@RequestBody PointRequest pointRequest) {
         // 存储或更新飞机的坐标信息
-        Airplane airplane = new Airplane(pointRequest.getId(), pointRequest.getLat(), pointRequest.getLon());
-        airplaneHashMap.put(airplane.getId(), airplane);
-
-        System.out.println("接收到飞机 " + airplane.getId() + " 的坐标: "
-                + "纬度 = " + airplane.getLat() + ", 经度 = " + airplane.getLon());
-        return new Result<String>().setCode("0").setMessage("已接收到飞机坐标");
+        Point point = new Point(pointRequest.getLat(), pointRequest.getLon());
+        String id = pointRequest.getId();
+        if(!pointList.containsKey(id)){
+            pointList.put(id, new ArrayList<>());
+        }
+        pointList.get(id).add(point);
+        log.info("接收到飞机 " + id + " 的坐标: "
+                + "纬度 = " + point.getLat() + ", 经度 = " + point.getLon());
+        return Results.success("已接收到飞机坐标");
     }
 
 
@@ -41,7 +48,7 @@ public class AirplaneController {
     @PostMapping("/delete")
     public void delete(@RequestParam String uuid){
         System.out.println("删除飞机： " + uuid);
-        airplaneHashMap.remove(uuid);
+        pointList.remove(uuid);
     }
 
     /**
