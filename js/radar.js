@@ -40,14 +40,88 @@ class Radar {
             radarCenterMarker.style.left = "50%";
             radarCenterMarker.style.top = "50%";
             radarCenterMarker.style.transform = "translate(-50%, -50%)"; // 使标记居中于中心
-    
+            // 初始化刻度环
+            this.createRadarScale(radarBackground);
+            this.createAngleLines(radarBackground);
+
             radarBackground.appendChild(radarCenterMarker);
         } else {
             console.error("雷达背景元素未找到，无法初始化中心坐标");
         }
     }
-    
 
+    createRadarScale(radarBackground) {
+        const radarRadiusInPixels = radarBackground.offsetWidth / 2;
+        const numberOfCircles = 4;
+        const stepDistance = this.scanRadius / numberOfCircles;
+
+        for (let i = 1; i <= numberOfCircles; i++) {
+            const circleDistance = i * stepDistance;
+            const circleRatio = circleDistance / this.scanRadius;
+            const circleRadius = circleRatio * radarRadiusInPixels;
+
+            const rangeCircle = document.createElement("div");
+            rangeCircle.className = "range-circle";
+            rangeCircle.style.width = `${circleRadius * 2}px`;
+            rangeCircle.style.height = `${circleRadius * 2}px`;
+            rangeCircle.style.left = "50%";
+            rangeCircle.style.top = "50%";
+            rangeCircle.style.transform = `translate(-50%, -50%) scale(${circleRatio})`;
+            radarBackground.appendChild(rangeCircle);
+
+            const rangeLabel = document.createElement("div");
+            rangeLabel.className = "range-label";
+            rangeLabel.style.left = `${50}%`;
+            rangeLabel.style.top = `${50 - circleRatio * 50}%`;
+            rangeLabel.style.transform = "translate(-50%, -50%)";
+            rangeLabel.textContent = `${(circleDistance / 1000).toFixed(1)} km`;
+            radarBackground.appendChild(rangeLabel);
+        }
+    }
+
+    createAngleLines(radarBackground) {
+        const radarRadiusInPixels = radarBackground.offsetWidth / 2;
+        const majorLineLength = radarRadiusInPixels;        // 大刻度线长度，为雷达半径
+        const middleLineLength = 10;                       // 中角度线长度，固定为10像素
+        const minorLineLength = 5;                         // 小角度线长度，固定为5像素
+    
+        for (let angle = 0; angle < 360; angle++) {
+            const angleLine = document.createElement("div");
+    
+            if (angle % 45 === 0) {
+                // 大刻度线，每 45 度一条
+                angleLine.className = "angle-line-major";
+                angleLine.style.height = `${majorLineLength}px`; // 大刻度线长度
+                angleLine.style.transformOrigin = `50% 0%`;      // 从圆周边缘向内延伸
+            } else if (angle % 5 === 0) {
+                // 中角度线，每 5 度一条
+                angleLine.className = "angle-line-middle";
+                angleLine.style.height = `${middleLineLength}px`; // 中角度线长度
+                angleLine.style.transformOrigin = `50% 0%`;       // 从圆周边缘向内延伸
+            } else {
+                // 小角度线，每 1 度一条
+                angleLine.className = "angle-line-minor";
+                angleLine.style.height = `${minorLineLength}px`; // 小角度线长度
+                angleLine.style.transformOrigin = `50% 0%`;      // 从圆周边缘向内延伸
+            }
+    
+            // 设置公共样式
+            angleLine.style.position = "absolute";
+            angleLine.style.width = angle % 45 === 0 ? "1px" : "0.5px"; // 大刻度线更粗
+            angleLine.style.left = "50%";
+            angleLine.style.top = "50%";
+    
+            // 旋转角度，以使刻度线正确分布
+            angleLine.style.transform = `rotate(${angle}deg) translate(0, -${radarRadiusInPixels}px)`;
+    
+            // 添加到雷达背景
+            radarBackground.appendChild(angleLine);
+        }
+    }
+    
+    
+    
+    
     createMarker() {
         this.id = generateUUID();
         const marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
@@ -75,7 +149,7 @@ class Radar {
         radarScanline.id = `radar-scanline-${this.id}`;
         // 将扫描线和目标点添加到雷达背景
         radarBackground.appendChild(radarScanline);
-    
+        
         // 创建 UUID 显示区域
         const radarText = document.createElement("p");
         radarText.textContent = `雷达 UUID: ${this.id}`;
@@ -96,7 +170,7 @@ class Radar {
         this.detectedPointsMap = new Map();
         this.scanAngle = 0;
         this.scanStep = 0.2; // 扫描步长
-        const scanIntervalMs = 10; // 扫描间隔（毫秒）
+        const scanIntervalMs = 20; // 扫描间隔（毫秒）
     
         // 定时扫描
         this.scanInterval = setInterval(() => {
@@ -136,11 +210,7 @@ class Radar {
                 });
         }, scanIntervalMs);
     }
-    
-    
-    
-    
-    
+
 
     updateRadarDisplay(points) {
         points.forEach(point => {
