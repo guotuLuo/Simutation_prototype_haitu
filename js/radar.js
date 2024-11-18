@@ -22,6 +22,8 @@ class Radar {
             // 假设 radarBackground 是一个固定大小的正方形容器
             const width = radarBackground.offsetWidth;
             const height = radarBackground.offsetHeight;
+            console.log("radarbackground width is:", width);
+            console.log("radarbackground height is:", height);
             this.radarCenter = {
                 x: width / 2,
                 y: height / 2
