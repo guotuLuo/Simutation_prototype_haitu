@@ -1,8 +1,8 @@
 package com.haitu.prototype.dao.entity;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class Radar {
     public String id;
     public String lat;

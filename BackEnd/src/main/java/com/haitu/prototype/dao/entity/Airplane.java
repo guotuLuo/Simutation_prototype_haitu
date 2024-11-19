@@ -1,10 +1,10 @@
 package com.haitu.prototype.dao.entity;
 
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.HashSet;
 
-@Getter
+@Data
 public class Airplane {
     public String id;
     public String lat;

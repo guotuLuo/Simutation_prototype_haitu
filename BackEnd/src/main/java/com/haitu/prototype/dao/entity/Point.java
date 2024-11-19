@@ -1,9 +1,8 @@
 package com.haitu.prototype.dao.entity;
+
 import lombok.Data;
-import lombok.Getter;
 
 @Data
-@Getter
 public class Point {
     public String lat;
     public String lon;

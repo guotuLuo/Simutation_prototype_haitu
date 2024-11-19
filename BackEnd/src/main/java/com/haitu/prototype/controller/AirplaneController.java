@@ -74,6 +74,7 @@ public class AirplaneController {
     public void deleteTrackPoint(String uuid, String name){
 
     }
+
     /**
      * 删除所有点迹
      * */
@@ -81,4 +82,6 @@ public class AirplaneController {
     public void deleteALLTrackPoints(String uuid, String name){
 
     }
+
+
 }
