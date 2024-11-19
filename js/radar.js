@@ -76,7 +76,7 @@ class Radar {
             rangeLabel.style.left = `${50}%`;
             rangeLabel.style.top = `${50 - circleRatio * 50}%`;
             rangeLabel.style.transform = "translate(-50%, -50%)";
-            rangeLabel.textContent = `${(circleDistance / 1000).toFixed(1)} km`;
+            rangeLabel.textContent = `${(circleDistance).toFixed(1)} m`;
             radarBackground.appendChild(rangeLabel);
         }
     }
@@ -312,7 +312,6 @@ class Radar {
         // 确保角度在 0 到 2π 之间
         return (angle + 2 * Math.PI) % (2 * Math.PI);
     }
-    
 
     delete() {
         this.map.removeLayer(this.marker);
