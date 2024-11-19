@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Plugins>
+    <Description>仿真目标仿真目标仿真目标仿真目标仿真目标仿真目标</Description>
+    <Parameter>
+        <usFlag name="脉冲标志码" offset="0" type="unsigned short" resolution="1"/>
+		<usPA name="脉冲幅度" offset="2" type="unsigned short" resolution="1"/>
+		<uiRF name="射频值" offset="4" type="unsigned int" resolution="1"/>
+		<uiBW name="带宽" offset="8" type="unsigned int" resolution="1"/>
+		<uiPW name="脉宽" offset="12" type="unsigned int" resolution="1"/>
+		<usAZ name="方位" offset="16" type="unsigned short" resolution="1"/>
+		<sEL name="俯仰" offset="18" type="short" resolution="1"/>
+		<ulToA name="到达时间" offset="20" type="unsigned long long" resolution="1"/>
+    </Parameter>
+</Plugins>
+
+

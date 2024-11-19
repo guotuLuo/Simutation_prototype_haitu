@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Plugins>
+    <Description>ParserClass</Description>
+    <Parameter>
+        <usFlag name="pulseMarkCode" offset="0" type="unsigned short" resolution="1"/>
+		<usPA name="pulseAmplitude" offset="2" type="unsigned short" resolution="1"/>
+		<uiRF name="radioFrequency" offset="4" type="unsigned int" resolution="1"/>
+		<uiBW name="bandWidth" offset="8" type="unsigned int" resolution="1"/>
+		<uiPW name="pulseWidth" offset="12" type="unsigned int" resolution="1"/>
+		<usAZ name="orientation" offset="16" type="unsigned short" resolution="1"/>
+		<sEL name="tilt" offset="18" type="short" resolution="1"/>
+		<ulToA name="arriveTime" offset="20" type="unsigned long long" resolution="1"/>
+    </Parameter>
+</Plugins>

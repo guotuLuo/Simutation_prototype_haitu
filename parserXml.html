@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态 XML 表格解析</title>
+    <link rel="stylesheet" href="./css/table.css">
+</head>
+<body>
+    <h1>动态 XML 表格解析</h1>
+    <div class="form-container">
+        <div class="row">
+            <input type="file" id="fileInput" accept=".xml">
+            <button onclick="parseXML()", id="parseXML">解析 XML</button>
+            <label><input type="checkbox" id="batchCheckbox" onclick="toggleBatchColumn()"> 批号有效</label>
+            <label><input type="checkbox" id="accumulateCheckbox"> 数据积累</label>
+            <label>包头大小（字节）：<input type="number" id="headerSize" value="0"></label>
+            <label>结构体大小（字节）：<input type="number" id="structSize" value="0"></label>
+            <button onclick="startReceivingData()">开始接收数据</button>
+        </div>
+    </div>
+    <table id="dataTable">
+        <thead>
+            <tr id="tableHeader"></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./js/tableForm.js"></script>
+</body>
+</html>

@@ -195,3 +195,23 @@ body, html {
     z-index: 10;           /* 确保红点在其他元素上方 */
 }
 
+
+
+/*列表显表单样式*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+th {
+    background-color: #f4f4f4;
+}
+input, button, label {
+    margin: 10px 5px;
+    padding: 5px 10px;
+}
