@@ -54,7 +54,7 @@ function parseXML() {
 
        // 发送 POST 请求
     // axios异步请求刷新
-    axios.post('http://127.0.0.1:8081/api/radars/receiveData', formData, {
+    axios.post('http://127.0.0.1:8081/api/radars/uploadData', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     })
 }
