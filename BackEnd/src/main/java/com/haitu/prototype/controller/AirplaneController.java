@@ -2,13 +2,11 @@ package com.haitu.prototype.controller;
 
 import com.haitu.prototype.common.convention.result.Result;
 import com.haitu.prototype.common.convention.result.Results;
-import com.haitu.prototype.dao.entity.Point;
-import com.haitu.prototype.dto.request.PointRequest;
+import com.haitu.prototype.dto.request.PointReqDTO;
+import com.haitu.prototype.service.AirPlaneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -22,22 +20,15 @@ import java.util.*;
  * */
 @RequestMapping("/airplanes")
 public class AirplaneController {
+    private final AirPlaneService airPlaneService;
 
     /**
+     *  存储或更新飞机的坐标信息
      * */
-    private final HashMap<String, List<Point>> pointList;
     @PostMapping("/upload")
-    public Result<String> uploadCoordinates(@RequestBody PointRequest pointRequest) {
-        // 存储或更新飞机的坐标信息
-        Point point = new Point(pointRequest.getLat(), pointRequest.getLon());
-        String id = pointRequest.getId();
-        if(!pointList.containsKey(id)){
-            pointList.put(id, new ArrayList<>());
-        }
-        pointList.get(id).add(point);
-        log.info("接收到飞机 " + id + " 的坐标: "
-                + "纬度 = " + point.getLat() + ", 经度 = " + point.getLon());
-        return Results.success("已接收到飞机坐标");
+    public Result<Void> uploadCoordinates(@RequestBody PointReqDTO pointRequest) {
+        airPlaneService.uploadCoordinates(pointRequest);
+        return Results.success();
     }
 
 
@@ -46,9 +37,9 @@ public class AirplaneController {
      * @param uuid
      * */
     @PostMapping("/delete")
-    public void delete(@RequestParam String uuid){
-        System.out.println("删除飞机： " + uuid);
-        pointList.remove(uuid);
+    public Result<Void> delete(@RequestParam String uuid){
+        airPlaneService.remove(uuid);
+        return Results.success();
     }
 
     /**
@@ -64,7 +55,7 @@ public class AirplaneController {
      * 增加点迹
      * */
     @PostMapping("/addTrackPoint")
-    public void addTrackPoint(@RequestBody PointRequest pointRequest){
+    public void addTrackPoint(@RequestBody PointReqDTO pointRequest){
 
     }
     /**
@@ -82,6 +73,4 @@ public class AirplaneController {
     public void deleteALLTrackPoints(String uuid, String name){
 
     }
-
-
 }
