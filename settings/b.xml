@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Plugins>
+    <Description>ParserClass</Description>
+    <Parameter>
+        <usFlag name="name" offset="0" type="unsigned short" resolution="1"/>
+		<usPA name="age" offset="2" type="unsigned short" resolution="1"/>
+		<uiRF name="pp" offset="4" type="unsigned int" resolution="1"/>
+		<uiBW name="height" offset="8" type="unsigned int" resolution="1"/>
+		<uiPW name="weight" offset="12" type="unsigned int" resolution="1"/>
+		<usAZ name="ddd" offset="16" type="unsigned short" resolution="1"/>
+		<sEL name="kkk" offset="18" type="short" resolution="1"/>
+		<ulToA name="time" offset="20" type="unsigned long long" resolution="1"/>
+    </Parameter>
+</Plugins>
