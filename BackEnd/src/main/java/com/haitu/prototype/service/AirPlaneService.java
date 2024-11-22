@@ -1,8 +1,10 @@
 package com.haitu.prototype.service;
 
-import org.springframework.stereotype.Service;
+import com.haitu.prototype.dto.request.PointReqDTO;
 
-@Service
 public interface AirPlaneService {
 
+    void uploadCoordinates(PointReqDTO pointRequest);
+
+    void remove(String uuid);
 }
