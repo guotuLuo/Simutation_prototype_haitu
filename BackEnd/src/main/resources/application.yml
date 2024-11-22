@@ -12,3 +12,20 @@ spring:
             connection-timeout: 20000
             maximum-pool-size: 5
             minimum-idle: 5
+
+
+
+    kafka:
+        bootstrap-servers: 121.36.206.19:9094
+        consumer:
+            group-id: websocket-group
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.apache.kafka.common.serialization.ByteArraySerializer
+            enable-auto-commit: false
+            auto-offset-reset: latest
+
+        producer:
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer

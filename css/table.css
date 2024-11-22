@@ -68,3 +68,7 @@ th, td {
 th {
     background-color: #f4f4f4;
 }
+
+.hidden-column {
+    display: none; /* 完全隐藏，移除布局 */
+}
