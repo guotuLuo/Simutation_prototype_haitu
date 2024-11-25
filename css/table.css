@@ -72,3 +72,9 @@ th {
 .hidden-column {
     display: none; /* 完全隐藏，移除布局 */
 }
+
+#maxRowsInput[disabled] {
+    background-color: #e0e0e0; /* 灰色背景 */
+    color: #a0a0a0; /* 灰色文字 */
+}
+

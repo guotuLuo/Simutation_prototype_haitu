@@ -2,7 +2,31 @@ let columnNames = [];
 const maxRows = 32;
 // 用于跟踪当前的接收状态
 let isReceiving = false;
-// const ws = new WebSocketManager('ws://127.0.0.1:8082/websocket'); // 初始化 WebSocket
+let ws; // 在外部声明 ws 变量，确保在整个作用域中都能访问到它
+
+// 监听复选框的变化，控制文本框的显示与隐藏
+document.getElementById('accumulateCheckbox').addEventListener('change', function () {
+    const maxRowsInput = document.getElementById('maxRowsInput');
+    if (this.checked) {
+        // 如果选中“数据积累”，禁用文本框并使其变灰
+        maxRowsInput.disabled = true;
+    } else {
+        // 如果没有选中“数据积累”，启用文本框并使其可输入
+        maxRowsInput.disabled = false;
+        maxRowsInput.style.backgroundColor = ''; // 恢复原背景色
+    }
+});
+
+document.getElementById('toggleButton').addEventListener('change', function () {
+    if (this.textContent === "停止接收数据") {
+        // 如果选中“数据积累”，禁用文本框并使其变灰
+        maxRowsInput.disabled = true;
+    } else {
+        // 如果没有选中“数据积累”，启用文本框并使其可输入
+        maxRowsInput.disabled = false;
+        maxRowsInput.style.backgroundColor = ''; // 恢复原背景色
+    }
+});
 
 document.getElementById('parseButton').addEventListener('click', function () {
     const fileInput = document.getElementById('fileInput');
@@ -56,17 +80,12 @@ document.getElementById('parseButton').addEventListener('click', function () {
         toggleBatchColumn();
     };
     reader.readAsText(file);
-
     // 发送 POST 请求
     // axios异步请求刷新
     axios.post('http://127.0.0.1:8081/api/radars/uploadData', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     })
 });
-
-
-
-
 
 // 开始/停止接收数据的切换逻辑
 function toggleReceivingData() {
@@ -94,7 +113,7 @@ function startReceivingData(){
         structSize: parseInt(document.getElementById('structSize').textContent, 10)
     });
 
-    const ws = new WebSocketManager('ws://127.0.0.1:8082/websocket');
+    ws = new WebSocketManager('ws://127.0.0.1:8082/websocket');
 
     // 连接 WebSocket
     ws.connect(
@@ -122,7 +141,7 @@ function startReceivingData(){
 
 function stopReceivingData() {
     // 如果 WebSocketManager 存在实例，关闭连接
-    if (ws && ws.isConnected()) {
+    if (ws && ws.isConnected) {
         ws.close();
         console.log('WebSocket connection closed.');
     } else {
@@ -145,19 +164,17 @@ function toggleBatchColumn() {
 
     // 动态检查或创建表头
     let batchHeader = document.getElementById(batchHeaderId);
-
+    if (!batchHeader) {
+        // 动态创建 BatchID 表头
+        batchHeader = document.createElement('th');
+        batchHeader.id = batchHeaderId;
+        batchHeader.textContent = 'batchId';
+        tableHeader.insertBefore(batchHeader, tableHeader.firstChild);
+    }
     if (batchCheckbox.checked) {
         // 显示 BatchID 列
-        if (!batchHeader) {
-            // 动态创建 BatchID 表头
-            batchHeader = document.createElement('th');
-            batchHeader.id = batchHeaderId;
-            batchHeader.textContent = 'batchId';
-            tableHeader.insertBefore(batchHeader, tableHeader.firstChild);
-        } else {
-            // 如果表头已经存在但被隐藏，显示它
-            batchHeader.style.display = '';
-        }
+        // 如果表头已经存在但被隐藏，显示它
+        batchHeader.style.display = '';
 
         // 遍历表格中的所有行，显示 BatchID 单元格
         const rows = tableBody.getElementsByTagName('tr');
@@ -207,6 +224,20 @@ function updateTableFromWebSocketData(jsonData) {
         headerMap[headers[i].textContent.trim()] = i;
     }
 
+    const maxRowsInput = document.getElementById('maxRowsInput'); // 获取最大行数输入框
+    const accumulateCheckbox = document.getElementById("accumulateCheckbox");
+    // 获取最大行数
+    let maxRows = 32; // 默认最大行数为32
+    if (maxRowsInput.style.display !== 'none') {
+        maxRows = parseInt(maxRowsInput.value) || 32; // 获取输入框的值，如果为空则使用32
+    }
+
+    // 如果复选框未选中，检查行数并处理淘汰
+    if (!accumulateCheckbox.checked && tableBody.rows.length >= maxRows) {
+        // 如果表格行数超过最大行数，删除第一行
+        tableBody.deleteRow(0);
+    }
+
     // 创建新行
     const newRow = document.createElement('tr');
     for (let i = 0; i < headers.length; i++) {
@@ -237,3 +268,5 @@ function updateTableFromWebSocketData(jsonData) {
 
     tableBody.appendChild(newRow);
 }
+
+
