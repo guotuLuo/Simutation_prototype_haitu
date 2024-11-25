@@ -140,34 +140,34 @@ function toggleBatchColumn() {
     const tableHeader = document.getElementById('tableHeader');
     const tableBody = document.getElementById('tableBody');
 
-    const batchHeaderId = 'batchHeader';
-    const batchCellClass = 'batchCell';
+    const batchHeaderId = 'batchHeader'; // 动态生成的表头 ID
+    const batchCellClass = 'batchCell'; // 动态生成的单元格 class
 
-    // 获取表头的 BatchID 列
+    // 动态检查或创建表头
     let batchHeader = document.getElementById(batchHeaderId);
 
     if (batchCheckbox.checked) {
         // 显示 BatchID 列
         if (!batchHeader) {
-            // 如果表头不存在，动态创建 BatchID 列
+            // 动态创建 BatchID 表头
             batchHeader = document.createElement('th');
             batchHeader.id = batchHeaderId;
             batchHeader.textContent = 'batchId';
             tableHeader.insertBefore(batchHeader, tableHeader.firstChild);
         } else {
-            // 恢复表头显示
+            // 如果表头已经存在但被隐藏，显示它
             batchHeader.style.display = '';
         }
 
-        // 遍历表格中的所有行
+        // 遍历表格中的所有行，显示 BatchID 单元格
         const rows = tableBody.getElementsByTagName('tr');
         for (const row of rows) {
             let batchCell = row.querySelector(`.${batchCellClass}`);
             if (!batchCell) {
-                // 如果行中不存在 BatchID 列，创建并插入
+                // 如果单元格不存在，则动态创建
                 batchCell = document.createElement('td');
                 batchCell.className = batchCellClass;
-                batchCell.textContent = ''; // 可根据需要设置默认值
+                batchCell.textContent = ''; // 可根据需要初始化内容
                 row.insertBefore(batchCell, row.firstChild);
             } else {
                 // 恢复单元格显示
@@ -176,10 +176,6 @@ function toggleBatchColumn() {
         }
     } else {
         // 隐藏 BatchID 列
-        if (batchHeader) {
-            batchHeader.style.display = 'none'; // 隐藏表头
-        }
-
         const rows = tableBody.getElementsByTagName('tr');
         for (const row of rows) {
             const batchCell = row.querySelector(`.${batchCellClass}`);
@@ -187,11 +183,13 @@ function toggleBatchColumn() {
                 batchCell.style.display = 'none'; // 隐藏单元格
             }
         }
+
+        // 隐藏 BatchID 表头
+        if (batchHeader) {
+            batchHeader.style.display = 'none'; // 隐藏表头
+        }
     }
 }
-
-
-
 
 // 通过 WebSocket 返回的数据填充表格
 /**
@@ -202,29 +200,36 @@ function updateTableFromWebSocketData(jsonData) {
     const tableBody = document.getElementById('tableBody');
     const tableHeader = document.getElementById('tableHeader');
     const headers = tableHeader.getElementsByTagName('th');
-    const headerMap = {};
+    const batchCheckbox = document.getElementById('batchCheckbox'); // 获取复选框
 
-    // 建立列名到索引的映射
+    const headerMap = {};
     for (let i = 0; i < headers.length; i++) {
         headerMap[headers[i].textContent.trim()] = i;
     }
 
+    // 创建新行
     const newRow = document.createElement('tr');
-
-    // 遍历表头，创建对应列
     for (let i = 0; i < headers.length; i++) {
         const fieldName = headers[i].textContent.trim();
         const cell = document.createElement('td');
-
+        if(fieldName === "batchId"){
+            cell.className = "batchCell";
+        }
+        // 判断是否有对应的字段名
         if (jsonData.hasOwnProperty(fieldName)) {
             cell.textContent = String(jsonData[fieldName]);
         } else {
-            cell.textContent = '-'; // 数据缺失时用占位符
+            cell.textContent = '-'; // 缺失数据时用占位符
         }
 
         // 如果表头列被隐藏，同步隐藏单元格
         if (headers[i].style.display === 'none') {
             cell.style.display = 'none';
+        }
+
+        // 如果复选框未选中，隐藏 BatchID 列
+        if (fieldName === 'batchId' && !batchCheckbox.checked) {
+            cell.style.display = 'none'; // 隐藏 BatchID 列的单元格
         }
 
         newRow.appendChild(cell);
