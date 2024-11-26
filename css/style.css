@@ -110,6 +110,31 @@ body, html {
     overflow: hidden;
 }
 
+.button-container {
+    display: flex;
+    justify-content: space-between; /* 按钮横向分布 */
+    gap: 10px; /* 按钮之间的间距 */
+    width: 100%; /* 容器宽度，确保按钮横向排列 */
+    margin-top: auto; /* 将按钮容器放到底部 */
+}
+
+.radar-button {
+    flex: 1; /* 按钮均分容器的宽度 */
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 8px;
+    text-align: center;
+    box-sizing: border-box; /* 确保按钮大小计算包含内边距 */
+}
+
+.radar-button:hover {
+    background-color: #0056b3; /* 鼠标悬停时按钮颜色 */
+}
+
 /* 刻度环样式 */
 .range-circle {
     position: absolute;
