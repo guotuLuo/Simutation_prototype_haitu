@@ -10,10 +10,28 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Airplane {
-    public String id;
-    public String lat;
-    public String lon;
-    public String name;
-    public int speed;
-    public List<Point> track;
+    /**
+     * 飞机id
+     * */
+    private String id;
+    /**
+     * 飞机维度
+     * */
+    private String lat;
+    /**
+     * 飞机经度
+     * */
+    private String lon;
+    /**
+     * 飞机名称
+     * */
+    private String name;
+    /**
+     * 飞机速度
+     * */
+    private int speed;
+    /**
+     * 飞机点迹
+     * */
+    private List<Point> track;
 }

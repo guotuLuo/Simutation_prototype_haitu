@@ -8,7 +8,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Radar {
-    public String id;
-    public String lat;
-    public String lon;
+    /**
+     * 雷达id
+     * */
+    private String id;
+    /**
+     * 雷达纬度
+     * */
+    private String lat;
+    /**
+     * 雷达经度
+     * */
+    private String lon;
+    /**
+     * 雷罚名称
+     * */
+    private String name;
 }
