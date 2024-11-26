@@ -1,9 +1,13 @@
 package com.haitu.prototype.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.haitu.prototype.dao.entity.Airplane;
 import com.haitu.prototype.dao.entity.Point;
+import com.haitu.prototype.dao.entity.Radar;
 import com.haitu.prototype.dto.request.FormSettingReqDTO;
+import com.haitu.prototype.dto.request.RadarReqDTO;
 import com.haitu.prototype.dto.response.FormDataRespDTO;
+import com.haitu.prototype.dto.response.RadarScanRespDTO;
 import com.haitu.prototype.service.KafkaConsumerService;
 import com.haitu.prototype.service.RadarService;
 import com.haitu.prototype.toolkit.XMLParser;
@@ -23,8 +27,20 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class RadarServiceImpl implements RadarService {
-    private final HashMap<String, List<Point>> pointList;
+    private final HashMap<String, Airplane> airplaneHashMap;
+    private final HashMap<String, Radar> radarHashMap;
     private final KafkaConsumerService kafkaConsumerService;
+    /**
+     * 上传雷达坐标
+     * */
+    @Override
+    public void uploadRadarCoordinates(RadarReqDTO radarReqDTO) {
+        String id = radarReqDTO.getId();
+        if(!radarHashMap.containsKey(id)){
+            radarHashMap.put(id, BeanUtil.toBean(radarReqDTO, Radar.class));
+        }
+    }
+
     @Override
     public String uploadData(MultipartFile file) {
         try {
@@ -57,28 +73,34 @@ public class RadarServiceImpl implements RadarService {
         }
     }
 
+    /**
+     * 获取当前内存中所有飞机对象
+     * */
 
     @Override
-    public List<Airplane> coordinatesForRadar() {
-        List<Airplane> list = new ArrayList<>();
-        for (String s : pointList.keySet()) {
-            List<Point> points = pointList.get(s);
-            if(!points.isEmpty()){
-                Airplane airplane = new Airplane(s, points.get(points.size() - 1).lat, points.get(points.size() - 1).lon);
-                list.add(airplane);
+    public List<RadarScanRespDTO> coordinatesForRadar() {
+        List<RadarScanRespDTO> list = new ArrayList<>();
+        for (String s : airplaneHashMap.keySet()) {
+            Airplane bean = BeanUtil.toBean(airplaneHashMap.get(s), Airplane.class);
+            List<Point> track = bean.getTrack();
+            if(track != null && !track.isEmpty()){
+                list.add(new RadarScanRespDTO(s, track.get(track.size() - 1).getLat(), track.get(track.size() - 1).getLon()));
             }
         }
         return list;
     }
 
+    /**
+     * 删除雷达
+     * */
     @Override
     public void remove(String uuid) {
         System.out.println("删除雷达： " + uuid);
-        pointList.remove(uuid);
+        radarHashMap.remove(uuid);
     }
 
     /**
-     * 消费者是否永远不会退出?
+     * 连接websocket, 将kafka数据传输到前端
      * */
     @Override
     public FormDataRespDTO receiveData(FormSettingReqDTO formSettingParam) {
@@ -87,6 +109,10 @@ public class RadarServiceImpl implements RadarService {
         return null;
     }
 
+
+    /**
+     * 断开websocket传输数据
+     * */
     @Override
     public void refuseData() {
         kafkaConsumerService.stopConsuming();
