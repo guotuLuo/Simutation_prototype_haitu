@@ -155,13 +155,31 @@ class Radar {
         // 创建 UUID 显示区域
         const radarText = document.createElement("p");
         radarText.textContent = `雷达 UUID: ${this.id}`;
-    
+
+        // 创建按钮数组
+        var buttonLabels = ["按钮1", "按钮2", "按钮3", "按钮4"]; // 按钮的文本内容
+        var radarContainer = document.getElementById("radar-container");
+
+        // 创建一个容器来放置这些按钮
+        var buttonContainer = document.createElement("div");
+        buttonContainer.classList.add("button-container"); // 给按钮容器添加一个类名
+
+        // 遍历按钮数组并创建按钮
+        buttonLabels.forEach(function(label) {
+            var button = document.createElement("button");
+            button.innerHTML = label; // 按钮显示的文本
+            button.classList.add("radar-button"); // 给按钮添加样式类
+            buttonContainer.appendChild(button); // 将按钮添加到容器中
+        });
+
+        // 将按钮容器添加到 radar-container 中
         // 将所有元素添加到雷达组件
         radarItem.appendChild(radarBackground);
         radarItem.appendChild(radarText);
-    
+        radarItem.appendChild(buttonContainer);
+
         // 将雷达组件添加到右侧容器中
-        document.getElementById("radar-container").appendChild(radarItem);    
+        document.getElementById("radar-container").appendChild(radarItem);
         return marker;
     }
     
