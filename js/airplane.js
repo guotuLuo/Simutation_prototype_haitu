@@ -166,8 +166,6 @@ class Airplane {
             const deltaLng = (endPoint.lng - startPoint.lng) / steps;
 
             const currentStep = Math.min(Math.floor(elapsedTime / updateInterval), steps);
-
-
             if (currentStep >= steps) {
                 this.marker.setLatLng(endPoint);  // 确保最终定位在目标点
                 this.currentRouteIndex++;
@@ -272,7 +270,7 @@ class Airplane {
         this.routes = [];
         this.routeMarkers.forEach(marker => marker.remove());
         this.routeMarkers = [];
-        const url=`http://127.0.0.1:8081/api/airplanes/deleteTrackPoint}`;
+        const url=`http://127.0.0.1:8081/api/airplanes/deleteTrackAllPoint}`;
         navigator.sendBeacon(url);
     }
 
