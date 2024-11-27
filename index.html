@@ -60,12 +60,19 @@
             <button data-action="tool7">评估</button>
             <button data-action="tool8">复位</button>
             <button data-action="tool9">中心</button>
-            <button id="toggle-sidebar" data-action="toggle-sidebar">切换侧边栏</button>
-            <button id="toggle-radarbar" data-action="toggle-radarbar">切换雷达栏</button>
+            <!-- 修改后的按钮结构 -->
+            <button id="toggle-sidebar" data-action="toggle-sidebar">
+                <img data-action="toggle-sidebar" src="images/full-screen.png" alt="全屏" />
+            </button>
+
+            <button id="toggle-radarbar" data-action="toggle-radarbar">
+                <img data-action="toggle-radarbar" src="images/part-screen.png" alt="收起" />
+            </button>
         </div>
     </div>
 
-
+    <!-- 分隔线 -->
+    <div class="divider"></div>
 
     <div class="main-container">
         <div class="side-bar">
@@ -91,7 +98,7 @@
                 <li id="start-scan">扫描</li>
             </ul>
         </div>
-        
+
         <div class="radar-display" id="radar-container">
             <!-- 雷达组件将在这里动态生成 -->
         </div>
@@ -99,7 +106,7 @@
 
     <!-- 引入各个模块的脚本 -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="js/utils.js"></script> 
+    <script src="js/utils.js"></script>
     <script src="js/contextMenu.js"></script>
     <script src="js/AirplaneContextMenu.js"></script>
     <script src="js/RadarContextMenu.js"></script>

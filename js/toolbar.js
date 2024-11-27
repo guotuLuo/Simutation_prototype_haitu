@@ -47,16 +47,17 @@ class Toolbar {
                 break;
             case 'toggle-sidebar':
                 // 获取sidebar和按钮
-                const sidebar = document.querySelector('.side-bar');
-                sidebar.classList.toggle('hidden');
+                document.querySelector('.side-bar').classList.toggle('hidden');
+                document.querySelector('.radar-display').classList.toggle('hidden');
                 break;
             case 'toggle-radarbar':
                 // 获取sidebar和按钮
-                const radarbar = document.querySelector('.radar-display');
-                radarbar.classList.toggle('hidden');
+                document.querySelector('.radar-display').classList.toggle('hidden');
                 break;
+
+
             default:
-                console.log("Unknown tool action");
+                console.log("Unknown tool action", action);
         }
     }
 }
