@@ -1,13 +1,13 @@
 // toolbar.js
 class Toolbar {
     constructor() {
-        this.toolbarElement = document.querySelector('.toolbar');
+        this.toolbarElement = document.querySelector(".tool-bar");
         this.initializeToolbar();
     }
 
     initializeToolbar() {
         // 初始化工具栏按钮
-        document.querySelectorAll('.toolbar button').forEach(button => {
+        document.querySelectorAll('.tool-bar button').forEach(button => {
             button.addEventListener('click', (e) => {
                 const toolAction = e.target.getAttribute('data-action');
                 this.handleToolAction(toolAction);
