@@ -108,8 +108,14 @@
 }
 
 /* 将切换侧边栏和切换雷达栏按钮推到最右 */
-#toggle-sidebar{
+#toggle-full{
     margin-left: auto;  /* 将这两个按钮推到最右 */
+    font-size: 15px;
+    align-items: center;  /* 垂直居中图片 */
+    justify-content: center;  /* 水平居中图片 */
+}
+
+#toggle-sidebar{
     font-size: 15px;
     align-items: center;  /* 垂直居中图片 */
     justify-content: center;  /* 水平居中图片 */
@@ -120,29 +126,31 @@
     align-items: center;  /* 垂直居中图片 */
     justify-content: center;  /* 水平居中图片 */
 }
-
+#toggle-full:hover,
 #toggle-sidebar:hover,
 #toggle-radarbar:hover {
     background-color: #bdc3c7; /* 鼠标悬停时改变背景色 */
 }
 
 /* 图片样式 */
+#toggle-full img{
+    width: 15px;  /* 设置图片宽度 */
+    height: 15px; /* 设置图片高度 */
+}
+
 #toggle-sidebar img {
     width: 15px;  /* 设置图片宽度 */
     height: 15px; /* 设置图片高度 */
 }
+
 #toggle-radarbar img {
     width: 15px;  /* 设置图片宽度 */
     height: 15px; /* 设置图片高度 */
 }
 
-/* 鼠标悬停时改变背景色 */
-#toggle-sidebar:hover,
-#toggle-radarbar:hover {
-    background-color: #bdc3c7;  /* 设置鼠标悬停时的背景色 */
-}
 
 /* 防止图标失真 */
+#toggle-full img,
 #toggle-sidebar img,
 #toggle-radarbar img {
     object-fit: contain; /* 确保图标按比例显示 */

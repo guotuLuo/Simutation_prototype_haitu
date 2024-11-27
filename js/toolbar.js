@@ -45,17 +45,19 @@ class Toolbar {
             case 'tool9':
                 console.log("Tool 3 activated");
                 break;
-            case 'toggle-sidebar':
+            case 'toggle-full':
                 // 获取sidebar和按钮
                 document.querySelector('.side-bar').classList.toggle('hidden');
                 document.querySelector('.radar-display').classList.toggle('hidden');
+                break;
+            case 'toggle-sidebar':
+                // 获取sidebar和按钮
+                document.querySelector('.side-bar').classList.toggle('hidden');
                 break;
             case 'toggle-radarbar':
                 // 获取sidebar和按钮
                 document.querySelector('.radar-display').classList.toggle('hidden');
                 break;
-
-
             default:
                 console.log("Unknown tool action", action);
         }

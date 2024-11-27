@@ -1,7 +1,7 @@
 .side-bar {
     width: 300px;
     background-color: #f8f9fa;
-    padding: 10px;
+    padding-right: 10px;
     overflow-y: auto;
     border-right: 1px solid #ddd;
     display: flex;
