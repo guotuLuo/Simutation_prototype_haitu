@@ -16,11 +16,6 @@ class MapController {
 
     initializeMap() {
         const map = L.map('map').setView([35.8617, 104.1954], 10);
-        // 离线地图，暂时不启用
-        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //     maxZoom: 15,
-        //     attribution: '© OpenStreetMap contributors'
-        // }).addTo(map);
 
         fetch('json/china.json') // 将路径替换为你的实际路径
             .then(response => response.json())
@@ -32,7 +27,8 @@ class MapController {
                 }).addTo(map); // 添加到地图上
             })
             .catch(error => console.error("Error loading JSON:", error));
-        // leftlet官方地图
+
+        // leaflet官方地图
         // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         // }).addTo(map);
@@ -50,6 +46,7 @@ class MapController {
             minZoom: 0,
             attribution: 'map'
         }).addTo(map);
+
         return map;
     }
 

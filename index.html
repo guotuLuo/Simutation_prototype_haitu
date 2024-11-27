@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Simulation</title>
+    <link rel="stylesheet" href="css/object.css">
+    <link rel="stylesheet" href="css/radar.css">
+    <link rel="stylesheet" href="css/side-bar.css">
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/top-bar.css" />
     <link rel="stylesheet" href="leaflet/leaflet.css" />
@@ -17,7 +20,7 @@
         <div class="title-bar">
             <!-- 图标区域 -->
             <div class="icon-column">
-                <img src="images/icon/favicon.ico" alt="图标" id="topIcon" onclick="onIconClick()">
+                <img src="images/icon/fzkf.png" alt="图标" id="topIcon" onclick="onIconClick()">
             </div>
 
             <!-- 右侧区域：标题栏和菜单栏 -->
@@ -48,16 +51,24 @@
 
         <!-- 工具栏 -->
         <div class="tool-bar">
-            <button data-action="tool1">工具1</button>
-            <button data-action="tool2">工具2</button>
-            <button data-action="tool3">工具3</button>
+            <button data-action="tool1">开始</button>
+            <button data-action="tool2">停止</button>
+            <button data-action="tool3">复原</button>
+            <button data-action="tool4">生成</button>
+            <button data-action="tool5">删除</button>
+            <button data-action="tool6">匹配连接</button>
+            <button data-action="tool7">评估</button>
+            <button data-action="tool8">复位</button>
+            <button data-action="tool9">中心</button>
+            <button id="toggle-sidebar" data-action="toggle-sidebar">切换侧边栏</button>
+            <button id="toggle-radarbar" data-action="toggle-radarbar">切换雷达栏</button>
         </div>
     </div>
 
 
 
     <div class="main-container">
-        <div class="sidebar">
+        <div class="side-bar">
             <button class="nav-button" data-submenu="submenu1">Radar</button>
             <ul id="submenu1" class="submenu" style="display: none;">
                 <li draggable="true" data-type="radar">radar1</li>
@@ -84,7 +95,6 @@
         <div class="radar-display" id="radar-container">
             <!-- 雷达组件将在这里动态生成 -->
         </div>
-        
     </div>
 
     <!-- 引入各个模块的脚本 -->

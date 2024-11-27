@@ -18,7 +18,7 @@ class ContextMenu {
         this.initializeMenu(); // 动态生成菜单项
         const iconRect = item.marker._icon.getBoundingClientRect();
         const offsetX = 0;
-        const offsetY = 0;
+        const offsetY = -120;
         this.menu.style.left = (iconRect.right + window.scrollX + offsetX) + "px";
         this.menu.style.top = (iconRect.bottom + window.scrollY + offsetY) + "px";
         this.menu.style.display = "block";

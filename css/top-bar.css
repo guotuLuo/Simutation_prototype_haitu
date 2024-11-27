@@ -60,6 +60,7 @@
 /* 菜单项 li 的样式 */
 .menu-bar li {
     margin-right: 20px;   /* 菜单项之间的间距 */
+
 }
 
 /* 菜单项链接 a 的样式 */
@@ -67,36 +68,52 @@
     color: black;
     text-decoration: none;
     font-size: 15px;
+    border-radius: 5px;
+    border: none;
 }
 
 /* 鼠标悬停时下划线效果 */
 .menu-bar a:hover {
-    text-decoration: underline;
+    background-color: #bdc3c7;
 }
 
 /* 分隔线 */
 .divider {
     height: 2px;
     background-color: #bdc3c7;  /* 浅灰色 */
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
 }
 
 /* 工具栏 */
 .tool-bar {
     display: flex;
-    justify-content: flex-start;  /* 靠左排列 */
+    justify-content: flex-start;  /* 默认让按钮从左向右排列 */
     max-width: 100%;  /* 工具栏宽度缩小一半 */
 }
 
 .tool-bar button {
     border: none;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 15px;
     color: black;
     border-radius: 5px;
 }
 
 .tool-bar button:hover {
     background-color: #bdc3c7;
+}
+
+/* 将切换侧边栏和切换雷达栏按钮推到最右 */
+#toggle-sidebar{
+    margin-left: auto;  /* 将这两个按钮推到最右 */
+    font-size: 15px;
+}
+
+#toggle-radarbar {
+    font-size: 15px;
+}
+
+#toggle-sidebar:hover,
+#toggle-radarbar:hover {
+    background-color: #bdc3c7; /* 鼠标悬停时改变背景色 */
 }

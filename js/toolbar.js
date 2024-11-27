@@ -27,6 +27,34 @@ class Toolbar {
             case 'tool3':
                 console.log("Tool 3 activated");
                 break;
+            case 'tool4':
+                console.log("Tool 3 activated");
+                break;
+            case 'tool5':
+                console.log("Tool 3 activated");
+                break;
+            case 'tool6':
+                console.log("Tool 3 activated");
+                break;
+            case 'tool7':
+                console.log("Tool 3 activated");
+                break;
+            case 'tool8':
+                console.log("Tool 3 activated");
+                break;
+            case 'tool9':
+                console.log("Tool 3 activated");
+                break;
+            case 'toggle-sidebar':
+                // 获取sidebar和按钮
+                const sidebar = document.querySelector('.side-bar');
+                sidebar.classList.toggle('hidden');
+                break;
+            case 'toggle-radarbar':
+                // 获取sidebar和按钮
+                const radarbar = document.querySelector('.radar-display');
+                radarbar.classList.toggle('hidden');
+                break;
             default:
                 console.log("Unknown tool action");
         }

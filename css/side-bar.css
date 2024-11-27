@@ -1,0 +1,44 @@
+.side-bar {
+    width: 300px;
+    background-color: #f8f9fa;
+    padding: 10px;
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    position: fixed;  /* 固定在页面上，浮动在地图上方 */
+    transition: transform 0.3s ease; /* 滑动动画 */
+    transform: translateX(0); /* 默认显示 */
+    z-index:1001 !important; /* 确保侧边栏在地图上方 */
+    height: 100vh;  /* 确保侧边栏高度铺满全屏 */
+    left: 0;
+}
+
+/* 隐藏 sidebar */
+.side-bar.hidden {
+    transform: translateX(-100%); /* 向左滑动隐藏 */
+}
+
+
+.nav-button {
+    padding: 10px;
+    background-color: #e0e0e0;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 5px;
+}
+
+.submenu {
+    display: none;
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+input, button, label {
+    margin: 10px 5px;
+    padding: 5px 10px;
+}
