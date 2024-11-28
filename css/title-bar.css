@@ -1,0 +1,50 @@
+/* 顶部区域 */
+.title-bar {
+    display: flex;
+    flex-direction: row; /* 水平排列 */
+    justify-content: flex-start;
+}
+
+
+/* 图标区域 */
+.icon-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+    width: 40px;
+    height: 40px; /* 图标占两行 */
+}
+
+.icon-column img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+/* 右侧区域：标题栏和菜单栏 */
+.right-column {
+    display: flex;
+    flex-direction: column; /* 垂直排列标题栏和菜单栏 */
+    justify-content: flex-start;
+    flex-grow: 1;
+}
+
+/* 标题栏 */
+.title {
+    font-size: 18px;
+    color: black;
+    cursor: pointer;  /* 设置鼠标悬停时显示为手指形状，表示可以点击 */
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 7px;
+}
+
+/* 鼠标悬停时的效果 */
+.title:hover {
+    color: #007bff; /* 改变文字颜色，表示可以点击 */
+}
+
+
+
+

@@ -1,0 +1,32 @@
+/* 菜单栏背景颜色 */
+.menu-bar {
+    display: flex;
+    padding-left: 10px;
+    flex-direction: row;  /* 水平排列菜单项 */
+}
+/* 设置菜单列表 ul 水平排列 */
+.menu-bar ul {
+    list-style: none;     /* 移除列表项的默认样式 */
+    padding: 0;           /* 去除内边距 */
+    display: flex;        /* 使用 flexbox 来水平排列菜单项 */
+}
+
+/* 菜单项 li 的样式 */
+.menu-bar li {
+    margin-right: 20px;   /* 菜单项之间的间距 */
+
+}
+
+/* 菜单项链接 a 的样式 */
+.menu-bar a {
+    color: black;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 5px;
+    border: none;
+}
+
+/* 鼠标悬停时下划线效果 */
+.menu-bar a:hover {
+    background-color: #bdc3c7;
+}

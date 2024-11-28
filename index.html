@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Simulation</title>
+    <link rel="stylesheet" href="css/divider.css">
+    <link rel="stylesheet" href="css/menu-bar.css">
+    <link rel="stylesheet" href="css/tool-bar.css">
     <link rel="stylesheet" href="css/object.css">
     <link rel="stylesheet" href="css/radar.css">
     <link rel="stylesheet" href="css/side-bar.css">
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/top-bar.css" />
+    <link rel="stylesheet" href="css/title-bar.css" />
     <link rel="stylesheet" href="leaflet/leaflet.css" />
     <script src="leaflet/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -51,25 +54,64 @@
 
         <!-- 工具栏 -->
         <div class="tool-bar">
-            <button data-action="tool1">开始</button>
-            <button data-action="tool2">停止</button>
-            <button data-action="tool3">复原</button>
-            <button data-action="tool4">生成</button>
-            <button data-action="tool5">删除</button>
-            <button data-action="tool6">匹配连接</button>
-            <button data-action="tool7">评估</button>
-            <button data-action="tool8">复位</button>
-            <button data-action="tool9">中心</button>
-            <!-- 修改后的按钮结构 -->
-            <button id="toggle-full" data-action="toggle-sidebar">
+            <div class="button-group">
+                <button data-action="start" title="开始">
+                    <img data-action="start" src="images/start.png" alt="全屏" />
+                </button>
+
+                <button data-action="stop" title="停止">
+                    <img data-action="stop" src="images/stop.png" alt="全屏" />
+                </button>
+
+                <button data-action="refresh" title="复原">
+                    <img data-action="refresh" src="images/refresh.png" alt="全屏" />
+                </button>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="button-group">
+                <button data-action="generate" title="生成">
+                    <img data-action="generate" src="images/generate.png" alt="全屏" />
+                </button>
+
+                <button data-action="delete" title="删除">
+                    <img data-action="delete" src="images/delete.png" alt="全屏" />
+                </button>
+
+                <button data-action="reset" title="复位">
+                    <img data-action="reset" src="images/reset.png" alt="全屏" />
+                </button>
+
+                <button data-action="center" title="中心">
+                    <img data-action="center" src="images/center.png" alt="全屏" />
+                </button>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="button-group">
+                <button data-action="match" title="匹配连接">
+                    <img data-action="match" src="images/match.png" alt="全屏" />
+                </button>
+
+                <button data-action="evaluate" title="评估">
+                    <img data-action="evaluate" src="images/evaluate.png" alt="全屏" />
+                </button>
+            </div>
+
+
+
+            <!-- 右侧显示按钮 -->
+            <button id="toggle-full" data-action="toggle-full" title="全屏">
                 <img data-action="toggle-full" src="images/full-screen.png" alt="全屏" />
             </button>
 
-            <button id="toggle-sidebar" data-action="toggle-sidebar">
+            <button id="toggle-sidebar" data-action="toggle-sidebar" title="向左收起">
                 <img data-action="toggle-sidebar" src="images/collapseLeft.png" alt="向左收起" />
             </button>
 
-            <button id="toggle-radarbar" data-action="toggle-radarbar">
+            <button id="toggle-radarbar" data-action="toggle-radarbar" title="向右收起">
                 <img data-action="toggle-radarbar" src="images/collapseRight.png" alt="向右收起" />
             </button>
         </div>
@@ -82,13 +124,23 @@
         <div class="side-bar">
             <button class="nav-button" data-submenu="submenu1">Radar</button>
             <ul id="submenu1" class="submenu" style="display: none;">
-                <li draggable="true" data-type="radar">radar1</li>
-                <li draggable="true" data-type="radar">radar2</li>
+                <li draggable="true" data-type="radar">radar</li>
             </ul>
-            <button class="nav-button" data-submenu="submenu2">Object</button>
+
+            <button class="nav-button" data-submenu="submenu2">Reconnaissance</button>
             <ul id="submenu2" class="submenu" style="display: none;">
-                <li draggable="true" data-type="airplane">plane1</li>
-                <li draggable="true" data-type="airplane">plane2</li>
+                <li draggable="true" data-type="reconnaissance">reconnaissance</li>
+            </ul>
+
+            <button class="nav-button" data-submenu="submenu3">Object</button>
+            <ul id="submenu3" class="submenu" style="display: none;">
+                <li draggable="true" data-type="airplane">object</li>
+            </ul>
+
+
+            <button class="nav-button" data-submenu="submenu4">Jamming</button>
+            <ul id="submenu4" class="submenu" style="display: none;">
+                <li draggable="true" data-type="reconnaissance">jamming</li>
             </ul>
         </div>
         <div class="map-container">

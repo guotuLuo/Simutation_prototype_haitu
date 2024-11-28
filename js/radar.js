@@ -22,8 +22,6 @@ class Radar {
             // 假设 radarBackground 是一个固定大小的正方形容器
             const width = radarBackground.offsetWidth;
             const height = radarBackground.offsetHeight;
-            console.log("radarbackground width is:", width);
-            console.log("radarbackground height is:", height);
             this.radarCenter = {
                 x: width / 2,
                 y: height / 2
@@ -127,8 +125,16 @@ class Radar {
     createMarker() {
         this.id = generateUUID();
         const marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
-        marker.bindPopup("雷达: " + this.id).openPopup();
-    
+        const latLng = marker.getLatLng();
+        marker.bindPopup("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6) ).openPopup();
+
+        // 监听拖动过程中的事件
+        marker.on('drag', (event) => {
+            const latLng = event.target.getLatLng();  // 获取当前经纬度
+            marker.setPopupContent("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6));
+            marker.openPopup();  // 更新并重新打开弹出窗口
+        });
+
         // 绑定右键菜单显示事件
         marker.on('contextmenu', (event) => {
             event.originalEvent.preventDefault();
