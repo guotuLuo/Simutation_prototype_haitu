@@ -30,12 +30,49 @@
     font-size: 16px;
     outline: none;
     margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease; /* 平滑的背景色变化 */
+}
+
+.nav-button:hover {
+    background-color: #d1d1d1;  /* 悬停时背景颜色加深 */
+}
+
+.expand-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    margin-right: 10px;  /* 将展开图标与文字之间的间距稍微增大 */
+}
+
+.add-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    margin-left: 10px;  /* 让添加图标与文字之间有一定的间距 */
+}
+
+.expand-icon:hover,
+.add-icon:hover {
+    opacity: 0.6;  /* 图标悬停时变得稍微透明，进一步加深视觉效果 */
+}
+
+
+.button-text {
+    flex-grow: 1;  /* 让文字占据剩余空间 */
 }
 
 .submenu {
-    display: none;
+    display: flex;
     list-style-type: none;
-    padding-left: 20px;
+    padding-left: 45px;
+    font-size: 16px;
+}
+
+.submenu:hover{
+    background-color: #d1d1d1;  /* 悬停时背景颜色加深 */
 }
 
 input, button, label {

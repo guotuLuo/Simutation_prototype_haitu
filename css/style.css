@@ -42,5 +42,9 @@ body, html {
     z-index: 1000;
 }
 
+#context-menu li:hover{
+    background-color: #d1d1d1;
+}
+
 
 

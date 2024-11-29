@@ -5,7 +5,7 @@ class Radar {
         this.position = position;
         this.icon = icon;
         this.contextMenu = contextMenu;
-        this.marker = this.createMarker();
+        this.createMarker();
         this.scanRadius = 30000; // 扫描半径，单位为米
         this.scanInterval = null; // 用于保存扫描的定时器
         this.Points = [];
@@ -124,19 +124,19 @@ class Radar {
     
     createMarker() {
         this.id = generateUUID();
-        const marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
-        const latLng = marker.getLatLng();
-        marker.bindPopup("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6) ).openPopup();
+        this.marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
+        const latLng = this.marker.getLatLng();
+        this.marker.bindPopup("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6) ).openPopup();
 
         // 监听拖动过程中的事件
-        marker.on('drag', (event) => {
+        this.marker.on('drag', (event) => {
             const latLng = event.target.getLatLng();  // 获取当前经纬度
-            marker.setPopupContent("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6));
-            marker.openPopup();  // 更新并重新打开弹出窗口
+            this.marker.setPopupContent("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6));
+            this.marker.openPopup();  // 更新并重新打开弹出窗口
         });
 
         // 绑定右键菜单显示事件
-        marker.on('contextmenu', (event) => {
+        this.marker.on('contextmenu', (event) => {
             event.originalEvent.preventDefault();
             this.contextMenu.show(event, this);
         });
@@ -160,7 +160,7 @@ class Radar {
         
         // 创建 UUID 显示区域
         const radarText = document.createElement("p");
-        radarText.textContent = `雷达 UUID: ${this.id}`;
+        radarText.textContent = `雷达 UUID: ${this.id.replace(/-/g, '').substring(0, 18)}`;
 
         // 创建按钮数组
         var buttonLabels = ["按钮1", "按钮2", "按钮3", "按钮4"]; // 按钮的文本内容
@@ -186,7 +186,6 @@ class Radar {
 
         // 将雷达组件添加到右侧容器中
         document.getElementById("radar-container").appendChild(radarItem);
-        return marker;
     }
     
     startScan() {

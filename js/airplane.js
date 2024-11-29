@@ -19,6 +19,17 @@ class Airplane {
         this.marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
         this.marker.bindPopup("飞机: " + this.id).openPopup();
         // 绑定右键菜单显示事件
+
+        const latLng = this.marker.getLatLng();
+        this.marker.bindPopup("飞机: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6) ).openPopup();
+
+        // 监听拖动过程中的事件
+        this.marker.on('drag', (event) => {
+            const latLng = event.target.getLatLng();  // 获取当前经纬度
+            this.marker.setPopupContent("飞机: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6));
+            this.marker.openPopup();  // 更新并重新打开弹出窗口
+        });
+
         this.marker.on('contextmenu', (event) => {
             event.originalEvent.preventDefault();
             this.contextMenu.show(event, this);

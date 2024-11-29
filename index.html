@@ -122,26 +122,47 @@
 
     <div class="main-container">
         <div class="side-bar">
-            <button class="nav-button" data-submenu="submenu1">Radar</button>
+            <button class="nav-button" data-submenu="submenu1">
+                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                <span class="button-text" data-action="expand">Radar</span>
+                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+            </button>
+
             <ul id="submenu1" class="submenu" style="display: none;">
                 <li draggable="true" data-type="radar">radar</li>
             </ul>
 
-            <button class="nav-button" data-submenu="submenu2">Reconnaissance</button>
+            <button class="nav-button" data-submenu="submenu2">
+                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                <span class="button-text" data-action="expand">Reconnaissance</span>
+                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+            </button>
+
             <ul id="submenu2" class="submenu" style="display: none;">
                 <li draggable="true" data-type="reconnaissance">reconnaissance</li>
             </ul>
 
-            <button class="nav-button" data-submenu="submenu3">Object</button>
+            <button class="nav-button" data-submenu="submenu3">
+                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                <span class="button-text" data-action="expand">Object</span>
+                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+            </button>
+
             <ul id="submenu3" class="submenu" style="display: none;">
                 <li draggable="true" data-type="airplane">object</li>
             </ul>
 
 
-            <button class="nav-button" data-submenu="submenu4">Jamming</button>
+            <button class="nav-button" data-submenu="submenu4">
+                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                <span class="button-text" data-action="expand">Jamming</span>
+                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+            </button>
+
             <ul id="submenu4" class="submenu" style="display: none;">
                 <li draggable="true" data-type="reconnaissance">jamming</li>
             </ul>
+
         </div>
         <div class="map-container">
             <div id="map" style="height: 100%; width: 100%;"></div>
