@@ -1,6 +1,6 @@
 // Radar 类
 class Radar {
-    constructor(map, position, icon, contextMenu) {
+    constructor(map, position, icon, contextMenu, className, name) {
         this.map = map;
         this.position = position;
         this.icon = icon;
@@ -10,6 +10,8 @@ class Radar {
         this.scanInterval = null; // 用于保存扫描的定时器
         this.Points = [];
         this.markerElement = [];
+        this.name = name;
+        this.className = className;
         this.initializeRadarCenter();
         this.radarGeoCenter = this.marker.getLatLng(); // 雷达中心的地理坐标
         this.detectedPointsMap = new Map();  // 存储检测到的飞机

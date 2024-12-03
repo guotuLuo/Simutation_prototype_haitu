@@ -10,12 +10,12 @@
  *
  *
  * */
-
+// 全局管理所有component
 const componentManager = {
     instances: new Map(),
 
     addInstance: function(className, name, instance) {
-        if(this.instances.get(className) === null){
+        if(!this.instances.has(className)){
             this.instances.set(className, new Map);
         }
         this.instances.get(className).set(name, instance);
@@ -36,10 +36,21 @@ const componentManager = {
         this.instances.clear();
     },
 
+    getInstanceList(itemType, className){
+        if(this.instances.has(itemType)){
+            console.log("hello");
+            return this.instances.get(itemType).get(className);
+        }else{
+            return null;
+        }
+    },
+
     // 获取某个类名下的实例
-    getInstance: function(className, name) {
-        if (this.instances.has(className)) {
-            return this.instances.get(className).get(name);
+    getInstance: function(itemType, className, name) {
+        if(this.instances.has(itemType)){
+            if (this.instances.get(itemType).has(className)) {
+                return this.instances.get(itemType).get(className).get(name);
+            }
         }
         return null;
     }

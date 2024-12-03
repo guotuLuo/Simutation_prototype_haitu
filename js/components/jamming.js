@@ -1,10 +1,12 @@
 // Jamming 类
 class Jamming {
-    constructor(map, position, icon, contextMenu) {
+    constructor(map, position, icon, contextMenu, className, name) {
         this.map = map;
         this.position = position;
         this.icon = icon;
         this.contextMenu = contextMenu;
+        this.name = name;
+        this.className = className;
         this.createMarker();
     }
 

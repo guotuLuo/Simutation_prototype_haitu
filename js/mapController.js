@@ -3,9 +3,9 @@ class MapController {
     constructor() {
         this.map = this.initializeMap();
         this.contextMenus = {
-            "airplane": new AirplaneContextMenu(this.map),
+            "object": new AirplaneContextMenu(this.map),
             "radar": new RadarContextMenu(this.map),
-            "reconnaissanceIcon": new ReconnaissanceContextMenu(this.map),
+            "reconnaissance": new ReconnaissanceContextMenu(this.map),
             "jamming": new JammingContextMenu(this.map)
         };
         this.initializeDragAndDrop();
@@ -48,17 +48,20 @@ class MapController {
         return map;
     }
 
-    addComponent(itemType, position){
+    addComponent(itemType, className, instanceName, position){
         const Icon = L.icon({
             iconUrl: 'images/' + itemType + '.png',
             iconSize: [32, 32],
             iconAnchor: [16, 16]
         });
-        const component = ComponentFactory.createComponent(itemType, this.map, position, Icon, this.contextMenus[itemType])
+        const component = ComponentFactory.createComponent(itemType, this.map, position, Icon, this.contextMenus[itemType], className, instanceName)
+
+
         // TODO 这里组件的组织需要想想,怎么管理所有组件
         // 每一次调用工厂创建新的对象都要将对象加入组件，删除的时候调用删除函数
-        componentManager.addInstance()
+        componentManager.addInstance(className, instanceName, component);
 
+        console.log(itemType);
         // 根据不同的类初始化特定菜单， 这里的itemType是一级菜单的类
         this.contextMenus[itemType].initializeMenu();
     }
@@ -72,10 +75,14 @@ class MapController {
         // 处理地图上的放置事件
         this.map.getContainer().addEventListener('drop', (e) => {
             e.preventDefault();
-            const itemType = e.dataTransfer.getData("text/plain");
+            const dragData = e.dataTransfer.getData('text/plain');
+
+            // 分割数据（假设数据是以'|'分隔的）
+            const [itemType, className, instanceName] = dragData.split('|');
+
             // 获取拖放位置的地理坐标
             const latLng = this.map.mouseEventToLatLng(e);
-            this.addComponent(itemType, latLng);
+            this.addComponent(itemType, className, instanceName, latLng);
         });
     }
 }

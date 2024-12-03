@@ -1,6 +1,6 @@
 // Airplane 类，用于管理飞机对象的创建、飞行和删除
 class Airplane {
-    constructor(map, position, icon, contextMenu) {
+    constructor(map, position, icon, contextMenu, className, name) {
         this.map = map;
         this.position = position;
         this.icon = icon;
@@ -9,6 +9,8 @@ class Airplane {
         this.routeMarkers = [];
         this.speed = 300;
         this.moving = false;
+        this.name = name;
+        this.className = className;
         this.createMarker();
         this.startSendingCoordinates();
     }
