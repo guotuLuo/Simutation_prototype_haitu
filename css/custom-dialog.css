@@ -1,0 +1,42 @@
+/* custom-dialog 样式 */
+.custom-dialog {
+    position: absolute;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 10px;
+    z-index: 9999;
+    min-width: 250px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 输入框容器 */
+.custom-dialog .input-container {
+
+}
+
+/* 输入框样式 */
+.custom-dialog input[type="text"] {
+    width: 95%;
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 按钮容器 */
+.custom-dialog .button-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* 按钮样式 */
+.custom-dialog button {
+
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-dialog button:hover {
+    background-color: #f0f0f0;
+}

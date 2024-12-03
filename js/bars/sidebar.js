@@ -47,98 +47,51 @@ class Sidebar {
         }
     }
 
-    // 新增项的操作
-    // TODO 以Airplane类为例，这里新增项是否只是新增了不同名称的Airplane,而不是新增了一个新的AirplaneNew 类，这也太鸡肋了
+    // 新增项的操作，需要获取对话框以及绑定元素拖拽函数
+    // 以Airplane类为例，这里新增项是否只是新增了不同名称的Airplane,而不是新增了一个新的AirplaneNew 类，这也太鸡肋了
     addItem(button) {
-        // 获取按钮的位置和尺寸
-        const rect = button.getBoundingClientRect();
-        const mouseX = rect.left + rect.width;  // 将对话框放在按钮右侧
-        const mouseY = rect.top + 10;
+        // customDialog是弹出对话框函数，获取输入到对话框里面的字符串
+        customDialog(button)
+            .then(className => {
+                if (className) {
+                    const submenuId = button.getAttribute('data-submenu');
+                    const submenu = document.getElementById(submenuId);
 
-        // 创建自定义对话框
-        const dialog = document.createElement('div');
-        dialog.classList.add('custom-prompt');
-        dialog.style.position = 'absolute';
-        dialog.style.left = `${mouseX}px`;
-        dialog.style.top = `${mouseY}px`;
-        dialog.style.border = '1px solid #ccc';
-        dialog.style.backgroundColor = '#fff';
-        dialog.style.zIndex = '9999';
-        dialog.style.minWidth = '250px';  // 给对话框设置最小宽度，避免太小
+                    // 创建新项
+                    const newItem = document.createElement('li');
+                    newItem.textContent = className;  // 使用用户输入的名称, 这是可拖拽项的名称，就是二级菜单的名称, 不是实例对象的名称
 
-        // 创建一个容器将输入框放在一行
-        const formContainer = document.createElement('div');
-        formContainer.style.display = 'flex';
-        formContainer.style.flexDirection = 'column';  // 纵向排列
-        formContainer.style.gap = '8px';  // 设置间距为8px，减少空白
-        dialog.appendChild(formContainer);
+                    // 使新项可拖拽
+                    newItem.draggable = true;
 
-        // 创建输入框
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = '请输入新项名称';
-        input.style.width = '96%';  // 输入框宽度充满容器
-        input.style.marginBottom = '5px';  // 给输入框底部添加一些间距
-        formContainer.appendChild(input);
+                    // 获取项的类名
+                    const itemType = button.querySelector('.button-text').textContent.trim().toLowerCase();
+                    newItem.setAttribute('data-type', itemType);  // 可以根据需求调整data-type的值
 
-        // 创建确认按钮和取消按钮的容器
-        const buttonContainer = document.createElement('div');
-        buttonContainer.style.display = 'flex';  // 使用 flex 布局将按钮放在同一行
-        buttonContainer.style.justifyContent = 'space-around';  // 按钮之间有空间
-        buttonContainer.style.gap = '10px';  // 设置按钮之间的间距为10px
-        formContainer.appendChild(buttonContainer);
+                    // 根据当前地图上所有相同className的对象来确定当前拖拽时间需要新建的对象名称
+                    // 这里创建实例对象名称比较简陋，就直接获取当前list.length + 1;
+                    const instanceName = componentManager.getInstanceList(itemType) + 1;
 
-        // 创建确认按钮
-        const submitButton = document.createElement('button');
-        submitButton.textContent = '确定';
-        submitButton.style.marginRight = '5px';  // 为按钮之间添加一些间距
-        buttonContainer.appendChild(submitButton);
 
-        // 创建取消按钮
-        const cancelButton = document.createElement('button');
-        cancelButton.textContent = '取消';
-        buttonContainer.appendChild(cancelButton);
+                    // 绑定拖拽监听事件
+                    newItem.addEventListener('dragstart', (e) => {
+                        // 连接数据项，使用'|'作为分隔符
+                        const dragData = `${itemType}|${className}|${instanceName}`;
+                        e.dataTransfer.setData('text/plain', dragData);  // 设置拖拽数据
 
-        document.body.appendChild(dialog);
+                    });
+                    // 将新项添加到 submenu 中
+                    submenu.appendChild(newItem);
 
-        // 聚焦到输入框
-        input.focus();
-
-        // 监听确认按钮点击事件
-        submitButton.addEventListener('click', () => {
-            const name = input.value.trim();
-            if (name) {
-                console.log('新增项');
-                const submenuId = button.getAttribute('data-submenu');
-                const submenu = document.getElementById(submenuId);
-                const newItem = document.createElement('li');
-                newItem.textContent = name;  // 使用用户输入的名称
-                submenu.appendChild(newItem);
-            } else {
-                console.log('用户未输入名称');
-            }
-
-            // 移除自定义对话框
-            dialog.remove();
-        });
-
-        // 监听取消按钮点击事件
-        cancelButton.addEventListener('click', () => {
-            // 移除自定义对话框
-            dialog.remove();
-        });
-
-        // 点击对话框外部时关闭对话框
-        dialog.addEventListener('click', (e) => {
-            if (e.target === dialog) {
-                dialog.remove();
-            }
-        });
+                } else {
+                    console.log('用户未输入名称或取消了操作');
+                }
+            });
     }
 
 
 
-    // 处理拖拽事件，设置拖拽数据类型
+    // 初始化处理拖拽事件，设置拖拽数据类型
     handleDragStart(event) {
         event.dataTransfer.setData("text/plain", event.target.getAttribute("data-type"));
     }
