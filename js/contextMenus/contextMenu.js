@@ -35,8 +35,6 @@ class ContextMenu {
     }
 
     delete() {
-        // TODO 这里去除了this.marker 不知道有啥影响
-        // this.map.removeLayer(this.marker);
         this.map.removeLayer();
     }
 }

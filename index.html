@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Simulation</title>
+    <link rel="stylesheet" href="css/custom-dialog.css">
     <link rel="stylesheet" href="css/divider.css">
     <link rel="stylesheet" href="css/menu-bar.css">
     <link rel="stylesheet" href="css/tool-bar.css">
@@ -149,7 +150,7 @@
             </button>
 
             <ul id="submenu3" class="submenu" style="display: none;">
-                <li draggable="true" data-type="airplane">object</li>
+                <li draggable="true" data-type="object">object</li>
             </ul>
 
 
@@ -184,6 +185,8 @@
     <!-- 引入各个模块的脚本 -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="js/utils/UUID.js"></script>
+    <script src="js/utils/Dialog.js"></script>
+    <script src="js/utils/PageEventControl.js"></script>
     <script src="js/contextMenus/contextMenu.js"></script>
     <script src="js/contextMenus/AirplaneContextMenu.js"></script>
     <script src="js/contextMenus/RadarContextMenu.js"></script>
@@ -198,6 +201,7 @@
     <script src="js/components/radar.js"></script>
     <script src="js/components/reconnaissance.js"></script>
     <script src="js/components/jamming.js"></script>
+    <script src="js/components/componentManager.js"></script>
     <script src="js/factories/ComponentFactory.js"></script>
     <script src="js/factories/MenuFactory.js"></script>
     <script src="js/main.js"></script>
