@@ -160,7 +160,7 @@
             </button>
 
             <ul id="submenu4" class="submenu" style="display: none;">
-                <li draggable="true" data-type="reconnaissance">jamming</li>
+                <li draggable="true" data-type="jamming">jamming</li>
             </ul>
 
         </div>
@@ -183,17 +183,23 @@
 
     <!-- 引入各个模块的脚本 -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/contextMenu.js"></script>
-    <script src="js/AirplaneContextMenu.js"></script>
-    <script src="js/RadarContextMenu.js"></script>
-    <script src="js/sidebar.js"></script>
-    <script src="js/toolbar.js"></script>
-    <script src="js/topIcon.js"></script>
+    <script src="js/utils/UUID.js"></script>
+    <script src="js/contextMenus/contextMenu.js"></script>
+    <script src="js/contextMenus/AirplaneContextMenu.js"></script>
+    <script src="js/contextMenus/RadarContextMenu.js"></script>
+    <script src="js/contextMenus/ReconnaissanceContextMenu.js"></script>
+    <script src="js/contextMenus/JammingContextMenu.js"></script>
+    <script src="js/bars/sidebar.js"></script>
+    <script src="js/bars/toolbar.js"></script>
+    <script src="js/bars/topIcon.js"></script>
     <script src="js/mapController.js"></script>
     <script src="js/point.js"></script>
-    <script src="js/airplane.js"></script>
-    <script src="js/radar.js"></script>
+    <script src="js/components/airplane.js"></script>
+    <script src="js/components/radar.js"></script>
+    <script src="js/components/reconnaissance.js"></script>
+    <script src="js/components/jamming.js"></script>
+    <script src="js/factories/ComponentFactory.js"></script>
+    <script src="js/factories/MenuFactory.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

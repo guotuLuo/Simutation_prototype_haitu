@@ -1,4 +1,4 @@
-// Radar 类，用于管理飞机对象的创建、飞行和删除
+// Radar 类
 class Radar {
     constructor(map, position, icon, contextMenu) {
         this.map = map;
