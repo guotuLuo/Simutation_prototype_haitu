@@ -9,9 +9,6 @@ class MapController {
         this.airplanes = [];  // 存储所有飞机的实例
         this.radars = [];
         this.initializeDragAndDrop();
-        // 在构造函数内调用各个菜单的初始化方法
-        this.contextMenus.airplane.initializeMenu();
-        this.contextMenus.radar.initializeMenu();
     }
 
     initializeMap() {
@@ -21,14 +18,14 @@ class MapController {
             .then(response => response.json())
             .then(data => {
                 L.geoJSON(data, {
-                    style: function() {
-                        return { color: "#ADD8E6", weight: 2 }; // 设置样式
+                    style: function () {
+                        return {color: "#ADD8E6", weight: 2}; // 设置样式
                     }
                 }).addTo(map); // 添加到地图上
             })
             .catch(error => console.error("Error loading JSON:", error));
 
-        // leaflet官方地图
+        // 在线加载leaflet官方地图
         // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         // }).addTo(map);
@@ -41,12 +38,13 @@ class MapController {
         // });
         // map.addLayer(layer);
 
+
+        // 分片加载地图
         L.tileLayer('tiles/{z}/{x}/{y}.png', {
             maxZoom: 10,
             minZoom: 0,
             attribution: 'map'
         }).addTo(map);
-
         return map;
     }
 
@@ -61,7 +59,7 @@ class MapController {
         this.contextMenus["airplane"].initializeMenu(); // 初始化特定菜单
     }
 
-    addRadar(position){
+    addRadar(position) {
         const radarIcon = L.icon({
             iconUrl: 'images/radar.png',
             iconSize: [32, 32],
@@ -70,22 +68,6 @@ class MapController {
         const radar = new Radar(this.map, position, radarIcon, this.contextMenus["radar"]);
         this.radars.push(radar);
         this.contextMenus["radar"].initializeMenu(); // 初始化特定菜单
-    }
-
-    enableDragAndDrop() {
-        this.map.getContainer().addEventListener('dragover', (e) => e.preventDefault());
-
-        this.map.getContainer().addEventListener('drop', (e) => {
-            e.preventDefault();
-            const itemType = e.dataTransfer.getData("text/plain");
-            if (itemType === "airplane") {
-                const latLng = this.map.mouseEventToLatLng(e);
-                this.addAirplane(latLng);
-            }else if(itemType == "radar"){
-                const latLng = this.map.mouseEventToLatLng(e);
-                this.addRadar(latLng);
-            }
-        });
     }
 
     initializeDragAndDrop() {
@@ -99,7 +81,7 @@ class MapController {
 
             // 获取拖放位置的地理坐标
             const latLng = this.map.mouseEventToLatLng(e);
-            
+
             // 根据拖放的类型生成对应的图标
             if (itemType === "airplane") {
                 this.addAirplane(latLng);
