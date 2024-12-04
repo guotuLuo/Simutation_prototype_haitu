@@ -1,0 +1,7 @@
+/* 分隔线 */
+.divider {
+    height: 2px;
+    background-color: #bdc3c7;  /* 浅灰色 */
+    margin-top: 2px;
+    margin-bottom: 2px;
+}

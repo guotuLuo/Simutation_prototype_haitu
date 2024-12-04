@@ -4,30 +4,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Simulation</title>
+    <link rel="stylesheet" href="css/custom-dialog.css">
+    <link rel="stylesheet" href="css/divider.css">
+    <link rel="stylesheet" href="css/menu-bar.css">
+    <link rel="stylesheet" href="css/tool-bar.css">
+    <link rel="stylesheet" href="css/object.css">
+    <link rel="stylesheet" href="css/radar.css">
+    <link rel="stylesheet" href="css/side-bar.css">
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/title-bar.css" />
     <link rel="stylesheet" href="leaflet/leaflet.css" />
     <script src="leaflet/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="toolbar">
-        <button data-action="tool1">工具1</button>
-        <button data-action="tool2">工具2</button>
-        <button data-action="tool3">工具3</button>
+    <!-- 顶部区域 -->
+    <div class="top-bar">
+        <!-- 顶部区域 -->
+        <div class="title-bar">
+            <!-- 图标区域 -->
+            <div class="icon-column">
+                <img src="images/fzkf.png" alt="图标" id="topIcon" onclick="onIconClick()">
+            </div>
+
+            <!-- 右侧区域：标题栏和菜单栏 -->
+            <div class="right-column">
+                <!-- 标题栏 -->
+                <div class="title">
+                    未命名态势.dpsp
+                </div>
+
+                <!-- 菜单栏 -->
+                <div class="menu-bar">
+                    <ul>
+                        <li><a href="#">文件</a></li>
+                        <li><a href="#">编辑</a></li>
+                        <li><a href="#">调试</a></li>
+                        <li><a href="#">分析</a></li>
+                        <li><a href="#">查看</a></li>
+                        <li><a href="#">工具</a></li>
+                        <li><a href="#">窗口</a></li>
+                        <li><a href="#">帮助</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分隔线 -->
+        <div class="divider"></div>
+
+        <!-- 工具栏 -->
+        <div class="tool-bar">
+            <div class="button-group">
+                <button data-action="start" title="开始">
+                    <img data-action="start" src="images/start.png" alt="全屏" />
+                </button>
+
+                <button data-action="stop" title="停止">
+                    <img data-action="stop" src="images/stop.png" alt="全屏" />
+                </button>
+
+                <button data-action="refresh" title="复原">
+                    <img data-action="refresh" src="images/refresh.png" alt="全屏" />
+                </button>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="button-group">
+                <button data-action="generate" title="生成">
+                    <img data-action="generate" src="images/generate.png" alt="全屏" />
+                </button>
+
+                <button data-action="delete" title="删除">
+                    <img data-action="delete" src="images/delete.png" alt="全屏" />
+                </button>
+
+                <button data-action="reset" title="复位">
+                    <img data-action="reset" src="images/reset.png" alt="全屏" />
+                </button>
+
+                <button data-action="center" title="中心">
+                    <img data-action="center" src="images/center.png" alt="全屏" />
+                </button>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="button-group">
+                <button data-action="match" title="匹配连接">
+                    <img data-action="match" src="images/match.png" alt="全屏" />
+                </button>
+
+                <button data-action="evaluate" title="评估">
+                    <img data-action="evaluate" src="images/evaluate.png" alt="全屏" />
+                </button>
+            </div>
+
+
+
+            <!-- 右侧显示按钮 -->
+            <button id="toggle-full" data-action="toggle-full" title="全屏">
+                <img data-action="toggle-full" src="images/full-screen.png" alt="全屏" />
+            </button>
+
+            <button id="toggle-sidebar" data-action="toggle-sidebar" title="向左收起">
+                <img data-action="toggle-sidebar" src="images/collapseLeft.png" alt="向左收起" />
+            </button>
+
+            <button id="toggle-radarbar" data-action="toggle-radarbar" title="向右收起">
+                <img data-action="toggle-radarbar" src="images/collapseRight.png" alt="向右收起" />
+            </button>
+        </div>
     </div>
 
+    <!-- 分隔线 -->
+    <div class="divider"></div>
+
     <div class="main-container">
-        <div class="sidebar">
-            <button class="nav-button" data-submenu="submenu1">Radar</button>
+        <div class="side-bar">
+            <button class="nav-button" data-submenu="submenu1">
+                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                <span class="button-text" data-action="expand">Radar</span>
+                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+            </button>
+
             <ul id="submenu1" class="submenu" style="display: none;">
-                <li draggable="true" data-type="radar">radar1</li>
-                <li draggable="true" data-type="radar">radar2</li>
+<!--                <li draggable="true" data-type="radar">radar</li>-->
             </ul>
-            <button class="nav-button" data-submenu="submenu2">Object</button>
+
+            <button class="nav-button" data-submenu="submenu2">
+                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                <span class="button-text" data-action="expand">Reconnaissance</span>
+                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+            </button>
+
             <ul id="submenu2" class="submenu" style="display: none;">
-                <li draggable="true" data-type="airplane">plane1</li>
-                <li draggable="true" data-type="airplane">plane2</li>
+<!--                <li draggable="true" data-type="reconnaissance">reconnaissance</li>-->
             </ul>
+
+            <button class="nav-button" data-submenu="submenu3">
+                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                <span class="button-text" data-action="expand">Object</span>
+                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+            </button>
+
+            <ul id="submenu3" class="submenu" style="display: none;">
+<!--                <li draggable="true" data-type="object">object</li>-->
+            </ul>
+
+
+            <button class="nav-button" data-submenu="submenu4">
+                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                <span class="button-text" data-action="expand">Jamming</span>
+                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+            </button>
+
+            <ul id="submenu4" class="submenu" style="display: none;">
+<!--                <li draggable="true" data-type="jamming">jamming</li>-->
+            </ul>
+
         </div>
         <div class="map-container">
             <div id="map" style="height: 100%; width: 100%;"></div>
@@ -40,25 +176,35 @@
                 <li id="start-scan">扫描</li>
             </ul>
         </div>
-        
+
         <div class="radar-display" id="radar-container">
             <!-- 雷达组件将在这里动态生成 -->
         </div>
-        
     </div>
 
     <!-- 引入各个模块的脚本 -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="js/utils.js"></script> 
-    <script src="js/ContextMenu.js"></script>
-    <script src="js/AirplaneContextMenu.js"></script>
-    <script src="js/RadarContextMenu.js"></script>
-    <script src="js/sidebar.js"></script>
-    <script src="js/toolbar.js"></script>
+    <script src="js/utils/GenerateUUID.js"></script>
+    <script src="js/utils/InputTextDialog.js"></script>
+    <script src="js/utils/CreateSubMenuLi.js"></script>
+    <script src="js/utils/PageEventControl.js"></script>
+    <script src="js/contextMenus/contextMenu.js"></script>
+    <script src="js/contextMenus/AirplaneContextMenu.js"></script>
+    <script src="js/contextMenus/RadarContextMenu.js"></script>
+    <script src="js/contextMenus/ReconnaissanceContextMenu.js"></script>
+    <script src="js/contextMenus/JammingContextMenu.js"></script>
+    <script src="js/bars/sidebar.js"></script>
+    <script src="js/bars/toolbar.js"></script>
+    <script src="js/bars/topIcon.js"></script>
     <script src="js/mapController.js"></script>
     <script src="js/point.js"></script>
-    <script src="js/airplane.js"></script>
-    <script src="js/radar.js"></script>
+    <script src="js/components/airplane.js"></script>
+    <script src="js/components/radar.js"></script>
+    <script src="js/components/reconnaissance.js"></script>
+    <script src="js/components/jamming.js"></script>
+    <script src="js/components/componentManager.js"></script>
+    <script src="js/factories/ComponentFactory.js"></script>
+    <script src="js/factories/MenuFactory.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

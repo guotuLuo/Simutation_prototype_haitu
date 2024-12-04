@@ -1,24 +1,36 @@
 // Airplane 类，用于管理飞机对象的创建、飞行和删除
 class Airplane {
-    constructor(map, position, icon, contextMenu) {
+    constructor(map, position, icon, contextMenu, className, name) {
         this.map = map;
         this.position = position;
         this.icon = icon;
         this.contextMenu = contextMenu;
         this.routes = [];
         this.routeMarkers = [];
-        this.routeLines = []; // 添加线集合
         this.speed = 300;
         this.moving = false;
+        this.name = name;
+        this.className = className;
         this.createMarker();
         this.startSendingCoordinates();
     }
 
     createMarker() {
         this.id = generateUUID();
-        this.marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
+        this.marker = L.marker(this.position, {icon: this.icon, draggable: true}).addTo(this.map);
         this.marker.bindPopup("飞机: " + this.id).openPopup();
         // 绑定右键菜单显示事件
+
+        const latLng = this.marker.getLatLng();
+        this.marker.bindPopup("飞机: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6)).openPopup();
+
+        // 监听拖动过程中的事件
+        this.marker.on('drag', (event) => {
+            const latLng = event.target.getLatLng();  // 获取当前经纬度
+            this.marker.setPopupContent("飞机: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6));
+            this.marker.openPopup();  // 更新并重新打开弹出窗口
+        });
+
         this.marker.on('contextmenu', (event) => {
             event.originalEvent.preventDefault();
             this.contextMenu.show(event, this);
@@ -46,7 +58,7 @@ class Airplane {
             lat: this.marker.getLatLng().lat,
             lon: this.marker.getLatLng().lng
         }).then(response => {
-                console.log(`路径点 ${this.id} 坐标已成功上传到服务器`);
+            console.log(`路径点 ${this.id} 坐标已成功上传到服务器`);
         }).catch(error => {
             console.error(`路径点 ${this.id} 坐标上传失败:`, error);
         });
@@ -77,11 +89,12 @@ class Airplane {
             // 如果有上一个点，则绘制线段连接
             if (this.routes.length > 1) {
                 const previousLatLng = this.routes[this.routes.length - 2];
-                const polyline = L.polyline([previousLatLng, [latLng.lat, latLng.lng]], { color: 'red' }).addTo(this.map);
+                const polyline = L.polyline([previousLatLng, [latLng.lat, latLng.lng]], {color: 'red'}).addTo(this.map);
                 this.routeMarkers.push(polyline); // 将线段添加到 routeMarkers 数组中}
                 console.log(`添加点迹: ${latLng.lat}, ${latLng.lng}`);
 
-            }};
+            }
+        };
 
         // 右键点击事件 - 结束路径设置
         const endRouteSetting = (event) => {
@@ -179,11 +192,10 @@ class Airplane {
                 setTimeout(moveStep, updateInterval); // 调用下一步
             }
         };
-
         moveStep(); // 开始移动
     }
 
-    setSpeed(){
+    setSpeed() {
         // 设置当前飞机的速度
         this.speed = parseInt(prompt("初始速度300,请输入新的速度", this.speed));
         this.marker.getPopup().setContent("飞机: " + this.speed);
@@ -213,7 +225,7 @@ class Airplane {
     // 启动定时任务，每秒发送一次
     startSendingCoordinates() {
         this.intervalId = setInterval(() => {
-            if(this.moving){
+            if (this.moving) {
                 this.sendCoordinates();
             }
         }, 1000); // 每秒发送一次
@@ -251,38 +263,26 @@ class Airplane {
             name: this.name
         }).then(response => {
             console.log(`飞机 ${this.id} 名称已修改成功`);
-         }).catch(error => {
+        }).catch(error => {
             console.error(`飞机 ${this.id} 名称已修改失败:`, error);
         });
     }
 
-    deleteRoute(){
+    deleteRoute() {
         this.stopFlight();
         this.routes = [];
         this.routeMarkers.forEach(marker => marker.remove());
         this.routeMarkers = [];
-        const url=`http://127.0.0.1:8081/api/airplanes/deleteTrackPoint?uuid=${encodeURIComponent(this.id)}`;
+        const url = `http://127.0.0.1:8081/api/airplanes/deleteTrackPoint?uuid=${encodeURIComponent(this.id)}`;
         navigator.sendBeacon(url);
     }
 
-    deleteAllRoute(){
+    deleteAllRoute() {
         this.stopFlight();
         this.routes = [];
         this.routeMarkers.forEach(marker => marker.remove());
         this.routeMarkers = [];
-        const url=`http://127.0.0.1:8081/api/airplanes/deleteTrackAllPoint}`;
+        const url = `http://127.0.0.1:8081/api/airplanes/deleteTrackAllPoint}`;
         navigator.sendBeacon(url);
-    }
-
-    getId(){
-        return this.id;
-    }
-
-    getLat(){
-        return this.marker.lat;
-    }
-
-    getLon(){
-        return this.marker.lon;
     }
 }

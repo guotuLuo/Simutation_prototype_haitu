@@ -1,0 +1,120 @@
+.side-bar {
+    width: 300px;
+    background-color: #f8f9fa;
+    padding-right: 10px;
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    position: fixed;  /* 固定在页面上，浮动在地图上方 */
+    transition: transform 0.3s ease; /* 滑动动画 */
+    transform: translateX(0); /* 默认显示 */
+    z-index:1001 !important; /* 确保侧边栏在地图上方 */
+    height: 100vh;  /* 确保侧边栏高度铺满全屏 */
+    left: 0;
+}
+
+/* 隐藏 sidebar */
+.side-bar.hidden {
+    transform: translateX(-100%); /* 向左滑动隐藏 */
+}
+
+
+.nav-button {
+    padding: 10px;
+    background-color: #e0e0e0;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease; /* 平滑的背景色变化 */
+}
+
+.nav-button:hover {
+    background-color: #d1d1d1;  /* 悬停时背景颜色加深 */
+}
+
+.expand-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    margin-right: 10px;  /* 将展开图标与文字之间的间距稍微增大 */
+}
+
+.add-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    margin-left: 10px;  /* 让添加图标与文字之间有一定的间距 */
+}
+
+.expand-icon:hover,
+.add-icon:hover {
+    opacity: 0.6;  /* 图标悬停时变得稍微透明，进一步加深视觉效果 */
+}
+
+
+.button-text {
+    flex-grow: 1;  /* 让文字占据剩余空间 */
+}
+
+.submenu {
+    display: flex;
+    list-style-type: none;
+    padding-left: 25px;
+    font-size: 16px;
+}
+
+
+/* submenu 中的 li 样式 */
+.submenu li {
+    display: flex;  /* 使用 flex 布局 */
+    justify-content: space-between;  /* 让内容分布到两边，删除按钮在右边 */
+    align-items: center;  /* 垂直居中对齐 */
+    padding: 5px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submenu li:hover {
+    background-color: #f1f1f1; /* 悬停时背景颜色加深 */
+}
+
+/* 确保删除按钮和图片都有正确的显示尺寸 */
+.delete-btn {
+    width: 14px;  /* 设置一个明确的尺寸 */
+    height: 14px;
+    display: flex;
+    justify-content: center;
+    border: none;
+    background: none;
+    align-items: center;
+    cursor: pointer;
+}
+
+.delete-btn img {
+    width: 10px;
+    height: 10px;
+    object-fit: contain;  /* 保证图标保持比例 */
+    display: block;  /* 确保图片被显示 */
+}
+
+.delete-btn:hover {
+    opacity: 0.6;  /* 图标悬停时变得稍微透明，进一步加深视觉效果 */
+}
+
+
+input, button, label {
+    margin: 5px 5px;
+    padding: 5px 5px;
+}

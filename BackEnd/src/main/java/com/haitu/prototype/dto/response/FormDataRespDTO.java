@@ -4,12 +4,12 @@ import lombok.Data;
 @Data
 public class FormDataRespDTO {
     private long batchId; 
-    private short name;
-    private short age;
-    private int pp;
-    private int height;
-    private int weight;
-    private short ddd;
-    private short kkk;
-    private long time;
+    private short pulseMarkCode;
+    private short pulseAmplitude;
+    private int radioFrequency;
+    private int bandWidth;
+    private int pulseWidth;
+    private short orientation;
+    private short tilt;
+    private long arriveTime;
 }

@@ -1,10 +1,10 @@
 class Radar {
-    constructor(map, position, icon, contextMenu) {
+    constructor(map, position, icon, contextMenu, className, name) {
         this.map = map;
         this.position = position;
         this.icon = icon;
         this.contextMenu = contextMenu;
-        this.marker = this.createMarker();
+        this.createMarker();
         this.scanRadius = 30000; // 扫描半径，单位为米
         this.scanInterval = null; // 用于保存扫描的定时器
         this.Points = [];
@@ -299,11 +299,19 @@ class Radar {
     
     createMarker() {
         this.id = generateUUID();
-        const marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
-        marker.bindPopup("雷达: " + this.id).openPopup();
-    
+        this.marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
+        const latLng = this.marker.getLatLng();
+        this.marker.bindPopup("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6) ).openPopup();
+
+        // 监听拖动过程中的事件
+        this.marker.on('drag', (event) => {
+            const latLng = event.target.getLatLng();  // 获取当前经纬度
+            this.marker.setPopupContent("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6));
+            this.marker.openPopup();  // 更新并重新打开弹出窗口
+        });
+
         // 绑定右键菜单显示事件
-        marker.on('contextmenu', (event) => {
+        this.marker.on('contextmenu', (event) => {
             event.originalEvent.preventDefault();
             this.contextMenu.show(event, this);
         });
@@ -327,7 +335,7 @@ class Radar {
         
         // 创建 UUID 显示区域
         const radarText = document.createElement("p");
-        radarText.textContent = `雷达 UUID: ${this.id}`;
+        radarText.textContent = `雷达 UUID: ${this.id.replace(/-/g, '').substring(0, 18)}`;
 
         // 创建按钮数组
         var buttonLabels = ["标准显示", "偏心显示", "空心显示", "延迟显示"]; // 按钮的文本内容
@@ -368,7 +376,6 @@ class Radar {
 
         // 将雷达组件添加到右侧容器中
         document.getElementById("radar-container").appendChild(radarItem);
-        return marker;
     }
 
     redrawPlaneMarkers() {
@@ -381,24 +388,34 @@ class Radar {
     startScan() {
 
         console.log("开始雷达扫描");
-    
+
         // 初始化状态
         this.detectedPointsMap = new Map();
         
         this.scanStep = 0.2; // 扫描步长
         const scanIntervalMs = 20; // 扫描间隔（毫秒）
-    
+        const maxRetries = 5; // 最大重试次数
+        let retryCount = 0; // 当前重试次数
+        let stopRequested = false; // 标志位，避免重复停止扫描
+
         // 定时扫描
         this.scanInterval = setInterval(() => {
+            if (stopRequested) {
+                // 如果已经请求停止扫描，清除定时器并退出
+                console.log("扫描已停止，取消定时器");
+                clearInterval(this.scanInterval);
+                return; // 退出当前执行
+            }
+
             // 更新扫描线的当前角度
             this.scanAngle = (this.scanAngle + this.scanStep) % 360;
-                // 先通过 ID 获取雷达背景元素
             const scanline = document.querySelector(`#radar-scanline-${this.id}`);
             scanline.style.transform = `rotate(${this.scanAngle}deg)`;
             
             // 获取新的数据并处理
             axios.get("http://127.0.0.1:8081/api/radars/scan")
                 .then(response => {
+                    retryCount = 0; // 重试次数归零，成功时重置
                     const data = response.data.data;
 
                     // 处理接收到的点并更新 `detectedPointsMap`
@@ -423,8 +440,36 @@ class Radar {
                 })
                 .catch(error => {
                     console.error("请求失败:", error);
+
+                    // 网络请求失败时增加重试次数
+                    if (retryCount < maxRetries) {
+                        retryCount++;
+                        console.log(`网络请求失败，正在重试 ${retryCount}/${maxRetries} 次...`);
+                    } else {
+                        console.log("最大重试次数已达到，停止扫描");
+                        stopRequested = true; // 设置停止扫描的标志
+                        this.stopScan(); // 超过最大重试次数才停止扫描
+                    }
                 });
         }, scanIntervalMs);
+    }
+    stopScan() {
+        console.log("停止雷达扫描");
+
+        // 清除定时扫描的 setInterval
+        if (this.scanInterval) {
+            console.log("调用停止雷达扫描函数");
+            clearInterval(this.scanInterval);
+            this.scanInterval = null;
+        }
+
+        // 删除雷达上所有点迹
+        this.removeAllPlaneMarkers();
+
+        // 清空 detectedPointsMap
+        this.detectedPointsMap.clear();
+
+        console.log("所有点迹已清除，扫描停止");
     }
 
 
@@ -432,7 +477,7 @@ class Radar {
         points.forEach(point => {
             const planePosition = point.getLatLng();
             const distance = this.map.distance(this.radarGeoCenter, planePosition);
-    
+
             if (distance <= this.scanRadius) {
                 // 在雷达显示上更新或添加该点
                 this.addPlaneToRadar(point);
@@ -597,7 +642,10 @@ class Radar {
         return (angle + 2 * Math.PI) % (2 * Math.PI);
     }
 
+
+    // 删除雷达的同时需要关闭雷达的一切活动，包括scan之类的
     delete() {
+        this.stopScan();
         this.map.removeLayer(this.marker);
         const radarItem = document.getElementById(`${this.id}`);
         if (radarItem) {

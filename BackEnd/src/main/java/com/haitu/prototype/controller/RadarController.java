@@ -33,6 +33,7 @@ public class RadarController {
     public Result<List<RadarScanRespDTO>> coordinatesForRadar() {
         return Results.success(radarService.coordinatesForRadar());
     }
+
     /**
      * 删除雷达
      * */
@@ -41,6 +42,7 @@ public class RadarController {
         radarService.remove(uuid);
         return Results.success();
     }
+
     /**
      * 解析前端发送的xml文件并生成java类
      * */
