@@ -12,6 +12,7 @@ class RadarContextMenu extends ContextMenu {
         startScanItem.textContent = "扫描";
         startScanItem.onclick = () => {
             if (this.currentItem) {
+                this.currentItem.scanning=true;
                 this.currentItem.startScan();
                 this.hide();
             }
@@ -25,6 +26,7 @@ class RadarContextMenu extends ContextMenu {
         stopScanItem.textContent = "停止扫描";
         stopScanItem.onclick = () =>{
             if(this.currentItem){
+                this.currentItem.scanning=false;
                 this.currentItem.stopScan();
                 this.hide();
             }

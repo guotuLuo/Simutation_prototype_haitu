@@ -212,8 +212,8 @@ body, html {
 
 
 .plane-marker {
-    width: 10px;           /* 红点的宽度 */
-    height: 10px;          /* 红点的高度 */
+    width: 3px;           /* 红点的宽度 */
+    height: 3px;          /* 红点的高度 */
     background-color: red; /* 红点颜色 */
     border-radius: 50%;    /* 使红点变为圆形 */
     position: absolute;    /* 绝对定位，确保定位生效 */

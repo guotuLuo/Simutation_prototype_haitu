@@ -1,4 +1,3 @@
-// Radar 类，用于管理飞机对象的创建、飞行和删除
 class Radar {
     constructor(map, position, icon, contextMenu) {
         this.map = map;
@@ -10,25 +9,35 @@ class Radar {
         this.scanInterval = null; // 用于保存扫描的定时器
         this.Points = [];
         this.markerElement = [];
+        this.radarBackground = null; // 添加 radarBackground 属性
         this.initializeRadarCenter();
         this.radarGeoCenter = this.marker.getLatLng(); // 雷达中心的地理坐标
         this.detectedPointsMap = new Map();  // 存储检测到的飞机
+        this.buttonLabels = ["标准显示", "偏心显示", "空心显示", "延迟显示"];
+        this.currentDisplayType = "标准显示"; // 全局变量跟踪当前显示状态
+        this.radarPdata = {};
+        // 初始化按钮
+        this.scanAngle = 0;
+        // this.initializeRadarControls(); // 页面加载完成后再初始化雷达
+        this.hollowSemiLength = 0;
+        this.scanning=false;
+        this.displayType='standard';
+        this.lines=[];
     }
 
-
     initializeRadarCenter() {
-        const radarBackground = document.getElementById(`radar-background-${this.id}`);
-        if (radarBackground) {
+        this.radarBackground = document.getElementById(`radar-background-${this.id}`);
+        if (this.radarBackground) {
             // 假设 radarBackground 是一个固定大小的正方形容器
-            const width = radarBackground.offsetWidth;
-            const height = radarBackground.offsetHeight;
+            const width = this.radarBackground.offsetWidth;
+            const height = this.radarBackground.offsetHeight;
             console.log("radarbackground width is:", width);
             console.log("radarbackground height is:", height);
             this.radarCenter = {
                 x: width / 2,
                 y: height / 2
             };
-    
+
             // 添加中心标记用于调试
             const radarCenterMarker = document.createElement("div");
             radarCenterMarker.className = "center-marker";
@@ -42,59 +51,206 @@ class Radar {
             radarCenterMarker.style.left = "50%";
             radarCenterMarker.style.top = "50%";
             radarCenterMarker.style.transform = "translate(-50%, -50%)"; // 使标记居中于中心
+            this.radarBackground.appendChild(radarCenterMarker);
+
             // 初始化刻度环
-            this.createRadarScale(radarBackground);
-            this.createAngleLines(radarBackground);
-
-            radarBackground.appendChild(radarCenterMarker);
-        } else {
-            console.error("雷达背景元素未找到，无法初始化中心坐标");
+            this.createRadarScale(this.radarBackground);
+            this.createAngleLines(this.radarBackground);
         }
     }
 
-    createRadarScale(radarBackground) {
+    // initializeRadarControls() {
+    //     if (this.radarBackground) {
+    //         const buttonContainer = document.createElement("div");
+    //         buttonContainer.classList.add("button-container");
+    //         // 给按钮容器添加一个类名
+
+    //         // 遍历按钮数组并创建按钮
+    //         this.buttonLabels.forEach((label) => {
+    //             const button = document.createElement("button");
+    //             button.innerHTML = label; // 按钮显示的文本
+    //             button.classList.add("radar-button"); // 给按钮添加样式类
+    //             button.addEventListener('click', () => {
+    //                 this.currentDisplayType = label; // 更新当前显示状态
+    //                 this.updateRadarDisplay1(this.radarBackground, this.currentDisplayType); // 更新雷达显示
+    //             });
+    //             buttonContainer.appendChild(button); // 将按钮添加到容器中
+    //         });
+
+    //         this.radarBackground.appendChild(buttonContainer); // 将按钮容器添加到 radarBackground 中
+    //     }
+    // }
+
+    updateRadarDisplay1(radarBackground, displayType) {
+        const circles = radarBackground.querySelectorAll('.range-circle');
+        const labels = radarBackground.querySelectorAll('.range-label');
+    
+        // 删除所有生成的圆形和标签
+        circles.forEach(circle => circle.remove());
+        labels.forEach(label => label.remove());
+
+        switch (displayType) {
+            case '标准显示':
+                this.createRadarScale(radarBackground);
+                //this.createAngleLines(radarBackground);
+                break;
+            case '偏心显示':
+                this.transformRadarBackground(radarBackground, 'eccentric');
+                break;
+            case '空心显示':
+                this.transformRadarBackground(radarBackground, 'hollow');
+                break;
+            case '延迟显示':
+                this.transformRadarBackground(radarBackground, 'delayed');
+                break;
+            default:
+                this.createRadarScale(radarBackground);
+                //this.createAngleLines(radarBackground);
+                break;
+        }
+    }
+    clearRadarDisplay(radarBackground) {
+        //radarBackground.innerHTML = ''; // 清除所有子元素
+    }
+
+    transformRadarBackground(radarBackground, type) {
         const radarRadiusInPixels = radarBackground.offsetWidth / 2;
-        const numberOfCircles = 4;
-        const stepDistance = this.scanRadius / numberOfCircles;
+    
+        switch (type) {
+            case 'eccentric':
+                // const circles = radarBackground.querySelectorAll('.range-circle');
+                // const labels = radarBackground.querySelectorAll('.range-label');
+            
+                // // 删除所有生成的圆形和标签
+                // circles.forEach(circle => circle.remove());
+                // labels.forEach(label => label.remove());
+                // // 偏心显示：将扫描中心移动至非几何中心位置，并将显示信息扩大两倍
+                // radarBackground.style.transform = `translate(-25%, -25%) scale(2)`;
+                
+                // // 更新雷达中心
+                // this.radarCenter.x = (radarBackground.offsetWidth * 0.75) / 2;
+                // this.radarCenter.y = (radarBackground.offsetHeight * 0.75) / 2;
+    
+                // // 重新绘制刻度和角度线
+                // this.createRadarScale(radarBackground);
+                // this.createAngleLines(radarBackground);
+                // break;
+            case 'hollow':
 
-        for (let i = 1; i <= numberOfCircles; i++) {
-            const circleDistance = i * stepDistance;
-            const circleRatio = circleDistance / this.scanRadius;
-            const circleRadius = circleRatio * radarRadiusInPixels;
+                // 空心显示：将回波显示距离向外围方向延伸50公里，量程减少50公里
+                //radarBackground.style.transform = `scale(0.5)`;
+                //radarBackground.scroll(0, 50); // 向外滚动50个单位
+    
+                // 重新绘制更小的刻度和角度线
+                this.createRadarScale(radarBackground, 'hollow');
+                //this.createAngleLines(radarBackground);
+                break;
+            case 'delayed':
+                // 延迟显示：设置延迟距离，扫描中心设置为延迟距离
+                //const delayDistance = 50; // 假设延迟距离为50个单位
+                //radarBackground.scroll(0, -delayDistance); // 向内滚动延迟距离个单位
+    
+                // 重新绘制刻度和角度线（考虑延迟效果）
+                //this.createRadarScale(radarBackground);
+                //this.createAngleLines(radarBackground);
+                break;
+            default:
+                // 默认显示逻辑
+                break;
+        }
+    }
+    
 
-            const rangeCircle = document.createElement("div");
-            rangeCircle.className = "range-circle";
-            rangeCircle.style.width = `${circleRadius * 2}px`;
-            rangeCircle.style.height = `${circleRadius * 2}px`;
-            rangeCircle.style.left = "50%";
-            rangeCircle.style.top = "50%";
-            rangeCircle.style.transform = `translate(-50%, -50%) scale(${circleRatio})`;
-            radarBackground.appendChild(rangeCircle);
-
-            const rangeLabel = document.createElement("div");
-            rangeLabel.className = "range-label";
-            rangeLabel.style.left = `${50}%`;
-            rangeLabel.style.top = `${50 - circleRatio * 50}%`;
-            rangeLabel.style.transform = "translate(-50%, -50%)";
-            rangeLabel.textContent = `${(circleDistance).toFixed(1)} m`;
-            radarBackground.appendChild(rangeLabel);
+    createRadarScale(radarBackground, displayType) {
+        if(displayType!=='hollow'){
+            const radarRadiusInPixels = radarBackground.offsetWidth / 2;
+            const numberOfCircles = 4;
+            const stepDistance = this.scanRadius / numberOfCircles;
+            for (let i = 0; i <= numberOfCircles; i++) {
+                const circleDistance = i * stepDistance; // 正确计算每个圆的距离
+                const circleRatio = circleDistance / this.scanRadius; // 每个圈的比例
+                const circleRadius = circleRatio * radarRadiusInPixels; // 根据比例计算圆的半径
+                const rangeCircle = document.createElement("div");
+                rangeCircle.className = "range-circle";
+                rangeCircle.style.width = `${circleRadius * 2}px`;
+                rangeCircle.style.height = `${circleRadius * 2}px`;
+                rangeCircle.style.left = "50%";
+                rangeCircle.style.top = "50%";
+                rangeCircle.style.transform = `translate(-50%, -50%) scale(${circleRatio})`;
+                radarBackground.appendChild(rangeCircle);
+                const rangeLabel = document.createElement("div");
+                rangeLabel.className = "range-label";
+                rangeLabel.style.left = `${50}%`;
+                rangeLabel.style.top = `${50 - circleRatio * 50}%`;
+                rangeLabel.style.transform = "translate(-50%, -50%)";
+                rangeLabel.textContent = `${(circleDistance).toFixed(1)} m`;
+                radarBackground.appendChild(rangeLabel);
+            }
+        }
+        if(displayType==='hollow'){
+            const radarRadiusInPixels = radarBackground.offsetWidth / 2;
+            const numberOfCircles = 5;
+            const stepDistance = this.scanRadius / numberOfCircles;
+            const numberOfCirclesHollow=4;
+            const stepDistanceHollow = this.scanRadius/numberOfCirclesHollow;
+            for (let i = 0; i <= numberOfCircles; i++) {
+                const circleDistance = i * stepDistance; // 正确计算每个圆的距离
+                const circleDistanceHollow = (i-1) * stepDistanceHollow;
+                const circleRatio = circleDistance / this.scanRadius; // 每个圈的比例
+                const circleRatioHollow = circleDistanceHollow / this.scanRadius; // 每个圈的比例
+                const circleRadius = circleRatio * radarRadiusInPixels; // 根据比例计算圆的半径
+                const circleRadiusHollow = circleRatioHollow * radarRadiusInPixels; // 根据比例计算圆的半径
+                const rangeCircle = document.createElement("div");
+                rangeCircle.className = "range-circle";
+                rangeCircle.style.width = `${circleRadius * 2}px`;
+                rangeCircle.style.height = `${circleRadius * 2}px`;
+                rangeCircle.style.left = "50%";
+                rangeCircle.style.top = "50%";
+                rangeCircle.style.transform = `translate(-50%, -50%) scale(${circleRatio})`;
+                if(i===0){
+                        // 将圆全部用白色填满
+                rangeCircle.style.backgroundColor = "white";
+                }
+                radarBackground.appendChild(rangeCircle);
+                if(i===0)
+                {
+                    continue
+                }
+                const rangeLabel = document.createElement("div");
+                rangeLabel.className = "range-label";
+                rangeLabel.style.left = `${50}%`;
+                rangeLabel.style.top = `${50 - circleRatio * 50}%`;
+                rangeLabel.style.transform = "translate(-50%, -50%)";
+                if(i===1){
+                    this.hollowSemiLength = circleDistanceHollow;
+                }
+                rangeLabel.textContent = `${(circleDistanceHollow).toFixed(1)} m`;
+                radarBackground.appendChild(rangeLabel);
+            }
         }
     }
 
-    createAngleLines(radarBackground) {
+    
+    
+
+    createAngleLines(radarBackground,displayType) {
         const radarRadiusInPixels = radarBackground.offsetWidth / 2;
         const majorLineLength = radarRadiusInPixels;        // 大刻度线长度，为雷达半径
         const middleLineLength = 10;                       // 中角度线长度，固定为10像素
         const minorLineLength = 5;                         // 小角度线长度，固定为5像素
-    
+
         for (let angle = 0; angle < 360; angle++) {
             const angleLine = document.createElement("div");
-    
+
             if (angle % 45 === 0) {
                 // 大刻度线，每 45 度一条
                 angleLine.className = "angle-line-major";
                 angleLine.style.height = `${majorLineLength}px`; // 大刻度线长度
                 angleLine.style.transformOrigin = `50% 0%`;      // 从圆周边缘向内延伸
+
+                
+                let angleRad = angle * (Math.PI / 180);  // 将角度转换为弧度
+                
             } else if (angle % 5 === 0) {
                 // 中角度线，每 5 度一条
                 angleLine.className = "angle-line-middle";
@@ -106,16 +262,33 @@ class Radar {
                 angleLine.style.height = `${minorLineLength}px`; // 小角度线长度
                 angleLine.style.transformOrigin = `50% 0%`;      // 从圆周边缘向内延伸
             }
-    
+
+            if(displayType==='hollow'){
+                
+                const lineEndX = Math.cos(angleRad) * lineLength;
+                const lineEndY = Math.sin(angleRad) * lineLength;
+        
+                // 计算 lineStart, lineCross 和 lineEnd 的坐标
+                const lineStartX = Math.cos(angleRad) * lineStart;
+                const lineStartY = Math.sin(angleRad) * lineStart;
+                const lineCrossX = Math.cos(angleRad) * lineCross;
+                const lineCrossY = Math.sin(angleRad) * lineCross;
+        
+                // 计算从 lineCross 到 lineEnd 的绘制部分
+                const startX = lineCrossX;
+                const startY = lineCrossY;
+                const endX = lineEndX;
+                const endY = lineEndY;
+            }
             // 设置公共样式
             angleLine.style.position = "absolute";
             angleLine.style.width = angle % 45 === 0 ? "1px" : "0.5px"; // 大刻度线更粗
             angleLine.style.left = "50%";
             angleLine.style.top = "50%";
-    
+
             // 旋转角度，以使刻度线正确分布
             angleLine.style.transform = `rotate(${angle}deg) translate(0, -${radarRadiusInPixels}px)`;
-    
+
             // 添加到雷达背景
             radarBackground.appendChild(angleLine);
         }
@@ -157,20 +330,35 @@ class Radar {
         radarText.textContent = `雷达 UUID: ${this.id}`;
 
         // 创建按钮数组
-        var buttonLabels = ["按钮1", "按钮2", "按钮3", "按钮4"]; // 按钮的文本内容
+        var buttonLabels = ["标准显示", "偏心显示", "空心显示", "延迟显示"]; // 按钮的文本内容
+        var currentDisplayType = "标准显示"; // 全局变量跟踪当前显示状态
+        var displayTypes = ['standard', 'eccentric', 'hollow', 'delayed'];
         var radarContainer = document.getElementById("radar-container");
 
         // 创建一个容器来放置这些按钮
         var buttonContainer = document.createElement("div");
         buttonContainer.classList.add("button-container"); // 给按钮容器添加一个类名
 
-        // 遍历按钮数组并创建按钮
-        buttonLabels.forEach(function(label) {
+        buttonLabels.forEach((label) => {
             var button = document.createElement("button");
             button.innerHTML = label; // 按钮显示的文本
             button.classList.add("radar-button"); // 给按钮添加样式类
+            this.displayType=displayTypes[buttonLabels.indexOf(currentDisplayType)];
+            // 为每个按钮绑定事件
+            button.addEventListener('click', (event) => {
+                currentDisplayType = label; // 更新当前显示状态
+                this.stopScan();
+                console.log("currentDisplayType is:", currentDisplayType);
+                this.updateRadarDisplay1(radarBackground, currentDisplayType); // 更新雷达显示
+                this.redrawPlaneMarkers();
+                if(this.scanning===true){
+                this.startScan();}
+                
+            });
+            
             buttonContainer.appendChild(button); // 将按钮添加到容器中
         });
+        
 
         // 将按钮容器添加到 radar-container 中
         // 将所有元素添加到雷达组件
@@ -182,13 +370,21 @@ class Radar {
         document.getElementById("radar-container").appendChild(radarItem);
         return marker;
     }
-    
+
+    redrawPlaneMarkers() {
+        // 删除雷达上所有点迹
+        this.removeAllPlaneMarkers();
+        this.detectedPointsMap.forEach(point => {
+            this.addPlaneToRadar(point);
+        });
+    }
     startScan() {
+
         console.log("开始雷达扫描");
     
         // 初始化状态
         this.detectedPointsMap = new Map();
-        this.scanAngle = 0;
+        
         this.scanStep = 0.2; // 扫描步长
         const scanIntervalMs = 20; // 扫描间隔（毫秒）
     
@@ -199,7 +395,7 @@ class Radar {
                 // 先通过 ID 获取雷达背景元素
             const scanline = document.querySelector(`#radar-scanline-${this.id}`);
             scanline.style.transform = `rotate(${this.scanAngle}deg)`;
-        
+            
             // 获取新的数据并处理
             axios.get("http://127.0.0.1:8081/api/radars/scan")
                 .then(response => {
@@ -209,16 +405,16 @@ class Radar {
                     Object.entries(data).forEach(([key, airplaneData]) => {
                         const planeId = airplaneData.id;
                         const point = new Point(planeId, airplaneData.lat, airplaneData.lon);
-
+                        
                         // 检查点是否在扫描范围内
                         const planePosition = point.getLatLng();
                         const distance = this.map.distance(this.radarGeoCenter, planePosition);
                         const angle = this.calculateAngle(this.radarGeoCenter, planePosition) * (180 / Math.PI); // 转换为度
                         const angleDifference = (this.scanAngle - angle + 360) % 360;
-
                         // 扇形区域内的点
                         if (angleDifference <= 90 && distance <= this.scanRadius) {
                             this.detectedPointsMap.set(planeId, point); // 更新或添加点
+                            // this.radarPdata[planeId].push(airplaneData.lat,airplaneData.lon);
                         }
                     });
 
@@ -243,7 +439,7 @@ class Radar {
             }
         });
     }
-    
+
     // 删除雷达上的指定点迹
     removePointFromRadar(point) {
         // 找到雷达界面上对应的点元素，并将其移除
@@ -257,6 +453,7 @@ class Radar {
 
 
     stopScan() {
+
         console.log("停止雷达扫描");
     
         // 清除定时扫描的 setInterval
@@ -279,16 +476,18 @@ class Radar {
         const planePosition = point.getLatLng();
         const distance = this.map.distance(this.radarGeoCenter, planePosition);
         const angle = this.calculateAngle(this.radarGeoCenter, planePosition);
-    
+        
+        if(this.displayType==='hollow'){
         // 转换距离到雷达表盘像素距离
-        const radarRadiusInPixels = this.radarCenter.x; // 假设雷达半径是中心 x 坐标的距离
-        const distanceRatio = Math.min(distance / this.scanRadius, 1);
+        
+        const radarRadiusInPixels = this.radarCenter.x-this.hollowSemiLength; // 假设雷达半径是中心 x 坐标的距离
+        const distanceRatio = Math.min((distance- this.hollowSemiLength) / this.scanRadius, 1);
         const displayDistance = distanceRatio * radarRadiusInPixels;
     
         // 计算飞机在雷达表盘上的位置
-        const x = Math.cos(angle) * displayDistance + this.radarCenter.x;
-        const y = Math.sin(angle) * displayDistance + this.radarCenter.y;
-    
+        const x = Math.cos(angle) * (displayDistance+this.hollowSemiLength) + this.radarCenter.x;
+        const y = Math.sin(angle) * (displayDistance+this.hollowSemiLength) + this.radarCenter.y;
+        
         // 创建飞机的显示标记
         const planeMarker = document.createElement("div");
         planeMarker.className = "plane-marker";
@@ -301,9 +500,76 @@ class Radar {
             radarBackground.appendChild(planeMarker);
         }
         this.markerElement.push(planeMarker);
+        }
+        else if(this.displayType==='standard'){
+                    // 转换距离到雷达表盘像素距离
+        const radarRadiusInPixels = this.radarCenter.x; // 假设雷达半径是中心 x 坐标的距离
+        const distanceRatio = Math.min(distance / this.scanRadius, 1);
+        const displayDistance = distanceRatio * radarRadiusInPixels;
+    
+        // 计算飞机在雷达表盘上的位置
+        const x = Math.cos(angle) * displayDistance + this.radarCenter.x;
+        const y = Math.sin(angle) * displayDistance + this.radarCenter.y;
+        
+        // 创建飞机的显示标记
+        const planeMarker = document.createElement("div");
+        planeMarker.className = "plane-marker";
+        planeMarker.style.left = `${x}px`;
+        planeMarker.style.top = `${y}px`;
+    
+        // 将飞机标记添加到对应的雷达背景中
+        const radarBackground = document.getElementById(`radar-background-${this.id}`);
+        if (radarBackground) {
+            radarBackground.appendChild(planeMarker);
+        }
+        this.markerElement.push(planeMarker);
+        }
+        else{}
+        // 更新线段集合并绘制线段
+        this.updateLines();
+    }
+    updateLines() {
+        // 清除现有的线段
+        // this.lines.forEach(line => line.remove());
+        // this.lines = [];
+
+        // 绘制新的线段
+        let i = this.markerElement.length - 1 ;
+        if(i>=1){
+        const startMarker = this.markerElement[i-1];
+        const endMarker = this.markerElement[i];
+
+        const startX = parseFloat(startMarker.style.left);
+        const startY = parseFloat(startMarker.style.top);
+        const endX = parseFloat(endMarker.style.left);
+        const endY = parseFloat(endMarker.style.top);
+
+        const line = this.createLine(startX, startY, endX, endY);
+        const radarBackground = document.getElementById(`radar-background-${this.id}`);
+        if (radarBackground) {
+            radarBackground.appendChild(line);
+        }
+        this.lines.push(line);}
     }
     
 
+    createLine(x1, y1, x2, y2) {
+        const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+        const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+
+        const line = document.createElement("div");
+        line.className = "line";
+        line.style.position = "absolute";
+        line.style.transformOrigin = "0 0";
+        line.style.width = `${length}px`;
+        line.style.height = "1px";
+        line.style.backgroundColor = "white";
+        line.style.left = `${x1}px`;
+        line.style.top = `${y1}px`;
+        line.style.transform = `rotate(${angle}deg)`;
+
+        return line;
+    }    
     removeAllPlaneMarkers() {
         this.markerElement.forEach(marker => {
             if (marker && marker.parentNode) {
