@@ -75,5 +75,13 @@ function customDialog(button) {
             dialog.remove();
             enablePageInteractions();
         });
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {  // 按下 Enter 键
+                confirmButton.click();  // 触发确认按钮的点击事件
+            } else if (event.key === 'Escape') {  // 按下 Escape 键
+                cancelButton.click();  // 触发取消按钮的点击事件
+            }
+        });
     });
 }

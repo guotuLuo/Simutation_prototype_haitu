@@ -67,15 +67,54 @@
 .submenu {
     display: flex;
     list-style-type: none;
-    padding-left: 45px;
+    padding-left: 25px;
     font-size: 16px;
 }
 
-.submenu:hover{
-    background-color: #d1d1d1;  /* 悬停时背景颜色加深 */
+
+/* submenu 中的 li 样式 */
+.submenu li {
+    display: flex;  /* 使用 flex 布局 */
+    justify-content: space-between;  /* 让内容分布到两边，删除按钮在右边 */
+    align-items: center;  /* 垂直居中对齐 */
+    padding: 5px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
+.submenu li:hover {
+    background-color: #f1f1f1; /* 悬停时背景颜色加深 */
+}
+
+/* 确保删除按钮和图片都有正确的显示尺寸 */
+.delete-btn {
+    width: 14px;  /* 设置一个明确的尺寸 */
+    height: 14px;
+    display: flex;
+    justify-content: center;
+    border: none;
+    background: none;
+    align-items: center;
+    cursor: pointer;
+}
+
+.delete-btn img {
+    width: 10px;
+    height: 10px;
+    object-fit: contain;  /* 保证图标保持比例 */
+    display: block;  /* 确保图片被显示 */
+}
+
+.delete-btn:hover {
+    opacity: 0.6;  /* 图标悬停时变得稍微透明，进一步加深视觉效果 */
+}
+
+
 input, button, label {
-    margin: 10px 5px;
-    padding: 5px 10px;
+    margin: 5px 5px;
+    padding: 5px 5px;
 }
