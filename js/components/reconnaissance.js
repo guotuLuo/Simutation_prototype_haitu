@@ -1,6 +1,6 @@
 // Jamming 类
 class Reconnaissance {
-    constructor(map, position, icon, contextMenu, className, name) {
+    constructor(map, position, icon, contextMenu, itemType, className, name) {
         this.map = map;
         this.position = position;
         this.icon = icon;
@@ -11,6 +11,7 @@ class Reconnaissance {
         this.moving = false;
         this.name = name;
         this.className = className;
+        this.itemType = itemType;
         this.createMarker();
         this.startSendingCoordinates();
     }
@@ -247,7 +248,8 @@ class Reconnaissance {
         if (this.marker) {
             this.marker.remove();
         }
-        console.log(this.id);
+        componentManager.deleteInstance(this.itemType, this.className, this.name);
+        removeObjectFromList(this.itemType, this.className, this.name);
         // 不能用异步axios，要不然关闭页面的时候来不及发送删除请求，
         // 导致下一次打开页面的时候保存的侦察样机数量不对
         const url = `http://127.0.0.1:8081/api/reconnaissances/delete?uuid=${encodeURIComponent(this.id)}`;
@@ -284,5 +286,15 @@ class Reconnaissance {
         this.routeMarkers = [];
         const url = `http://127.0.0.1:8081/api/reconnaissances/deleteTrackAllPoint}`;
         navigator.sendBeacon(url);
+    }
+
+    getItemType(){
+        return this.itemType;
+    }
+    getClassName(){
+        return this.className;
+    }
+    getName(){
+        return this.name;
     }
 }

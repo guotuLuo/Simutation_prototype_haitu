@@ -1,6 +1,6 @@
 // Airplane 类，用于管理飞机对象的创建、飞行和删除
 class Airplane {
-    constructor(map, position, icon, contextMenu, className, name) {
+    constructor(map, position, icon, contextMenu, itemType, className, name) {
         this.map = map;
         this.position = position;
         this.icon = icon;
@@ -9,8 +9,10 @@ class Airplane {
         this.routeMarkers = [];
         this.speed = 300;
         this.moving = false;
-        this.name = name;
+
+        this.itemType = itemType;
         this.className = className;
+        this.name = name;
         this.createMarker();
         this.startSendingCoordinates();
     }
@@ -247,7 +249,8 @@ class Airplane {
         if (this.marker) {
             this.marker.remove();
         }
-        console.log(this.id);
+        componentManager.deleteInstance(this.itemType, this.className, this.name);
+        removeObjectFromList(this.itemType, this.className, this.name);
         // 不能用异步axios，要不然关闭页面的时候来不及发送删除请求，
         // 导致下一次打开页面的时候保存的飞机数量不对
         const url = `http://127.0.0.1:8081/api/airplanes/delete?uuid=${encodeURIComponent(this.id)}`;
@@ -284,5 +287,15 @@ class Airplane {
         this.routeMarkers = [];
         const url = `http://127.0.0.1:8081/api/airplanes/deleteTrackAllPoint}`;
         navigator.sendBeacon(url);
+    }
+
+    getItemType(){
+        return this.itemType;
+    }
+    getClassName(){
+        return this.className;
+    }
+    getName(){
+        return this.name;
     }
 }

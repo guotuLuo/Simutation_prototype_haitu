@@ -1,9 +1,12 @@
 class Radar {
-    constructor(map, position, icon, contextMenu, className, name) {
+    constructor(map, position, icon, contextMenu, itemType, className, name) {
         this.map = map;
         this.position = position;
         this.icon = icon;
         this.contextMenu = contextMenu;
+        this.itemType = itemType;
+        this.className = className;
+        this.name = name;
         this.createMarker();
         this.scanRadius = 30000; // 扫描半径，单位为米
         this.scanInterval = null; // 用于保存扫描的定时器
@@ -630,8 +633,20 @@ class Radar {
         if (radarItem) {
             radarItem.remove();
         }
+        componentManager.deleteInstance(this.itemType, this.className, this.name);
+        removeObjectFromList(this.itemType, this.className, this.name);
         // 相比于使用axios发送前端请求，使用sendBeacon可以保证发送的请求在关闭当前标签的时候仍然可以成功发送
         const url = `http://127.0.0.1:8081/api/radars/delete?uuid=${encodeURIComponent(this.id)}`;
         navigator.sendBeacon(url);
+    }
+
+    getItemType(){
+        return this.itemType;
+    }
+    getClassName(){
+        return this.className;
+    }
+    getName(){
+        return this.name;
     }
 }

@@ -14,10 +14,16 @@ const componentManager = {
     init() {
         // 用于存储每个 className 下的实例
         this.instances = new Map();
-        this.instances.set("Radar", new Map());
-        this.instances.set("Object", new Map());
-        this.instances.set("Reconnaissance", new Map());
-        this.instances.set("Jamming", new Map());
+        // this.components, deletedIndexes, nextIndex 用于维护组件的名称，保证所有组件的名称按递增顺序自然增长
+        this.components = [];
+        this.deletedIndexes = [];  // 用于记录已删除组件的位置
+        this.nextIndex = 1;  // 初始组件名称从1开始
+
+
+        this.instances.set("radar", new Map());
+        this.instances.set("object", new Map());
+        this.instances.set("reconnaissance", new Map());
+        this.instances.set("jamming", new Map());
     },
 
     // 添加类名，如果没有则创建一个空 Map
@@ -53,6 +59,48 @@ const componentManager = {
             return this.instances.get(itemType).get(className).get(name);
         }
         return null;
+    },
+
+    // 删除指定类名和实例名称的实例
+    deleteInstance(itemType, className, name) {
+        const itemTypeMap = this.instances.get(itemType);
+        if (itemTypeMap && itemTypeMap.has(className)) {
+            const classNameMap = itemTypeMap.get(className);
+            if (classNameMap && classNameMap.has(name)) {
+                classNameMap.delete(name);
+                console.log(`Instance ${name} removed from class ${className} in ${itemType}`);
+            } else {
+                console.log(`Instance ${name} not found in class ${className}`);
+            }
+        } else {
+            console.log(`Class ${className} not found in item type ${itemType}`);
+        }
+        this.removeCurInstanceName(itemType, name);
+    },
+
+    getNextInstanceName(){
+        let name;
+        if (this.deletedIndexes.length > 0) {
+            // 如果有删除的组件位置，复用最早删除的位置
+            name = this.deletedIndexes.shift();  // 获取最早删除的索引
+        } else {
+            // 如果没有删除的组件位置，则按递增顺序
+            name = this.nextIndex;
+            this.nextIndex++;  // 更新计数器
+        }
+        this.components.push(String(name));
+        return name;
+    },
+
+    removeCurInstanceName(itemType, name){
+        name = name.substring(itemType.length);
+        console.log(name);
+        const index = this.components.indexOf(name);
+        if (index !== -1) {
+            this.components.splice(index, 1);  // 删除指定组件
+            this.deletedIndexes.push(String(name));  // 记录删除的位置
+            console.log(`Component removed with name: ${name}`);
+        }
     },
 
     // 打印所有实例，按 className 顺序
