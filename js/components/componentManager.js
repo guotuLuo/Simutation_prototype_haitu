@@ -104,11 +104,12 @@ const componentManager = {
     },
 
     // 打印所有实例，按 className 顺序
-    printAllInstances() {
-        this.instances.forEach((instancesMap, className) => {
-            console.log(`Class: ${className}`);
-            instancesMap.forEach((instance, name) => {
-                console.log(`  Instance: ${name}`, instance);
+    deleteAllInstances() {
+        this.instances.forEach((itemTypeItem) => {
+            itemTypeItem.forEach((classNameItem) => {
+                classNameItem.forEach((instanceItem) =>{
+                    instanceItem.delete();
+                })
             });
         });
     }
