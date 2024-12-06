@@ -31,8 +31,8 @@ class Radar {
             // 假设 radarBackground 是一个固定大小的正方形容器
             const width = this.radarBackground.offsetWidth;
             const height = this.radarBackground.offsetHeight;
-            console.log("radarbackground width is:", width);
-            console.log("radarbackground height is:", height);
+            console.log("radar background width is:", width);
+            console.log("radar background height is:", height);
             this.radarCenter = {
                 x: width / 2,
                 y: height / 2
@@ -493,27 +493,6 @@ class Radar {
             planeMarker.remove();
         }
         console.log(`已删除飞机 ${point.id} 的点迹`);
-    }
-    
-
-
-    stopScan() {
-
-        console.log("停止雷达扫描");
-    
-        // 清除定时扫描的 setInterval
-        if (this.scanInterval) {
-            clearInterval(this.scanInterval);
-            this.scanInterval = null;
-        }
-    
-        // 删除雷达上所有点迹
-        this.removeAllPlaneMarkers();
-    
-        // 清空 detectedPointsMap
-        this.detectedPointsMap.clear();
-    
-        console.log("所有点迹已清除，扫描停止");
     }
     
 

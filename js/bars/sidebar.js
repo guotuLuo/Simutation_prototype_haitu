@@ -48,15 +48,18 @@ class Sidebar {
         }
     }
 
+
     // 新增项的操作，需要获取对话框以及绑定元素拖拽函数
     // 以Airplane类为例，这里新增项是否只是新增了不同名称的Airplane,而不是新增了一个新的AirplaneNew 类，这也太鸡肋了
     addItem(button) {
         // customDialog是弹出对话框函数，获取输入到对话框里面的字符串
         customDialog(button)
             .then(className => {
+                const itemType = button.querySelector('.button-text').textContent.trim().toLowerCase();
                 if (className) {
                     // 创建新的菜单子项，这里的button是add加号创建的， className是输入框文字
-                    createSubMenuLi(button, className);
+                    // 如果className 合法
+                    createSubMenuLi(button, itemType, className);
                 } else {
                     console.log('用户未输入名称或取消了操作');
                 }

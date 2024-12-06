@@ -1,57 +1,67 @@
 // componentManager.js
-/**                     className:String          name:String          instance:Airplane(Component)
- * componentManager  -| airplaneDeliver     -| airplaneDeliver_00
- *                                          -| airplaneDeliver_01
+/**                  type           className:String          name:String          instance:Airplane(Component)
+ * componentManager  airplane       -| airplaneDeliver     -| airplaneDeliver_00
+ *                                                         -| airplaneDeliver_013a
  *
- *                   -| airplaneFighter
- *                   -| airplaneHelicopter
+ *                                  -| airplaneFighter
+ *                                  -| airplaneHelicopter
  *                   ***
  *                   -|
  *
  *
  * */
-// 全局管理所有component
 const componentManager = {
-    instances: new Map(),
-
-    addInstance: function(className, name, instance) {
-        if(!this.instances.has(className)){
-            this.instances.set(className, new Map);
-        }
-        this.instances.get(className).set(name, instance);
+    init() {
+        // 用于存储每个 className 下的实例
+        this.instances = new Map();
+        this.instances.set("Radar", new Map());
+        this.instances.set("Object", new Map());
+        this.instances.set("Reconnaissance", new Map());
+        this.instances.set("Jamming", new Map());
     },
 
-    clearAllInstances: function() {
-        this.instances.forEach((classMap, className) => {
-            // 对于每个类名，遍历其对应的实例
-            classMap.forEach((instance, name) => {
-                if (typeof instance.delete === 'function') {
-                    instance.delete();  // 如果实例有 delete 方法，调用它
-                }
-            });
-            // 清空该类的所有实例
-            classMap.clear();
-        });
-        // 清空所有类名映射
-        this.instances.clear();
-    },
-
-    getInstanceList(itemType, className){
-        if(this.instances.has(itemType)){
-            console.log("hello");
-            return this.instances.get(itemType).get(className);
-        }else{
-            return null;
+    // 添加类名，如果没有则创建一个空 Map
+    addClassName(itemType, className) {
+        if (!this.instances.get(itemType).has(className)) {
+            this.instances.get(itemType).set(className, new Map());
         }
     },
 
-    // 获取某个类名下的实例
-    getInstance: function(itemType, className, name) {
-        if(this.instances.has(itemType)){
-            if (this.instances.get(itemType).has(className)) {
-                return this.instances.get(itemType).get(className).get(name);
-            }
+    // 添加实例，按照 name 存储每个实例
+    addInstance(itemType, className, name, instance) {
+        // 如果 className 没有添加过，创建一个新的 Map
+        if (!this.instances.get(itemType).has(className)) {
+            this.instances.get(itemType).set(className, new Map());
+        }
+        // 将实例按 name 添加到 className 对应的 Map 中
+        this.instances.get(itemType).get(className).set(name, instance);
+    },
+
+    // 获取指定类名下所有实例（按顺序）
+    getInstancesByClassName(itemType, className) {
+        if (this.instances.get(itemType).has(className)) {
+            // 返回一个按 name 排序的实例数组
+            return Array.from(this.instances.get(itemType).get(className).entries())
+                .map(([name, instance]) => ({ name, instance }));
+        }
+        return [];
+    },
+
+    // 获取指定类名和实例名称的实例
+    getInstance(itemType, className, name) {
+        if (this.instances.get(itemType).has(className)) {
+            return this.instances.get(itemType).get(className).get(name);
         }
         return null;
+    },
+
+    // 打印所有实例，按 className 顺序
+    printAllInstances() {
+        this.instances.forEach((instancesMap, className) => {
+            console.log(`Class: ${className}`);
+            instancesMap.forEach((instance, name) => {
+                console.log(`  Instance: ${name}`, instance);
+            });
+        });
     }
-};
+}

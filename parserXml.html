@@ -14,7 +14,7 @@
             <button id="parseButton">解析 XML</button>
             <label><input type="checkbox" id="batchCheckbox" onclick="toggleBatchColumn()"> 批号有效 </label>
             <label><input type="checkbox" id="accumulateCheckbox"> 数据积累</label>
-            <input type="number" id="maxRowsInput" value="32" min="1">
+            <label for="maxRowsInput"></label><input type="number" id="maxRowsInput" value="32" min="1">
             <label>包头大小（字节）：<input type="number" id="headerSize" value="0"></label>
             <label>结构体大小（字节）：<span id="structSize">0</span></label>
             <button id = "toggleButton" onclick="toggleReceivingData()">开始接收数据</button>

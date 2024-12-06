@@ -1,4 +1,8 @@
-function  createSubMenuLi(button, className){
+function  createSubMenuLi(button, itemType, className){
+    if(componentManager.instances.get(itemType).has(className)){
+        alert("创建新项失败，请勿输入重名名称");
+        return;
+    }
     const submenu = document.getElementById(button.getAttribute('data-submenu'));
 
     // 创建新项
@@ -9,12 +13,12 @@ function  createSubMenuLi(button, className){
     newItem.draggable = true;
 
     // 获取项的类名
-    const itemType = button.querySelector('.button-text').textContent.trim().toLowerCase();
     newItem.setAttribute('data-type', itemType);  // 可以根据需求调整data-type的值
 
     // 根据当前地图上所有相同className的对象来确定当前拖拽时间需要新建的对象名称
     // 这里创建实例对象名称比较简陋，就直接获取当前list.length + 1作为当前对象的名称;
-    const instanceName = componentManager.getInstanceList(itemType) + 1;
+    const instanceName = componentManager.get(itemType) + 1;
+    console.log(instanceName);
 
     // 创建删除按钮
     const deleteBtn = document.createElement('button');
@@ -38,6 +42,8 @@ function  createSubMenuLi(button, className){
         e.dataTransfer.setData('text/plain', dragData);  // 设置拖拽数据
 
     });
+
     // 将新项添加到 submenu 中
     submenu.appendChild(newItem);
+    componentManager.addClassName(itemType, className);
 }
