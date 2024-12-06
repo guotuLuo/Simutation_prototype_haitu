@@ -17,8 +17,6 @@ function  createSubMenuLi(button, itemType, className){
 
     // 根据当前地图上所有相同className的对象来确定当前拖拽时间需要新建的对象名称
     // 这里创建实例对象名称比较简陋，就直接获取当前list.length + 1作为当前对象的名称;
-    const instanceName = componentManager.get(itemType) + 1;
-    console.log(instanceName);
 
     // 创建删除按钮
     const deleteBtn = document.createElement('button');
@@ -38,7 +36,7 @@ function  createSubMenuLi(button, itemType, className){
     // 绑定拖拽监听事件
     newItem.addEventListener('dragstart', (e) => {
         // 连接数据项，使用'|'作为分隔符
-        const dragData = `${itemType}|${className}|${instanceName}`;
+        const dragData = `${itemType}|${className}`;
         e.dataTransfer.setData('text/plain', dragData);  // 设置拖拽数据
 
     });
