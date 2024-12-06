@@ -81,19 +81,3 @@ document.addEventListener('mouseup', () => {
 });
 
 
-
-// 获取列表项和属性表单
-const objectList = document.querySelectorAll('.object-item');
-const objectNameInput = document.getElementById('objectName');
-const objectTypeInput = document.getElementById('objectType');
-
-// 添加点击事件监听器，选择列表项时更新右侧属性
-objectList.forEach(item => {
-    item.addEventListener('click', () => {
-        const objectName = item.textContent.trim();
-
-        // 根据选中的对象，更新右侧表单内容
-        objectNameInput.value = objectName;
-        objectTypeInput.value = `Type of ${objectName}`; // 可以根据实际内容动态更新
-    });
-});
