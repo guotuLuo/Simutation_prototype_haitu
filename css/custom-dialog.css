@@ -4,7 +4,7 @@
     border: 1px solid #ccc;
     background-color: #fff;
     padding: 10px;
-    z-index: 9999;
+    z-index: 1200;
     min-width: 250px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

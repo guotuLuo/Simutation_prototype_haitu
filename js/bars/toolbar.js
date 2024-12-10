@@ -73,6 +73,10 @@ class Toolbar {
                 // 获取sidebar和按钮
                 document.querySelector('.radar-display').classList.toggle('hidden');
                 break;
+            case 'setting':
+                console.log("样机设置");
+                openModal();
+                break;
             default:
                 console.log("Unknown tool action", action);
         }

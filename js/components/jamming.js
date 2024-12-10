@@ -1,12 +1,13 @@
 // Jamming 类
 class Jamming {
-    constructor(map, position, icon, contextMenu, className, name) {
+    constructor(map, position, icon, contextMenu, itemType, className, name) {
         this.map = map;
         this.position = position;
         this.icon = icon;
         this.contextMenu = contextMenu;
-        this.name = name;
+        this.itemType = itemType;
         this.className = className;
+        this.name = name;
         this.createMarker();
     }
 
@@ -36,8 +37,20 @@ class Jamming {
         if (jammingItem) {
             jammingItem.remove();
         }
+        componentManager.deleteInstance(this.itemType, this.className, this.name);
+        removeObjectFromList(this.itemType, this.className, this.name);
         // 相比于使用axios发送前端请求，使用sendBeacon可以保证发送的请求在关闭当前标签的时候仍然可以成功发送
         const url = `http://127.0.0.1:8081/api/jamming/delete?uuid=${encodeURIComponent(this.id)}`;
         navigator.sendBeacon(url);
+    }
+
+    getItemType(){
+        return this.itemType;
+    }
+    getClassName(){
+        return this.className;
+    }
+    getName(){
+        return this.name;
     }
 }

@@ -1,9 +1,12 @@
 class Radar {
-    constructor(map, position, icon, contextMenu, className, name) {
+    constructor(map, position, icon, contextMenu, itemType, className, name) {
         this.map = map;
         this.position = position;
         this.icon = icon;
         this.contextMenu = contextMenu;
+        this.itemType = itemType;
+        this.className = className;
+        this.name = name;
         this.createMarker();
         this.scanRadius = 30000; // 扫描半径，单位为米
         this.scanInterval = null; // 用于保存扫描的定时器
@@ -31,8 +34,8 @@ class Radar {
             // 假设 radarBackground 是一个固定大小的正方形容器
             const width = this.radarBackground.offsetWidth;
             const height = this.radarBackground.offsetHeight;
-            console.log("radarbackground width is:", width);
-            console.log("radarbackground height is:", height);
+            console.log("radar background width is:", width);
+            console.log("radar background height is:", height);
             this.radarCenter = {
                 x: width / 2,
                 y: height / 2
@@ -496,27 +499,6 @@ class Radar {
     }
     
 
-
-    stopScan() {
-
-        console.log("停止雷达扫描");
-    
-        // 清除定时扫描的 setInterval
-        if (this.scanInterval) {
-            clearInterval(this.scanInterval);
-            this.scanInterval = null;
-        }
-    
-        // 删除雷达上所有点迹
-        this.removeAllPlaneMarkers();
-    
-        // 清空 detectedPointsMap
-        this.detectedPointsMap.clear();
-    
-        console.log("所有点迹已清除，扫描停止");
-    }
-    
-
     addPlaneToRadar(point) {
         const planePosition = point.getLatLng();
         const distance = this.map.distance(this.radarGeoCenter, planePosition);
@@ -651,8 +633,20 @@ class Radar {
         if (radarItem) {
             radarItem.remove();
         }
+        componentManager.deleteInstance(this.itemType, this.className, this.name);
+        removeObjectFromList(this.itemType, this.className, this.name);
         // 相比于使用axios发送前端请求，使用sendBeacon可以保证发送的请求在关闭当前标签的时候仍然可以成功发送
         const url = `http://127.0.0.1:8081/api/radars/delete?uuid=${encodeURIComponent(this.id)}`;
         navigator.sendBeacon(url);
+    }
+
+    getItemType(){
+        return this.itemType;
+    }
+    getClassName(){
+        return this.className;
+    }
+    getName(){
+        return this.name;
     }
 }

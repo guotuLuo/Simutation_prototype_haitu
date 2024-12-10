@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Simulation</title>
+    <link rel="stylesheet" href="css/overlay.css">
+    <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/custom-dialog.css">
     <link rel="stylesheet" href="css/divider.css">
     <link rel="stylesheet" href="css/menu-bar.css">
@@ -101,6 +103,14 @@
                 </button>
             </div>
 
+            <div class="separator"></div>
+
+            <div class="button-group">
+                <button data-action="setting" title="设置">
+                    <img data-action="setting" src="images/setting.png" alt="设置" />
+                </button>
+            </div>
+
 
 
             <!-- 右侧显示按钮 -->
@@ -182,6 +192,140 @@
         </div>
     </div>
 
+
+    <section class="modal hidden" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+
+        <div class="modal__header flex">
+            <img src="images/setting.png" alt="setting" class="header_img" />
+            <button class="btn-close" aria-label="Close modal">⨉</button>
+        </div>
+
+
+        <div class="modal__content">
+            <!-- 左侧列表 -->
+            <div class="modal__left">
+                <ul id="objectList">
+
+                </ul>
+            </div>
+
+            <div class="modal__middle">
+                <form id="objectPropertiesForm">
+                    <div class="form-row">
+                        <label for="objectName">名称</label>
+                        <span id="objectName">Name</span>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="objectType">设备类型</label>
+                        <span id="objectType">Device Type</span>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="objectBatch">批次号</label>
+                        <span id="objectBatch">Batch Information</span>
+                    </div>
+
+                    <!-- 单选框 -->
+                    <div class="form-row">
+                        <label>身份</label>
+                        <div class="radio-group">
+                            <input type="radio" id="radio1" name="identity" value="1">
+                            <label for="radio1">敌方</label>
+
+                            <input type="radio" id="radio2" name="identity" value="2">
+                            <label for="radio2">中立</label>
+
+                            <input type="radio" id="radio3" name="identity" value="3">
+                            <label for="radio3">我方</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="objectModel">型号</label>
+                        <input type="text" id="objectModel"  />
+                    </div>
+
+                    <div class="form-row">
+                        <label for="objectSpeed">初速度</label>
+                        <input type="text" id="objectSpeed"  />
+                    </div>
+
+                    <div class="form-row">
+                        <label for="objectReflect">反射截面积</label>
+                        <input type="text" id="objectReflect"  />
+                    </div>
+
+                    <!-- 下拉框 -->
+                    <div class="form-row">
+                        <label for="dropDownDevice">设备状态</label>
+                        <select id="dropDownDevice" name="options">
+                            <option value="开机">开机</option>
+                            <option value="发射">发射</option>
+                            <option value="故障">故障</option>
+                            <option value="关机">关机</option>
+                        </select>
+                    </div>
+
+                    <!-- 下拉框 -->
+                    <div class="form-row">
+                        <label for="dropDownPrototype">样机用途</label>
+                        <select id="dropDownPrototype" name="options">
+                            <option value="背景目标">背景目标</option>
+                            <option value="预警雷达">预警雷达</option>
+                            <option value="超视距雷达">侦察</option>
+                            <option value="干扰">干扰</option>
+                        </select>
+                    </div>
+                </form>
+                <button class="btn" type="button">Save Changes</button>
+           </div>
+
+            <div class="modal__right">
+                <form id="objectPropertiesFormRight">
+                    <div class="form-row">
+                        <label>频段</label>
+                        <div class="dropdown">
+                            <div class="selected">
+                                <div class="selected-values"></div>
+                                <span class="arrow"></span>
+                            </div>
+                            <div class="options">
+                                <label>
+                                    <input type="checkbox" value="0"> 0
+                                </label>
+                                <label>
+                                    <input type="checkbox" value="10-30MHz"> 10-30MHz
+                                </label>
+                                <label>
+                                    <input type="checkbox" value="30-300MHz"> 30-300MHz
+                                </label>
+                                <label>
+                                    <input type="checkbox" value="300MHz-1GHz"> 300MHz-1GHz
+                                </label>
+                                <label>
+                                    <input type="checkbox" value="1-2GHz"> 1-2GHz
+                                </label>
+                                <!-- 根据需要添加更多选项 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="objectKeyPoint">轨迹关键点</label>
+                        <span id="objectKeyPoint">轨迹关键点</span>
+                    </div>
+                </form>
+                <button class="btn" type="button">Cancel Changes</button>
+            </div>
+        </div>
+</section>
+    <!--    遮罩层 -->
+    <!--    <div class="overlay hidden"></div>-->
+
+
+
+
     <!-- 引入各个模块的脚本 -->
     <script src="leaflet/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -190,6 +334,8 @@
     <script src="js/utils/InputTextDialog.js"></script>
     <script src="js/utils/CreateSubMenuLi.js"></script>
     <script src="js/utils/PageEventControl.js"></script>
+    <script src="js/bars/setting/modal_left.js"></script>
+    <script src="js/bars/setting/modal_right.js"></script>
     <script src="js/contextMenus/contextMenu.js"></script>
     <script src="js/contextMenus/AirplaneContextMenu.js"></script>
     <script src="js/contextMenus/RadarContextMenu.js"></script>
@@ -198,6 +344,7 @@
     <script src="js/bars/sidebar.js"></script>
     <script src="js/bars/toolbar.js"></script>
     <script src="js/bars/topIcon.js"></script>
+    <script src="js/bars/setting/setting.js"></script>
     <script src="js/mapController.js"></script>
     <script src="js/point.js"></script>
     <script src="js/components/airplane.js"></script>
