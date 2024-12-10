@@ -53,5 +53,63 @@ const componentManager = {
             }
         }
         return null;
-    }
+    },
+  
+    startAllObjects() {
+        this.instances.forEach(itemMap => {
+            itemMap.forEach(classMap => {
+                classMap.forEach(instance => {
+                  // 检查实例是否有 startFlight 函数
+                  if (typeof instance.startFlight === 'function') {
+                    instance.startFlight();  // 调用 startFlight 函数
+                  }
+                });
+            });
+        });
+    },
+
+    startAllRadars(){
+        this.instances.forEach(itemMap => {
+            itemMap.forEach(classMap => {
+                classMap.forEach(instance => {
+                if (typeof instance.startScan === 'function') {
+                  instance.startScan();  
+                  }
+                });
+            });
+        });
+    },
+    stopAllObjects() {
+        this.instances.forEach(itemMap => {
+            itemMap.forEach(classMap => {
+                classMap.forEach(instance => {
+                if (typeof instance.stopFlight === 'function') {
+                  instance.stopFlight();
+                }
+            });
+        });
+    });
+},
+    stopAllRadars(){
+        this.instances.forEach(itemMap => {
+            itemMap.forEach(classMap => {
+                classMap.forEach(instance => {
+                if (typeof instance.stopScan === 'function') {
+                  instance.stopScan();
+                }
+            });
+        });
+    });
+},
+    returnAllObjects(){
+        this.instances.forEach(itemMap => {
+            itemMap.forEach(classMap => {
+                classMap.forEach(instance => {
+                if (typeof instance.backToStart === 'function') {
+                  instance.backToStart();
+                }
+            });
+        });
+    });
+},
 };

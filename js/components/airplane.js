@@ -13,6 +13,12 @@ class Airplane {
         this.className = className;
         this.createMarker();
         this.startSendingCoordinates();
+        this.startlat=0;
+        this.startlon=0;
+    }
+    backToStart(){
+        this.marker.setLatLng([this.startlat,this.startlon]);
+        this.position=
     }
 
     createMarker() {
@@ -35,7 +41,8 @@ class Airplane {
             event.originalEvent.preventDefault();
             this.contextMenu.show(event, this);
         });
-
+        this.startlat=this.marker.getLatLng().lat;
+        this.startlon=this.marker.getLatLng().lng;
         axios.post("http://127.0.0.1:8081/api/airplanes/uploadCoordinates", {
             id: this.id,
             lat: this.marker.getLatLng().lat,
