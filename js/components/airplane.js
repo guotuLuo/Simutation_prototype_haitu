@@ -3,6 +3,7 @@ class Airplane {
     constructor(map, position, icon, contextMenu, itemType, className, name) {
         this.map = map;
         this.position = position;
+        console.log("飞机位置", position);
         this.icon = icon;
         this.contextMenu = contextMenu;
         this.routes = [];
@@ -15,11 +16,11 @@ class Airplane {
         this.name = name;
         this.createMarker();
         this.startSendingCoordinates();
-        this.startlat=0;
-        this.startlon=0;
+        this.startposition=position;
     }
     backToStart(){
-        this.marker.setLatLng([this.startlat,this.startlon]);
+        this.marker.setLatLng(this.startposition);
+
         this.currentRouteIndex = 0;
     }
 
@@ -43,8 +44,7 @@ class Airplane {
             event.originalEvent.preventDefault();
             this.contextMenu.show(event, this);
         });
-        this.startlat=this.marker.getLatLng().lat;
-        this.startlon=this.marker.getLatLng().lng;
+
         axios.post("http://127.0.0.1:8081/api/airplanes/uploadCoordinates", {
             id: this.id,
             lat: this.marker.getLatLng().lat,
