@@ -1,8 +1,13 @@
-// toolbar.js
+
 class Toolbar {
-    constructor() {
+    constructor(mapController) {
+        
+        this.map = mapController.getMap(); // 获取 map 对象
         this.toolbarElement = document.querySelector(".tool-bar");
         this.initializeToolbar();
+        this.centerMarker = null; // 用于存储中心标记
+        this.centerCoordinates = null; // 用于存储中心坐标
+        
     }
 
     initializeToolbar() {
@@ -20,12 +25,18 @@ class Toolbar {
         switch (action) {
             case 'start':
                 console.log("态势启动");
+                console.log(componentManager);
+                componentManager.startAllRadars();
+                componentManager.startAllObjects();
                 break;
             case 'stop':
                 console.log("态势停止");
+                componentManager.stopAllObjects();
+                componentManager.stopAllRadars();
                 break;
             case 'refresh':
                 console.log("态势复原");
+                componentManager.returnAllObjects();
                 break;
             case 'generate':
                 console.log("态势代码生成");
@@ -35,9 +46,13 @@ class Toolbar {
                 break;
             case 'reset':
                 console.log("中心复位");
+                if (this.centerCoordinates) {
+                    this.map.setView(this.centerCoordinates, 10);
+                }
                 break;
             case 'center':
                 console.log("设置态势中心");
+                this.setCenter();
                 break;
             case 'match':
                 console.log("匹配连接");
@@ -65,5 +80,24 @@ class Toolbar {
             default:
                 console.log("Unknown tool action", action);
         }
+    }
+    setCenter() {
+        // 获取当前地图中心
+        const center = this.map.getCenter();
+        this.centerCoordinates = [center.lat, center.lng];
+
+        // 如果已经有中心标记，先移除它
+        if (this.centerMarker) {
+            this.map.removeLayer(this.centerMarker);
+        }
+
+        // 创建新的中心标记
+        const icon = L.icon({
+            iconUrl: 'images/center50.png',
+            iconSize: [50, 50], // 图标大小
+            iconAnchor: [25, 25] // 图标锚点
+        });
+
+        this.centerMarker = L.marker(this.centerCoordinates, { icon: icon }).addTo(this.map);
     }
 }

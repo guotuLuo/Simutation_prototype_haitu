@@ -10,6 +10,9 @@ class MapController {
         };
         this.initializeDragAndDrop();
     }
+    getMap() {
+        return this.map;
+    }
 
     initializeMap() {
         const map = L.map('map').setView([35.8617, 104.1954], 10);
@@ -26,9 +29,9 @@ class MapController {
         //     .catch(error => console.error("Error loading JSON:", error));
 
         // 在线加载leaflet官方地图
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // }).addTo(map);
 
         // // 使用高德的WMS服务
         // var layer = L.tileLayer('http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
@@ -39,12 +42,12 @@ class MapController {
         // map.addLayer(layer);
 
 
-        // // 分片加载地图
-        // L.tileLayer('tiles/{z}/{x}/{y}.png', {
-        //     maxZoom: 10,
-        //     minZoom: 0,
-        //     attribution: 'map'
-        // }).addTo(map);
+        // 分片加载地图
+        L.tileLayer('tiles/{z}/{x}/{y}.png', {
+            maxZoom: 10,
+            minZoom: 0,
+            attribution: 'map'
+        }).addTo(map);
         return map;
     }
 
@@ -79,7 +82,8 @@ class MapController {
             const dragData = e.dataTransfer.getData('text/plain');
 
             // 分割数据（假设数据是以'|'分隔的）
-            const [itemType, className] = dragData.split('|');
+            const [itemType, className, instanceName] = dragData.split('|');
+            console.log(itemType,className,instanceName);
             // 获取拖放位置的地理坐标
             const latLng = this.map.mouseEventToLatLng(e);
             this.addComponent(itemType, className, latLng);

@@ -14,8 +14,12 @@ class Reconnaissance {
         this.itemType = itemType;
         this.createMarker();
         this.startSendingCoordinates();
+        this.startlat=0;
+        this.startlon=0;
     }
-
+    backToStart(){
+        this.marker.setLatLng([this.startlat,this.startlon]);
+    }
     createMarker() {
         this.id = generateUUID();
         this.marker = L.marker(this.position, {icon: this.icon, draggable: true}).addTo(this.map);
@@ -36,6 +40,8 @@ class Reconnaissance {
             event.originalEvent.preventDefault();
             this.contextMenu.show(event, this);
         });
+        this.startlat=this.marker.getLatLng().lat;
+        this.startlon=this.marker.getLatLng().lng;
 
         axios.post("http://127.0.0.1:8081/api/reconnaissances/uploadCoordinates", {
             id: this.id,

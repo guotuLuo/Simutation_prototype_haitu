@@ -3,6 +3,7 @@ class Airplane {
     constructor(map, position, icon, contextMenu, itemType, className, name) {
         this.map = map;
         this.position = position;
+        console.log("飞机位置", position);
         this.icon = icon;
         this.contextMenu = contextMenu;
         this.routes = [];
@@ -15,6 +16,12 @@ class Airplane {
         this.name = name;
         this.createMarker();
         this.startSendingCoordinates();
+        this.startposition=position;
+    }
+    backToStart(){
+        this.marker.setLatLng(this.startposition);
+
+        this.currentRouteIndex = 0;
     }
 
     createMarker() {
