@@ -80,4 +80,29 @@ document.addEventListener('mouseup', () => {
     modal.style.cursor = 'default';  // 恢复为普通指针
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const page1Btn = document.getElementById('page1Btn');
+    const page2Btn = document.getElementById('page2Btn');
+    const contentPage1 = document.querySelector('.modal__content.page1');
+    const contentPage2 = document.querySelector('.modal__content.page2');
+
+    // 默认显示第一个页面
+    contentPage1.classList.add('active');
+
+    // 添加事件监听
+    page1Btn.addEventListener('click', () => {
+        page1Btn.classList.add('active');
+        page2Btn.classList.remove('active');
+        contentPage1.classList.add('active');
+        contentPage2.classList.remove('active');
+    });
+
+    page2Btn.addEventListener('click', () => {
+        page2Btn.classList.add('active');
+        page1Btn.classList.remove('active');
+        contentPage2.classList.add('active');
+        contentPage1.classList.remove('active');
+    });
+});
+
 

@@ -289,13 +289,15 @@ class Airplane {
         navigator.sendBeacon(url);
     }
 
-    getItemType(){
+    getItemType() {
         return this.itemType;
     }
-    getClassName(){
+
+    getClassName() {
         return this.className;
     }
-    getName(){
+
+    getName() {
         return this.name;
     }
 }
