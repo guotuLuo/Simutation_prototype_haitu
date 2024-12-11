@@ -32,9 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 informationElement.getElementsByTagName("name")[0].setAttribute(title);
                 informationElement.getElementsByTagName("id")[0].setAttribute(generateUUID());
 
-
                 const componentElement = xmlDoc.getElementsByTagName("components")[0];
                 const sceneElement = xmlDoc.getElementsByTagName("scene")[0];
+                const enviElement = xmlDoc.getElementsByTagName("envi")[0];
 
                 componentManager.instances.forEach((classNameMap, itemType) => {
                     classNameMap.forEach((instanceMap, className) => {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             tempElement.setAttribute("name", className);
                             componentElement.appendChild(tempElement);
                             instanceMap.forEach((instance, instanceName) => {
-                                const itemElement = xmlDoc.createElement('item');
+                                const itemElement= xmlDoc.createElement('item');
                                 itemElement.setAttribute('posx', instance.position.getLat());
                                 itemElement.setAttribute('posy', instance.position.getLng());
                                 itemElement.setAttribute('type', itemType);
@@ -53,10 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     )
                 });
-
-
-
-
             });
         });
     });

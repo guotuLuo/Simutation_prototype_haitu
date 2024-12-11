@@ -85,6 +85,7 @@ const componentManager = {
             });
         });
     },
+
     stopAllObjects() {
         this.instances.forEach(itemMap => {
             itemMap.forEach(classMap => {
@@ -96,6 +97,7 @@ const componentManager = {
         });
     });
     },
+
     stopAllRadars(){
         this.instances.forEach(itemMap => {
             itemMap.forEach(classMap => {
@@ -118,6 +120,24 @@ const componentManager = {
             });
         });
     },
+
+    // 删除指定类名和实例名称的实例
+    deleteInstance(itemType, className, name) {
+        const itemTypeMap = this.instances.get(itemType);
+        if (itemTypeMap && itemTypeMap.has(className)) {
+            const classNameMap = itemTypeMap.get(className);
+            if (classNameMap && classNameMap.has(name)) {
+                classNameMap.delete(name);
+                console.log(`Instance ${name} removed from class ${className} in ${itemType}`);
+            } else {
+                console.log(`Instance ${name} not found in class ${className}`);
+            }
+        } else {
+            console.log(`Class ${className} not found in item type ${itemType}`);
+        }
+        this.removeCurInstanceName(itemType, name);
+    },
+
     deleteAllObjects(){
         this.instances.forEach(itemMap => {
             itemMap.forEach(classMap => {
