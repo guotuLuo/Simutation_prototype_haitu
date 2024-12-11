@@ -39,7 +39,14 @@
                 <!-- 菜单栏 -->
                 <div class="menu-bar">
                     <ul>
-                        <li><a href="#">文件</a></li>
+                        <li>
+                            <a href="#">文件</a>
+                            <ul class="sub-menu">
+                                <li><a href="#">保存文件</a></li>
+                                <li><a href="#">打开文件</a></li>
+                                <li><a href="#">关闭文件</a></li>
+                            </ul>
+                        </li>
                         <li><a href="#">编辑</a></li>
                         <li><a href="#">调试</a></li>
                         <li><a href="#">分析</a></li>
@@ -196,12 +203,16 @@
     <section class="modal hidden" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
 
         <div class="modal__header flex">
-            <img src="images/setting.png" alt="setting" class="header_img" />
+            <div class="header-buttons">
+                <button id="page1Btn" class="btn">设备参数设置</button>
+                <button id="page2Btn" class="btn">环境参数设置</button>
+            </div>
+
             <button class="btn-close" aria-label="Close modal">⨉</button>
         </div>
 
 
-        <div class="modal__content">
+        <div class="modal__content page1 active">
             <!-- 左侧列表 -->
             <div class="modal__left">
                 <ul id="objectList">
@@ -233,7 +244,7 @@
                             <input type="radio" id="radio1" name="identity" value="1">
                             <label for="radio1">敌方</label>
 
-                            <input type="radio" id="radio2" name="identity" value="2">
+                            <input type="radio" id="radio2" name="identity" value="2" checked>
                             <label for="radio2">中立</label>
 
                             <input type="radio" id="radio3" name="identity" value="3">
@@ -243,17 +254,17 @@
 
                     <div class="form-row">
                         <label for="objectModel">型号</label>
-                        <input type="text" id="objectModel"  />
+                        <span id="objectModel">UnKnown</span>
                     </div>
 
                     <div class="form-row">
                         <label for="objectSpeed">初速度</label>
-                        <input type="text" id="objectSpeed"  />
+                        <span id="objectSpeed">Speed</span>
                     </div>
 
                     <div class="form-row">
                         <label for="objectReflect">反射截面积</label>
-                        <input type="text" id="objectReflect"  />
+                        <span id="objectReflect">Reflect Area</span>
                     </div>
 
                     <!-- 下拉框 -->
@@ -278,7 +289,7 @@
                         </select>
                     </div>
                 </form>
-                <button class="btn" type="button">Save Changes</button>
+                <button class="btn" type="button">保存</button>
            </div>
 
             <div class="modal__right">
@@ -316,9 +327,95 @@
                         <span id="objectKeyPoint">轨迹关键点</span>
                     </div>
                 </form>
-                <button class="btn" type="button">Cancel Changes</button>
+                <button class="btn" type="button">取消</button>
             </div>
         </div>
+
+
+        <!-- Page 2 content -->
+        <div class="modal__content page2">
+            <div class="envi__modal__left">
+                <form id="enviPropertiesForm">
+                    <div class="form-row">
+                        <label for="threadNum">线程数量</label>
+                        <input id="threadNum"  value="1">
+                    </div>
+
+                    <div class="form-row">
+                        <label for="timeScale">时间标尺</label>
+                        <input id="timeScale"  value="1000">
+                    </div>
+
+                    <div class="form-row">
+                        <label for="timeSlice">时间片</label>
+                        <input id="timeSlice"  value="1000">
+                    </div>
+
+
+                    <div class="form-row">
+                        <label for="clutterLevel">杂波等级</label>
+                        <input id="clutterLevel"  value="1">
+                    </div>
+
+                    <!-- 下拉框 -->
+                    <div class="form-row">
+                        <label for="dropDownClutterType">杂波类型</label>
+                        <select id="dropDownClutterType" name="options">
+                            <option value="无杂波">无杂波</option>
+                            <option value="一级海杂波">一级海杂波</option>
+                            <option value="二级海杂波">二级海杂波</option>
+                            <option value="三级海杂波">三级海杂波</option>
+                            <option value="四级海杂波">四级海杂波</option>
+                            <option value="五级海杂波">五级海杂波</option>
+                        </select>
+                    </div>
+
+                    <!-- 下拉框 -->
+                    <div class="form-row">
+                        <label for="dropDownClutterModel">杂波模型</label>
+                        <select id="dropDownClutterModel" name="options">
+                            <option value="均匀分布">均匀分布</option>
+                            <option value="正态分布">正态分布</option>
+                            <option value="瑞利分布">瑞利分布</option>
+                            <option value="韦布尔分布">韦布尔分布</option>
+                        </select>
+                    </div>
+                </form>
+                <button class="btn" type="button">保存</button>
+            </div>
+
+
+            <div class="envi__modal__right">
+                <form id="enviPropertiesFormRight">
+                    <div class="form-row">
+                        <label for="simulationCenter">场景仿真零点</label>
+                        <span id="simulationCenter">(0,0)</span>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="instanceNumber">样机数量</label>
+                        <span id="instanceNumber">0</span>
+                    </div>
+
+
+                    <div class="form-row">
+                        <label for="refreshRate">场景刷新时间</label>
+                        <input id="refreshRate"  value="100">
+                        <span id="unit">ms</span>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="IP">ip</label>
+                        <input id="IP"  value="127.0.0.1">
+                    </div>
+                </form>
+                <button class="btn" type="button">取消</button>
+            </div>
+        </div>
+
+
+
+
 </section>
     <!--    遮罩层 -->
     <!--    <div class="overlay hidden"></div>-->
@@ -334,26 +431,35 @@
     <script src="js/utils/InputTextDialog.js"></script>
     <script src="js/utils/CreateSubMenuLi.js"></script>
     <script src="js/utils/PageEventControl.js"></script>
-    <script src="js/bars/setting/modal_left.js"></script>
-    <script src="js/bars/setting/modal_right.js"></script>
+    <script src="js/utils/CreateXMLDoc.js"></script>
+
+    <script src="js/bars/setting/device_modal_left.js"></script>
+    <script src="js/bars/setting/device_modal_right.js"></script>
+    <script src="js/bars/setting/deivce_modal_header.js"></script>
+    <script src="js/bars/sidebar.js"></script>
+    <script src="js/bars/toolbar.js"></script>
+    <script src="js/bars/topIcon.js"></script>
+    <script src="js/bars/menubar.js"></script>
+
+
     <script src="js/contextMenus/contextMenu.js"></script>
     <script src="js/contextMenus/AirplaneContextMenu.js"></script>
     <script src="js/contextMenus/RadarContextMenu.js"></script>
     <script src="js/contextMenus/ReconnaissanceContextMenu.js"></script>
     <script src="js/contextMenus/JammingContextMenu.js"></script>
-    <script src="js/bars/sidebar.js"></script>
-    <script src="js/bars/toolbar.js"></script>
-    <script src="js/bars/topIcon.js"></script>
-    <script src="js/bars/setting/setting.js"></script>
+
     <script src="js/mapController.js"></script>
     <script src="js/point.js"></script>
+
     <script src="js/components/airplane.js"></script>
     <script src="js/components/radar.js"></script>
     <script src="js/components/reconnaissance.js"></script>
     <script src="js/components/jamming.js"></script>
     <script src="js/components/componentManager.js"></script>
+
     <script src="js/factories/ComponentFactory.js"></script>
     <script src="js/factories/MenuFactory.js"></script>
+
     <script src="js/main.js"></script>
 </body>
 </html>

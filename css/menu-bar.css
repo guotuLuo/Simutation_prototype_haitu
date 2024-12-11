@@ -10,13 +10,11 @@
     padding: 0;           /* 去除内边距 */
     display: flex;        /* 使用 flexbox 来水平排列菜单项 */
 }
-
 /* 菜单项 li 的样式 */
 .menu-bar li {
     margin-right: 20px;   /* 菜单项之间的间距 */
-
+    position: relative; /* 为了给子菜单定位 */
 }
-
 /* 菜单项链接 a 的样式 */
 .menu-bar a {
     color: black;
@@ -25,8 +23,33 @@
     border-radius: 5px;
     border: none;
 }
-
 /* 鼠标悬停时下划线效果 */
 .menu-bar a:hover {
+    background-color: #bdc3c7;
+}
+/* 隐藏子菜单 */
+.menu-bar .sub-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    padding: 10px;
+    z-index: 1900;
+}
+/* 当父菜单项悬停或聚焦时显示子菜单 */
+
+.menu-bar li:focus .sub-menu {
+    display: block;
+    z-index: 1800;
+}
+/* 调整子菜单项的样式 */
+.menu-bar .sub-menu li {
+    width: 80px; /* 设置子菜单项的宽度 */
+    margin-right: 0;
+}
+/* 可选：为父菜单项添加背景色以突出显示 */
+.menu-bar li:hover,
+.menu-bar li:focus {
     background-color: #bdc3c7;
 }

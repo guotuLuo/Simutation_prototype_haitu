@@ -1,7 +1,8 @@
 // 获取列表项和属性表单
 const objectList = document.getElementById('objectList');
-const objectNameInput = document.getElementById('objectName');
-const objectTypeInput = document.getElementById('objectType');
+const objectName = document.getElementById('objectName');
+const objectType = document.getElementById('objectType');
+const objectSpeed = document.getElementById('objectSpeed');
 
 function addObjectToList(component) {
     // 创建新的 li 元素
@@ -16,8 +17,10 @@ function addObjectToList(component) {
     // 添加点击事件监听
     li.addEventListener('click', () => {
         // 更新表单内容
-        objectNameInput.value = li.getAttribute("data-name");
-        objectTypeInput.value = li.getAttribute("data-itemType");
+        objectName.textContent = li.getAttribute("data-name");
+        objectType.textContent = li.getAttribute("data-itemType");
+        // objectSpeed.textContent = li.getAttribute("data-speed");
+        
     });
 
     // 将新的 li 元素添加到 objectList 中

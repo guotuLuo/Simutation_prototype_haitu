@@ -6,7 +6,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 0.4rem;
-    width: 50vw;  /* 设置宽度为视口宽度的一半 */
+    width: 52vw;  /* 设置宽度为视口宽度的一半 */
     height: 70vh;  /* 设置高度为视口高度的 70% */
     min-height: 250px;
     background-color: white;
@@ -30,32 +30,73 @@
 .modal__header {
     display: flex;
     align-items: center;
-    justify-content: space-between;  /* 确保头像和其他内容在左侧 */
+    justify-content: space-between; /* 切换按钮和关闭按钮两端对齐 */
     border-bottom: 1px solid #ddd;
-    padding: 0.8rem; /* 确保合理的内边距 */
-    margin: 0; /* 确保外边距不影响布局 */
+    padding: 0.8rem;
+    margin: 0;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 0; /* 移除按钮之间的间距 */
+}
+
+.header-buttons button {
+    font-size: 0.8em; /* 缩小文字大小 */
+    padding: 0.3rem 0.6rem; /* 缩小内边距 */
+    border-radius: 0; /* 调整按钮圆角 */
+    border: 1px solid #ccc; /* 添加细边框 */
+    background-color: #f9f9f9; /* 背景颜色 */
+    transition: all 0.3s ease;
+    margin: 0; /* 确保没有外边距 */
+}
+
+.header-buttons button:hover {
+    background-color: #e0e0e0; /* 鼠标悬停效果 */
+}
+
+/* 高亮选中按钮样式 */
+.header-buttons button.active {
+    background-color: #464748; /* 高亮颜色 */
+    color: white; /* 高亮时字体变白 */
+    border-color: #74797c; /* 边框颜色改变 */
 }
 
 
-
-.header_img{
-    width: 24px;  /* 设置图片宽度 */
-    height: 24px;  /* 设置图片高度 */
-    margin-right: 10px;  /* 可选：为图片和关闭按钮添加间距 */
-    margin-left: 10px;  /* 可选：为图片和关闭按钮添加间距 */
-    margin-top: 3px;
-
+/* 关闭按钮 */
+.btn-close {
+    background-color: transparent; /* 透明背景 */
+    color: black; /* 黑色叉 */
+    font-size: 1.5em; /* 适当放大叉的字体 */
+    border: none; /* 取消边框 */
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
+
+.btn-close:hover {
+    color: #555; /* 悬停时颜色变为深灰 */
+}
+
+.btn-close:active {
+    color: black; /* 点击时颜色保持黑色 */
+    transform: scale(1); /* 点击时恢复正常大小 */
+}
+
 
 .modal__content {
-    display: flex;
+    display: none;
     height: 100%;  /* 填满模态框的剩余空间 */
     gap: 1rem;
+    justify-content: space-around;  /* 横向分布子元素 */
+}
+
+.modal__content.active {
+    display: flex; /* 仅激活的页面显示 */
 }
 
 .modal__left {
     flex: 1;  /* 左侧占据剩余空间 */
-    max-width: 30%;  /* 设置最大宽度，确保不占据过多空间 */
+    max-width: 24%;  /* 设置最大宽度，确保不占据过多空间 */
     padding: 1rem;
     border-right: 1px solid #ddd;
     overflow-y: auto;
@@ -63,7 +104,7 @@
 
 .modal__middle {
     display: flex;
-    max-width: 35%;  /* 设置最大宽度，确保不占据过多空间 */
+    max-width: 38%;  /* 设置最大宽度，确保不占据过多空间 */
 
     flex-direction: column;
     gap: 1rem;  /* 设置每个表单项之间的间距 */
@@ -85,7 +126,7 @@
 
 .modal__right {
     display: flex;
-    max-width: 35%;  /* 设置最大宽度，确保不占据过多空间 */
+    max-width: 38%;  /* 设置最大宽度，确保不占据过多空间 */
     flex-direction: column;
     gap: 1rem;  /* 设置每个表单项之间的间距 */
 }
@@ -104,28 +145,72 @@
     background-color: #f83804; /* 改为更深的红色 */
 }
 
+
+.envi__modal__left {
+    display: flex;
+    max-width: 40%;  /* 设置最大宽度，确保不占据过多空间 */
+    flex-direction: column;
+    gap: 1rem;  /* 设置每个表单项之间的间距 */
+}
+
+.envi__modal__left button {
+    padding: 0.5rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+.envi__modal__left button:hover {
+    background-color: #45a049;
+}
+
+.envi__modal__right {
+    display: flex;
+    max-width: 40%;  /* 设置最大宽度，确保不占据过多空间 */
+    flex-direction: column;
+    gap: 1rem;  /* 设置每个表单项之间的间距 */
+}
+
+.envi__modal__right button {
+    padding: 0.5rem;
+    background-color: #ee0606; /* 改为红色 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+.envi__modal__right button:hover {
+    background-color: #f83804; /* 改为更深的红色 */
+}
+
+
+
 .form-row {
     display: flex;
     align-items: center; /* 垂直居中 */
-    gap: 1rem; /* 设置 label 和 dropdown 之间的间距 */
+    gap: 3rem; /* 设置 label 和 dropdown 之间的间距 */
     width: 100%; /* 确保占据整个父容器的宽度 */
     box-sizing: border-box; /* 确保宽度计算包含边框和内边距 */
 }
 
 label {
-    width: 70px; /* 固定宽度，确保所有 label 一致 */
+    width: 80px; /* 固定宽度，确保所有 label 一致 */
     text-align: left; /* 左对齐文本 */
     white-space: nowrap; /* 防止 label 换行 */
     font-size: 1rem;
     cursor: pointer; /* 鼠标悬停时显示手指指针 */
-    margin-right: 0.5rem; /* 标签和控件之间的间距 */
+    margin-right: 5rem; /* 标签和控件之间的间距 */
 }
 
 
 input {
     flex-grow: 1; /* 自动填充剩余空间 */
     min-width: 0; /* 防止过度扩展 */
-    padding: 0.5rem;
 }
 
 /* 复选框容器 */
@@ -139,7 +224,6 @@ input {
 /* 复选框样式 */
 input[type="checkbox"] {
     transform: scale(1.2);  /* 放大复选框 */
-    margin: 0;
     cursor: pointer; /* 鼠标悬停时显示手指指针 */
 }
 
@@ -248,7 +332,6 @@ select[multiple] option:checked {
 }
 
 #objectPropertiesForm input {
-    padding: 0.5rem;
     margin: 0;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -282,6 +365,59 @@ select[multiple] option:checked {
     border-radius: 5px;
 }
 
+#enviPropertiesForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#enviPropertiesForm input {
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#enviPropertiesForm button {
+    padding: 0.5rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#enviPropertiesForm button:hover {
+    background-color: #45a049;
+}
+
+
+
+#enviPropertiesFormRight {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#enviPropertiesFormRight input {
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#enviPropertiesFormRight button {
+    padding: 0.5rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#enviPropertiesFormRight button:hover {
+    background-color: #45a049;
+}
+
+
 
 
 /* 按钮样式 */
@@ -307,23 +443,5 @@ button {
 }
 
 
-/* 关闭按钮 */
-.btn-close {
-    background-color: transparent; /* 透明背景 */
-    color: black; /* 黑色叉 */
-    font-size: 1.5em; /* 适当放大叉的字体 */
-    border: none; /* 取消边框 */
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-close:hover {
-    color: #555; /* 悬停时颜色变为深灰 */
-}
-
-.btn-close:active {
-    color: black; /* 点击时颜色保持黑色 */
-    transform: scale(1); /* 点击时恢复正常大小 */
-}
 
 
