@@ -341,9 +341,9 @@ class Radar {
         radarText.textContent = `雷达 UUID: ${this.id.replace(/-/g, '').substring(0, 18)}`;
 
         // 创建按钮数组
-        var buttonLabels = ["标准显示", "偏心显示", "空心显示", "延迟显示"]; // 按钮的文本内容
+        var buttonLabels = ["标准显示", "空心显示", "切换线段显示"]; // 新的按钮文本内容，加入切换线段显示
         var currentDisplayType = "标准显示"; // 全局变量跟踪当前显示状态
-        var displayTypes = ['standard', 'eccentric', 'hollow', 'delayed'];
+        var displayTypes = ['standard', 'hollow'];
         var radarContainer = document.getElementById("radar-container");
 
         // 创建一个容器来放置这些按钮
@@ -354,21 +354,30 @@ class Radar {
             var button = document.createElement("button");
             button.innerHTML = label; // 按钮显示的文本
             button.classList.add("radar-button"); // 给按钮添加样式类
-            this.displayType=displayTypes[buttonLabels.indexOf(currentDisplayType)];
+            this.displayType = displayTypes[buttonLabels.indexOf(currentDisplayType)];
+
             // 为每个按钮绑定事件
             button.addEventListener('click', (event) => {
-                currentDisplayType = label; // 更新当前显示状态
-                this.stopScan();
-                console.log("currentDisplayType is:", currentDisplayType);
-                this.updateRadarDisplay1(radarBackground, currentDisplayType); // 更新雷达显示
-                this.redrawPlaneMarkers();
-                if(this.scanning===true){
-                this.startScan();}
-                
+                if (label === "切换线段显示") {
+                    this.toggleLines(); // 当点击“切换线段显示”按钮时，切换线段显示状态
+                } else {
+                    currentDisplayType = label; // 更新当前显示状态
+                    this.stopScan();
+                    console.log("currentDisplayType is:", currentDisplayType);
+                    this.updateRadarDisplay1(radarBackground, currentDisplayType); // 更新雷达显示
+                    this.redrawPlaneMarkers();
+                    if (this.scanning === true) {
+                        this.startScan();
+                    }
+                }
             });
-            
+
             buttonContainer.appendChild(button); // 将按钮添加到容器中
         });
+
+        // 将按钮容器添加到页面中
+        radarContainer.appendChild(buttonContainer);
+
         
 
         // 将按钮容器添加到 radar-container 中
@@ -554,6 +563,30 @@ class Radar {
         else{}
         // 更新线段集合并绘制线段
         this.updateLines();
+    }
+
+
+
+    // 显示所有线段
+    showLines() {
+        this.lines.forEach(line => {
+            line.style.display = 'block';  // 显示线段
+        });
+    }
+
+    // 隐藏所有线段
+    hideLines() {
+        this.lines.forEach(line => {
+            line.style.display = 'none';  // 隐藏线段
+        });
+    }
+
+    // 切换显示状态
+    toggleLines() {
+        this.lines.forEach(line => {
+            // 如果线段目前显示，则隐藏；如果隐藏，则显示
+            line.style.display = (line.style.display === 'none' || line.style.display === '') ? 'block' : 'none';
+        });
     }
     updateLines() {
         // 清除现有的线段
