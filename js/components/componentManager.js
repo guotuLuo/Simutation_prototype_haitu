@@ -95,46 +95,39 @@ const componentManager = {
             });
         });
     });
-},
+    },
     stopAllRadars(){
         this.instances.forEach(itemMap => {
             itemMap.forEach(classMap => {
                 classMap.forEach(instance => {
-                if (typeof instance.stopScan === 'function') {
-                  instance.stopScan();
+                    if (typeof instance.stopScan === 'function') {
+                    instance.stopScan();
                 }
             });
         });
     });
-},
+    },
     returnAllObjects(){
+            this.instances.forEach(itemMap => {
+                itemMap.forEach(classMap => {
+                    classMap.forEach(instance => {
+                    if (typeof instance.backToStart === 'function') {
+                    instance.backToStart();
+                    }
+                });
+            });
+        });
+    },
+    deleteAllObjects(){
         this.instances.forEach(itemMap => {
             itemMap.forEach(classMap => {
                 classMap.forEach(instance => {
-                if (typeof instance.backToStart === 'function') {
-                  instance.backToStart();
+                if (typeof instance.delete === 'function') {
+                instance.delete();
                 }
             });
         });
     });
-},
-
-
-    // 删除指定类名和实例名称的实例
-    deleteInstance(itemType, className, name) {
-        const itemTypeMap = this.instances.get(itemType);
-        if (itemTypeMap && itemTypeMap.has(className)) {
-            const classNameMap = itemTypeMap.get(className);
-            if (classNameMap && classNameMap.has(name)) {
-                classNameMap.delete(name);
-                console.log(`Instance ${name} removed from class ${className} in ${itemType}`);
-            } else {
-                console.log(`Instance ${name} not found in class ${className}`);
-            }
-        } else {
-            console.log(`Class ${className} not found in item type ${itemType}`);
-        }
-        this.removeCurInstanceName(itemType, name);
     },
 
     getNextInstanceName(){
@@ -160,16 +153,6 @@ const componentManager = {
             this.deletedIndexes.push(String(name));  // 记录删除的位置
             console.log(`Component removed with name: ${name}`);
         }
-    },
-
-    // 打印所有实例，按 className 顺序
-    deleteAllInstances() {
-        this.instances.forEach((itemTypeItem) => {
-            itemTypeItem.forEach((classNameItem) => {
-                classNameItem.forEach((instanceItem) =>{
-                    instanceItem.delete();
-                })
-            });
-        });
     }
+
 }

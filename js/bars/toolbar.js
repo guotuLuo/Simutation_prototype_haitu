@@ -43,6 +43,7 @@ class Toolbar {
                 break;
             case 'delete':
                 console.log("组件删除");
+                componentManager.deleteAllObjects();
                 break;
             case 'reset':
                 console.log("中心复位");
