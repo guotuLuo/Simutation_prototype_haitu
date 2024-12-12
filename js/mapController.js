@@ -15,8 +15,10 @@ class MapController {
     }
 
     initializeMap() {
-        const map = L.map('map').setView([35.8617, 104.1954], 10);
-
+        // 初始视图中心 L.map('map')这里的map对应了html里面的map-container里的map
+        const mapElement = document.getElementById('map');
+        const map = L.map(mapElement).setView([35.8617, 104.1954], 10);
+        mapElement._leafletMap = map;
         // fetch('json/china.json') // 将路径替换为你的实际路径
         //     .then(response => response.json())
         //     .then(data => {
