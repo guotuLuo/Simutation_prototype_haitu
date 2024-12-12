@@ -9,6 +9,11 @@ class Jamming {
         this.className = className;
         this.name = name;
         this.createMarker();
+
+        // 经度维度海拔
+        this.latitude = position.lat;
+        this.longitude = position.lng;
+        this.altitude = 0;
     }
 
     createMarker() {
@@ -52,5 +57,17 @@ class Jamming {
     }
     getName(){
         return this.name;
+    }
+
+    getLat(){
+        return this.latitude;
+    }
+
+    getLng(){
+        return this.longitude;
+    }
+
+    getAlt(){
+        return this.altitude;
     }
 }

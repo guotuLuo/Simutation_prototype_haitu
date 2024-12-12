@@ -42,7 +42,7 @@
                         <li>
                             <a href="#">文件</a>
                             <ul class="sub-menu">
-                                <li><a href="#">保存文件</a></li>
+                                <li><a href="#" >保存文件</a></li>
                                 <li><a href="#">打开文件</a></li>
                                 <li><a href="#">关闭文件</a></li>
                             </ul>
@@ -263,8 +263,8 @@
                     </div>
 
                     <div class="form-row">
-                        <label for="objectReflect">反射截面积</label>
-                        <span id="objectReflect">Reflect Area</span>
+                        <label for="objectRCS">反射截面积</label>
+                        <input id="objectRCS" value="1000">
                     </div>
 
                     <!-- 下拉框 -->
@@ -342,31 +342,31 @@
                     </div>
 
                     <div class="form-row">
-                        <label for="timeScale">时间标尺</label>
-                        <input id="timeScale"  value="1000">
+                        <label for="timeScalar">时间标尺</label>
+                        <input id="timeScalar"  value="1000">
                     </div>
 
                     <div class="form-row">
-                        <label for="timeSlice">时间片</label>
-                        <input id="timeSlice"  value="1000">
+                        <label for="timeClkRate">时间片</label>
+                        <input id="timeClkRate"  value="1000">
                     </div>
 
 
                     <div class="form-row">
-                        <label for="clutterLevel">杂波等级</label>
-                        <input id="clutterLevel"  value="1">
+                        <label for="clutterGrade">杂波等级</label>
+                        <input id="clutterGrade"  value="1">
                     </div>
 
                     <!-- 下拉框 -->
                     <div class="form-row">
                         <label for="dropDownClutterType">杂波类型</label>
                         <select id="dropDownClutterType" name="options">
-                            <option value="无杂波">无杂波</option>
-                            <option value="一级海杂波">一级海杂波</option>
-                            <option value="二级海杂波">二级海杂波</option>
-                            <option value="三级海杂波">三级海杂波</option>
-                            <option value="四级海杂波">四级海杂波</option>
-                            <option value="五级海杂波">五级海杂波</option>
+                            <option value="0">无杂波</option>
+                            <option value="1">一级海杂波</option>
+                            <option value="2">二级海杂波</option>
+                            <option value="3">三级海杂波</option>
+                            <option value="4">四级海杂波</option>
+                            <option value="5">五级海杂波</option>
                         </select>
                     </div>
 
@@ -374,10 +374,10 @@
                     <div class="form-row">
                         <label for="dropDownClutterModel">杂波模型</label>
                         <select id="dropDownClutterModel" name="options">
-                            <option value="均匀分布">均匀分布</option>
-                            <option value="正态分布">正态分布</option>
-                            <option value="瑞利分布">瑞利分布</option>
-                            <option value="韦布尔分布">韦布尔分布</option>
+                            <option value="0">均匀分布</option>
+                            <option value="1">正态分布</option>
+                            <option value="2">瑞利分布</option>
+                            <option value="3">韦布尔分布</option>
                         </select>
                     </div>
                 </form>
@@ -399,8 +399,8 @@
 
 
                     <div class="form-row">
-                        <label for="refreshRate">场景刷新时间</label>
-                        <input id="refreshRate"  value="100">
+                        <label for="refresh">场景刷新时间</label>
+                        <input id="refresh"  value="100">
                         <span id="unit">ms</span>
                     </div>
 

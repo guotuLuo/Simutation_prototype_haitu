@@ -90,12 +90,12 @@ const componentManager = {
         this.instances.forEach(itemMap => {
             itemMap.forEach(classMap => {
                 classMap.forEach(instance => {
-                if (typeof instance.stopFlight === 'function') {
-                  instance.stopFlight();
-                }
+                     if (typeof instance.stopFlight === 'function') {
+                        instance.stopFlight();
+                    }
+                });
             });
         });
-    });
     },
 
     stopAllRadars(){
@@ -103,11 +103,11 @@ const componentManager = {
             itemMap.forEach(classMap => {
                 classMap.forEach(instance => {
                     if (typeof instance.stopScan === 'function') {
-                    instance.stopScan();
-                }
+                        instance.stopScan();
+                    }
+                });
             });
         });
-    });
     },
     returnAllObjects(){
             this.instances.forEach(itemMap => {
@@ -143,11 +143,11 @@ const componentManager = {
             itemMap.forEach(classMap => {
                 classMap.forEach(instance => {
                 if (typeof instance.delete === 'function') {
-                instance.delete();
-                }
+                    instance.delete();
+                    }
+                });
             });
         });
-    });
     },
 
     getNextInstanceName(){
@@ -174,5 +174,4 @@ const componentManager = {
             console.log(`Component removed with name: ${name}`);
         }
     }
-
 }

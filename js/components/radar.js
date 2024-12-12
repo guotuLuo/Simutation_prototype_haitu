@@ -26,6 +26,11 @@ class Radar {
         this.scanning=false;
         this.displayType='standard';
         this.lines=[];
+
+        // 经度维度海拔
+        this.latitude = position.lat;
+        this.longitude = position.lng;
+        this.altitude = 0;
     }
 
     initializeRadarCenter() {
@@ -681,5 +686,17 @@ class Radar {
     }
     getName(){
         return this.name;
+    }
+
+    getLat(){
+        return this.latitude;
+    }
+
+    getLng(){
+        return this.longitude;
+    }
+
+    getAlt(){
+        return this.altitude;
     }
 }
