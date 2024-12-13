@@ -25,5 +25,12 @@ options.forEach(function(checkbox) {
     });
 });
 
+function updateSelectedValues() {
+    const selectedValuesContainer = document.querySelector('.dropdown .selected .selected-values');
+    const selectedBandLabels = Array.from(document.querySelectorAll('.dropdown .options input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.closest('label').textContent.trim());
+    selectedValuesContainer.textContent = selectedBandLabels.join(' ');
+}
+
 // 属性设置保存按钮响应
 

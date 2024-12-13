@@ -20,9 +20,24 @@ function saveHandler() {
         const [lat, lng] = point.trim().slice(1, -1).split(',').map(Number);
         return [parseFloat(lat.toFixed(5)), parseFloat(lng.toFixed(5))];
     });
+    // 获取选中的频段并更新 selected-values
+    const selectedBands = Array.from(document.querySelectorAll('.dropdown .options input[type="checkbox"]'))
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => {
+            return checkbox.closest('label').textContent.trim();
+        });
+
+    // 更新 selected-values 内容
+    const selectedValuesContainer = document.querySelector('.selected .selected-values');
+    selectedValuesContainer.textContent = selectedBands.join(' ');
+
     const band1 = Array.from(document.querySelectorAll('.dropdown .options input[type="checkbox"]'))
         .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.value).join(' ');
+        .map(checkbox => checkbox.value)  // 显式返回 checkbox.value
+        .join(' ');
+    console.log(band1);
+
+
 
     // 更新 component 实例
     selectedComponent.setIdentity(identity);
@@ -32,10 +47,7 @@ function saveHandler() {
     selectedComponent.setTrack(track);
     selectedComponent.setBand1(band1);
 
-    // 对于 object 和 reconnaissance，重置速度和轨迹
-    if (selectedComponent.getItemType() === 'object' || selectedComponent.getItemType() === 'reconnaissance') {
-        selectedComponent.setSpeed(speed); // Reset the speed for these types
-    }
+    selectedComponent.setSpeed(speed); // Reset the speed for these types
 
     // 更新 li 的 data 属性
     selectedLi.setAttribute('data-identity', identity);
@@ -76,12 +88,13 @@ function resetHandler() {
     document.getElementById('objectSpeed').value = 0;
     document.getElementById('objectRCS').value = 1000;
     document.getElementById('dropDownDevice').value = 0;
-    document.getElementById('dropDownPrototype').setAttribute('data-value', '');
     document.getElementById('objectKeyPointNumber').textContent = 1;
     document.getElementById('objectTrack').textContent = `(${selectedComponent.getLat().toFixed(5)}, ${selectedComponent.getLng().toFixed(5)})`;
+    // 取消所有频段选择
     document.querySelectorAll('.dropdown .options input[type="checkbox"]').forEach((checkbox) => {
         checkbox.checked = false; // 取消所有频段选择
     });
+    document.querySelector('.selected .selected-values').textContent = ''; // 清空显示的频段
 
     // 更新 li 的 data 属性
     selectedLi.setAttribute('data-identity', selectedComponent.getIdentity());
@@ -93,15 +106,7 @@ function resetHandler() {
     selectedLi.setAttribute('data-band1', '');
 }
 
-// 在更新表单时控制 speed 输入框的禁用状态
-function updateFormFields(selectedComponent) {
-    const speedInput = document.getElementById('objectSpeed');
-    if (selectedComponent.getItemType() !== 'object' && selectedComponent.getItemType() !== 'reconnaissance') {
-        speedInput.disabled = true; // Disable speed input for other types
-    } else {
-        speedInput.disabled = false; // Enable speed input for object and reconnaissance
-    }
-}
+
 
 function addObjectToList(component) {
     // 创建新的 li 元素
@@ -156,11 +161,18 @@ function addObjectToList(component) {
         document.getElementById('objectKeyPointNumber').textContent = String(selectedComponent.getTrack().length);
         document.getElementById('objectTrack').innerHTML = selectedComponent.getTrack().map(([lat, lng]) => `(${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)})`).join('; <br>');
         document.querySelectorAll('.dropdown .options input[type="checkbox"]').forEach((checkbox) => {
-            checkbox.checked = selectedComponent.getBand1()?.split(' ').includes(checkbox.value); // 设置选中状态
+            const band1 = selectedComponent.getBand1();
+            if (band1 && band1.trim() !== '') {
+                const selectedBands = band1.split(' ').map(band => band.trim()).filter(Boolean); // 去除空元素
+                checkbox.checked = selectedBands.includes(checkbox.value); // 设置选中状态
+            } else {
+                checkbox.checked = false; // 如果 band1 为空，则不选中任何复选框
+            }
         });
 
         // 调用函数来控制 speed 输入框
         updateFormFields(selectedComponent);
+        updateSelectedValues();
 
         // 绑定事件监听器
         const saveButton = document.getElementById('protoSaveButton');
@@ -180,6 +192,15 @@ function addObjectToList(component) {
 }
 
 
+// 在更新表单时控制 speed 输入框的禁用状态
+function updateFormFields(selectedComponent) {
+    const speedInput = document.getElementById('objectSpeed');
+    if (selectedComponent.getItemType() !== 'object' && selectedComponent.getItemType() !== 'reconnaissance') {
+        speedInput.disabled = true; // Disable speed input for other types
+    } else {
+        speedInput.disabled = false; // Enable speed input for object and reconnaissance
+    }
+}
 
 
 // 删除一个对象项
