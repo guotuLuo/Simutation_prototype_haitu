@@ -1,6 +1,7 @@
 // Jamming 类
-class Jamming {
+class Jamming extends BaseComponent{
     constructor(map, position, icon, contextMenu, itemType, className, name) {
+        super();
         this.map = map;
         this.position = position;
         this.icon = icon;
@@ -14,6 +15,14 @@ class Jamming {
         this.latitude = position.lat;
         this.longitude = position.lng;
         this.altitude = 0;
+
+        // nBatch 不知道干啥的，先留在这
+        this.batch = parseInt(this.name.substring(this.itemType.length));
+        this.use = 0;
+        this.track = [];
+        const lat = position.lat.toFixed(5);
+        const lng = position.lng.toFixed(5);
+        this.track.push([lat, lng]);
     }
 
     createMarker() {
@@ -49,25 +58,7 @@ class Jamming {
         navigator.sendBeacon(url);
     }
 
-    getItemType(){
-        return this.itemType;
-    }
     getClassName(){
         return this.className;
-    }
-    getName(){
-        return this.name;
-    }
-
-    getLat(){
-        return this.latitude;
-    }
-
-    getLng(){
-        return this.longitude;
-    }
-
-    getAlt(){
-        return this.altitude;
     }
 }
