@@ -240,7 +240,7 @@
                     <!-- 单选框 -->
                     <div class="form-row">
                         <label>身份</label>
-                        <div class="radio-group">
+                        <div class="radio-group" id="objectIdentity">
                             <input type="radio" id="radio1" name="identity" value="1">
                             <label for="radio1">敌方</label>
 
@@ -254,42 +254,37 @@
 
                     <div class="form-row">
                         <label for="objectModel">型号</label>
-                        <span id="objectModel">UnKnown</span>
+                        <input id="objectModel" value="dgn">
                     </div>
 
                     <div class="form-row">
                         <label for="objectSpeed">初速度</label>
-                        <span id="objectSpeed">Speed</span>
+                        <input id="objectSpeed" placeholder="单位(米/秒)" value="0">
                     </div>
 
                     <div class="form-row">
                         <label for="objectRCS">反射截面积</label>
-                        <input id="objectRCS" value="1000">
+                        <input id="objectRCS" placeholder="单位(平方厘米)" value="1000">
                     </div>
 
                     <!-- 下拉框 -->
                     <div class="form-row">
                         <label for="dropDownDevice">设备状态</label>
                         <select id="dropDownDevice" name="options">
-                            <option value="开机">开机</option>
-                            <option value="发射">发射</option>
-                            <option value="故障">故障</option>
-                            <option value="关机">关机</option>
+                            <option value="0">开机</option>
+                            <option value="1">发射</option>
+                            <option value="2">故障</option>
+                            <option value="3">关机</option>
                         </select>
                     </div>
 
                     <!-- 下拉框 -->
                     <div class="form-row">
                         <label for="dropDownPrototype">样机用途</label>
-                        <select id="dropDownPrototype" name="options">
-                            <option value="背景目标">背景目标</option>
-                            <option value="预警雷达">预警雷达</option>
-                            <option value="超视距雷达">侦察</option>
-                            <option value="干扰">干扰</option>
-                        </select>
+                        <span id="dropDownPrototype" data-value="0"></span>
                     </div>
                 </form>
-                <button id="saveButton" class="btn" type="button">保存</button>
+                <button id="protoSaveButton" class="btn" type="button">保存</button>
            </div>
 
             <div class="modal__right">
@@ -303,19 +298,19 @@
                             </div>
                             <div class="options">
                                 <label>
-                                    <input type="checkbox" value="0"> 0
+                                    <input type="checkbox" value="0" checked> 0
                                 </label>
                                 <label>
-                                    <input type="checkbox" value="10-30MHz"> 10-30MHz
+                                    <input type="checkbox" value="1"> 10-30MHz
                                 </label>
                                 <label>
-                                    <input type="checkbox" value="30-300MHz"> 30-300MHz
+                                    <input type="checkbox" value="2"> 30-300MHz
                                 </label>
                                 <label>
-                                    <input type="checkbox" value="300MHz-1GHz"> 300MHz-1GHz
+                                    <input type="checkbox" value="3"> 300MHz-1GHz
                                 </label>
                                 <label>
-                                    <input type="checkbox" value="1-2GHz"> 1-2GHz
+                                    <input type="checkbox" value="4"> 1-2GHz
                                 </label>
                                 <!-- 根据需要添加更多选项 -->
                             </div>
@@ -323,11 +318,22 @@
                     </div>
 
                     <div class="form-row">
-                        <label for="objectKeyPoint">轨迹关键点</label>
-                        <span id="objectKeyPoint">轨迹关键点</span>
+                        <label for="objectKeyPointNumber">轨迹点数量</label>
+                        <span id="objectKeyPointNumber">轨迹点数量</span>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="objectTrack">轨迹</label>
+                        <span id="objectTrack">轨迹</span>
+                    </div>
+
+
+                    <div class="form-row">
+                        <label for="objectRCSFile">反射截面文件</label>
+                        <span id="objectRCSFile">未定</span>
                     </div>
                 </form>
-                <button class="btn" type="button">取消</button>
+                <button id= "protoResetButton" class="btn" type="button">重置</button>
             </div>
         </div>
 
@@ -381,7 +387,7 @@
                         </select>
                     </div>
                 </form>
-                <button class="btn" type="button">保存</button>
+                <button id="enviSaveButton" class="btn" type="button">保存</button>
             </div>
 
 
@@ -400,8 +406,7 @@
 
                     <div class="form-row">
                         <label for="refresh">场景刷新时间</label>
-                        <input id="refresh"  value="100">
-                        <span id="unit">ms</span>
+                        <input id="refresh"  value="100" placeholder="单位(毫秒)">
                     </div>
 
                     <div class="form-row">
@@ -409,7 +414,7 @@
                         <input id="IP"  value="127.0.0.1">
                     </div>
                 </form>
-                <button class="btn" type="button">取消</button>
+                <button id="enviResetButton" class="btn" type="button">重置</button>
             </div>
         </div>
 
@@ -434,7 +439,7 @@
     <script src="js/utils/CreateXMLDoc.js"></script>
 
     <script src="js/bars/setting/device_modal_left.js"></script>
-    <script src="js/bars/setting/device_modal_right.js"></script>
+    <script src="js/bars/setting/device_modal_form.js"></script>
     <script src="js/bars/setting/deivce_modal_header.js"></script>
     <script src="js/bars/sidebar.js"></script>
     <script src="js/bars/toolbar.js"></script>
@@ -451,6 +456,7 @@
     <script src="js/mapController.js"></script>
     <script src="js/point.js"></script>
 
+    <script src="js/components/BaseComponent.js"></script>
     <script src="js/components/airplane.js"></script>
     <script src="js/components/radar.js"></script>
     <script src="js/components/reconnaissance.js"></script>
