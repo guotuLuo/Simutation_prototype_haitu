@@ -35,7 +35,7 @@ class Radar extends BaseComponent{
 
         // nBatch 不知道干啥的，先留在这
         this.batch = parseInt(this.name.substring(this.itemType.length));
-        this.use = 0;
+        this.use = 1;
         this.track = [];
         const lat = position.lat.toFixed(5);
         const lng = position.lng.toFixed(5);

@@ -149,6 +149,21 @@ class Reconnaissance extends BaseComponent{
         this.map.on("contextmenu", endRouteSetting);
     }
 
+    // 添加标记点的辅助函数
+    addRoutesMarker(latLng, color) {
+        if (!latLng || isNaN(latLng.lat) || isNaN(latLng.lng)) {
+            console.error("无效的 LatLng 对象，无法添加标记。");
+            return;
+        }
+
+        const marker = L.circleMarker(latLng, {
+            color: color,
+            radius: 5
+        }).addTo(this.map);
+
+        this.routeMarkers.push(marker); // 将标记添加到 routeMarkers 数组中
+    }
+
     startFlight() {
         if (this.track.length < 2) {
             console.log("路径点不足，无法移动");
