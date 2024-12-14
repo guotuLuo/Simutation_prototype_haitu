@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="leaflet/leaflet.css" />
     <script src="leaflet/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
     <!-- 顶部区域 -->
@@ -32,9 +33,7 @@
             <!-- 右侧区域：标题栏和菜单栏 -->
             <div class="right-column">
                 <!-- 标题栏 -->
-                <div class="title">
-                    未命名态势.dpsp
-                </div>
+                <div class="title">undefined.dpsp</div>
 
                 <!-- 菜单栏 -->
                 <div class="menu-bar">
@@ -152,7 +151,7 @@
 
             <button class="nav-button" data-submenu="submenu2">
                 <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
-                <span class="button-text" data-action="expand">Reconnaissance</span>
+                <span class="button-text" data-action="expand">Reconnoissance</span>
                 <img src="images/add.png" alt="add" class="add-icon" data-action="add">
             </button>
 
@@ -432,15 +431,17 @@
     <script src="leaflet/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
     <script src="js/utils/GenerateUUID.js"></script>
     <script src="js/utils/InputTextDialog.js"></script>
     <script src="js/utils/CreateSubMenuLi.js"></script>
     <script src="js/utils/PageEventControl.js"></script>
-    <script src="js/utils/CreateXMLDoc.js"></script>
+    <script src="js/utils/XMLDocHandler.js"></script>
 
     <script src="js/bars/setting/device_modal_left.js"></script>
     <script src="js/bars/setting/device_modal_form.js"></script>
-    <script src="js/bars/setting/deivce_modal_header.js"></script>
+    <script src="js/bars/setting/device_modal_header.js"></script>
     <script src="js/bars/sidebar.js"></script>
     <script src="js/bars/toolbar.js"></script>
     <script src="js/bars/topIcon.js"></script>
@@ -450,7 +451,7 @@
     <script src="js/contextMenus/contextMenu.js"></script>
     <script src="js/contextMenus/AirplaneContextMenu.js"></script>
     <script src="js/contextMenus/RadarContextMenu.js"></script>
-    <script src="js/contextMenus/ReconnaissanceContextMenu.js"></script>
+    <script src="js/contextMenus/ReconnoissanceContextMenu.js"></script>
     <script src="js/contextMenus/JammingContextMenu.js"></script>
 
     <script src="js/mapController.js"></script>
@@ -459,12 +460,13 @@
     <script src="js/components/BaseComponent.js"></script>
     <script src="js/components/airplane.js"></script>
     <script src="js/components/radar.js"></script>
-    <script src="js/components/reconnaissance.js"></script>
+    <script src="js/components/reconnoissance.js"></script>
     <script src="js/components/jamming.js"></script>
     <script src="js/components/componentManager.js"></script>
 
     <script src="js/factories/ComponentFactory.js"></script>
     <script src="js/factories/MenuFactory.js"></script>
+
 
     <script src="js/main.js"></script>
 </body>

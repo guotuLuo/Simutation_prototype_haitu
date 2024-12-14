@@ -5,7 +5,7 @@ class MapController {
         this.contextMenus = {
             "object": new AirplaneContextMenu(this.map),
             "radar": new RadarContextMenu(this.map),
-            "reconnaissance": new ReconnaissanceContextMenu(this.map),
+            "reconnoissance": new ReconnoissanceContextMenu(this.map),
             "jamming": new JammingContextMenu(this.map)
         };
         this.initializeDragAndDrop();

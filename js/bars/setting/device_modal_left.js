@@ -76,8 +76,8 @@ function resetHandler() {
     selectedComponent.setTrack([[parseFloat(selectedComponent.getLat().toFixed(5)), parseFloat(selectedComponent.getLng().toFixed(5))]]);
     selectedComponent.setBand1('');
 
-    // 对于 object 和 reconnaissance，重置速度和轨迹
-    if (selectedComponent.getItemType() === 'object' || selectedComponent.getItemType() === 'reconnaissance') {
+    // 对于 object 和 reconnoissance，重置速度和轨迹
+    if (selectedComponent.getItemType() === 'object' || selectedComponent.getItemType() === 'reconnoissance') {
         selectedComponent.setSpeed(0); // Reset speed for these types
         selectedComponent.deleteRoute();
     }
@@ -195,10 +195,10 @@ function addObjectToList(component) {
 // 在更新表单时控制 speed 输入框的禁用状态
 function updateFormFields(selectedComponent) {
     const speedInput = document.getElementById('objectSpeed');
-    if (selectedComponent.getItemType() !== 'object' && selectedComponent.getItemType() !== 'reconnaissance') {
+    if (selectedComponent.getItemType() !== 'object' && selectedComponent.getItemType() !== 'reconnoissance') {
         speedInput.disabled = true; // Disable speed input for other types
     } else {
-        speedInput.disabled = false; // Enable speed input for object and reconnaissance
+        speedInput.disabled = false; // Enable speed input for object and reconnoissance
     }
 }
 

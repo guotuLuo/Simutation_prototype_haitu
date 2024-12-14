@@ -1,5 +1,5 @@
 class BaseComponent {
-    constructor(latitude, longitude, altitude, name = null, itemType = null, batch = null, identity = 2, model = 'dgn', speed = 0, rcs = 1000, rcsFile = null, status = 0, use = null, band = 0, band1 = null, track = null) {
+    constructor(latitude, longitude, altitude, name = null, itemType = null, batch = null, identity = 2, model = 'dgn', speed = 0, rcs = 1000, rcsFile = null, acceleration = 0, status = 0, use = null, band = 0, band1 = null, track = null) {
         this.name = name;
         this.itemType = itemType;
         this.batch = batch;
@@ -8,6 +8,7 @@ class BaseComponent {
         this.speed = speed;
         this.rcs = rcs;
         this.rcsFile = rcsFile;
+        this.acceleration = acceleration;
         this.status = status;
         this.use = use;
         this.band = band;
@@ -152,5 +153,13 @@ class BaseComponent {
 
     setTrack(value){
         this.track = value;
+    }
+
+    getAcceleration(){
+        return this.acceleration;
+    }
+
+    setAcceleration(value){
+        this.altitude = value;
     }
 }

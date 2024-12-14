@@ -1,5 +1,5 @@
-// ReconnaissanceContextMenu.js
-class ReconnaissanceContextMenu extends ContextMenu {
+// ReconnoissanceContextMenu.js
+class ReconnoissanceContextMenu extends ContextMenu {
     constructor(map) {
         super(map);
     }

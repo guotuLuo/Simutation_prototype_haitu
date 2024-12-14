@@ -332,40 +332,40 @@ class Radar extends BaseComponent{
             event.originalEvent.preventDefault();
             this.contextMenu.show(event, this);
         });
-    
+
         // 创建雷达组件容器
         const radarItem = document.createElement("div");
         radarItem.className = "radar-item";
         radarItem.id = this.id;
-    
+
         // 创建雷达背景并设置唯一 id
         const radarBackground = document.createElement("div");
         radarBackground.className = "radar-background";
         radarBackground.id = `radar-background-${this.id}`; // 设置唯一 id
-    
+
         // 创建扫描线
         const radarScanline = document.createElement("div");
         radarScanline.className = "radar-scanline";
         radarScanline.id = `radar-scanline-${this.id}`;
         // 将扫描线和目标点添加到雷达背景
         radarBackground.appendChild(radarScanline);
-        
+
         // 创建 UUID 显示区域
         const radarText = document.createElement("p");
         radarText.textContent = `雷达 UUID: ${this.id.replace(/-/g, '').substring(0, 18)}`;
 
         // 创建按钮数组
-        var buttonLabels = ["标准显示", "空心显示", "切换线段显示"]; // 新的按钮文本内容，加入切换线段显示
-        var currentDisplayType = "标准显示"; // 全局变量跟踪当前显示状态
-        var displayTypes = ['standard', 'hollow'];
-        var radarContainer = document.getElementById("radar-container");
+        const buttonLabels = ["标准显示", "空心显示", "切换线段显示"]; // 新的按钮文本内容，加入切换线段显示
+        let currentDisplayType = "标准显示"; // 全局变量跟踪当前显示状态
+        const displayTypes = ['standard', 'hollow'];
+        const radarContainer = document.getElementById("radar-container");
 
         // 创建一个容器来放置这些按钮
-        var buttonContainer = document.createElement("div");
+        const buttonContainer = document.createElement("div");
         buttonContainer.classList.add("button-container"); // 给按钮容器添加一个类名
 
         buttonLabels.forEach((label) => {
-            var button = document.createElement("button");
+            const button = document.createElement("button");
             button.innerHTML = label; // 按钮显示的文本
             button.classList.add("radar-button"); // 给按钮添加样式类
             this.displayType = displayTypes[buttonLabels.indexOf(currentDisplayType)];
@@ -392,7 +392,7 @@ class Radar extends BaseComponent{
         // 将按钮容器添加到页面中
         radarContainer.appendChild(buttonContainer);
 
-        
+
 
         // 将按钮容器添加到 radar-container 中
         // 将所有元素添加到雷达组件

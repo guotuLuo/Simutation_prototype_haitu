@@ -102,6 +102,8 @@
     overflow-y: auto;
 }
 
+
+
 .modal__middle {
     display: flex;
     max-width: 38%;  /* 设置最大宽度，确保不占据过多空间 */
@@ -144,6 +146,7 @@
 .modal__right button:hover {
     background-color: #f83804; /* 改为更深的红色 */
 }
+
 
 
 .envi__modal__left {
@@ -198,6 +201,13 @@
     box-sizing: border-box; /* 确保宽度计算包含边框和内边距 */
 }
 
+input {
+    flex-grow: 1; /* 自动填充剩余空间 */
+    min-width: 0; /* 防止过度扩展 */
+    height: 80%; /* 高度跟随父元素 */
+    box-sizing: border-box; /* 包括内边距和边框在高度计算中 */
+}
+
 label {
     width: 80px; /* 固定宽度，确保所有 label 一致 */
     text-align: left; /* 左对齐文本 */
@@ -208,10 +218,7 @@ label {
 }
 
 
-input {
-    flex-grow: 1; /* 自动填充剩余空间 */
-    min-width: 0; /* 防止过度扩展 */
-}
+
 
 /* 复选框容器 */
 .checkbox-group {
@@ -263,6 +270,23 @@ select[multiple] option:checked {
     display: inline-flex;
     width: 200px; /* 根据需要调整宽度 */
     box-sizing: border-box;
+}
+
+/* 默认状态 */
+#dropDownPrototype[data-value="0"]:before {
+    content: "背景目标";
+}
+
+#dropDownPrototype[data-value="1"]:before {
+    content: "预警雷达";
+}
+
+#dropDownPrototype[data-value="2"]:before {
+    content: "侦察样机";
+}
+
+#dropDownPrototype[data-value="3"]:before {
+    content: "干扰样机";
 }
 
 .selected {

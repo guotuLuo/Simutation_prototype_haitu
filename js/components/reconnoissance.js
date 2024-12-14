@@ -1,5 +1,5 @@
 // Jamming 类
-class Reconnaissance extends BaseComponent{
+class Reconnoissance extends BaseComponent{
     constructor(map, position, icon, contextMenu, itemType, className, name) {
         super();
         this.map = map;
@@ -38,7 +38,7 @@ class Reconnaissance extends BaseComponent{
     createMarker() {
         this.id = generateUUID();
         this.marker = L.marker(this.position, {icon: this.icon, draggable: true}).addTo(this.map);
-        this.marker.bindPopup("飞机: " + this.id).openPopup();
+        this.marker.bindPopup("侦察: " + this.id).openPopup();
 
         // 绑定拖动事件
         this.marker.on('drag', (event) => {
@@ -236,20 +236,20 @@ class Reconnaissance extends BaseComponent{
     setItemSpeed() {
         // 设置当前飞机的速度
         this.setSpeed(parseInt(prompt("初始速度300,请输入新的速度", this.speed)));
-        this.marker.getPopup().setContent("飞机: " + this.speed);
+        this.marker.getPopup().setContent("侦察: " + this.speed);
         axios.post("http://127.0.0.1:8081/api/airplanes/setSpeed", {
             id: this.id,
             speed: this.speed
         }).then(response => {
-            console.log(`飞机 ${this.id} 速度设置成功`);
+            console.log(`侦察 ${this.id} 速度设置成功`);
         }).catch(error => {
-            console.error(`飞机 ${this.id} 速度设置失败:`, error);
+            console.error(`侦察 ${this.id} 速度设置失败:`, error);
         });
     }
 
     // 向后端发送坐标的方法
     sendCoordinates() {
-        axios.post("http://127.0.0.1:8081/api/reconnaissances/uploadCoordinates", {
+        axios.post("http://127.0.0.1:8081/api/reconnoissances/uploadCoordinates", {
             id: this.id,
             lat: this.marker.getLatLng().lat,
             lon: this.marker.getLatLng().lng
@@ -289,7 +289,7 @@ class Reconnaissance extends BaseComponent{
         removeObjectFromList(this.itemType, this.className, this.name);
         // 不能用异步axios，要不然关闭页面的时候来不及发送删除请求，
         // 导致下一次打开页面的时候保存的侦察样机数量不对
-        const url = `http://127.0.0.1:8081/api/reconnaissances/delete?uuid=${encodeURIComponent(this.id)}`;
+        const url = `http://127.0.0.1:8081/api/reconnoissances/delete?uuid=${encodeURIComponent(this.id)}`;
         navigator.sendBeacon(url);
         console.log("侦察样机及其所有点迹已删除");
     }
@@ -297,7 +297,7 @@ class Reconnaissance extends BaseComponent{
     changeName() {
         this.name = prompt("请输入新的侦察样机名称", this.name);
         this.marker.getPopup().setContent("侦察样机: " + this.name);
-        axios.post(`http://127.0.0.1:8081/api/reconnaissances/editName`, {
+        axios.post(`http://127.0.0.1:8081/api/reconnoissances/editName`, {
             id: this.id,
             name: this.name
         }).then(response => {

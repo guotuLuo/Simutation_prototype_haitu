@@ -22,7 +22,7 @@ const componentManager = {
 
         this.instances.set("radar", new Map());
         this.instances.set("object", new Map());
-        this.instances.set("reconnaissance", new Map());
+        this.instances.set("reconnoissance", new Map());
         this.instances.set("jamming", new Map());
     },
 
