@@ -1,17 +1,16 @@
 //格式化xml代码
 function formatXml(xmlStr) {
-    text = xmlStr;
+    let text = xmlStr;
     //使用replace去空格
     text = '\n' + text.replace(/(<\w+)(\s.*?>)/g, function ($0, name, props) {
         return name + ' ' + props.replace(/\s+(\w+=)/g, " $1");
     }).replace(/>\s*?</g, ">\n<");
     //处理注释
     text = text.replace(/\n/g, '\r').replace(/<!--(.+?)-->/g, function ($0, text) {
-        var ret = '<!--' + escape(text) + '-->';
-        return ret;
+        return '<!--' + escape(text) + '-->';
     }).replace(/\r/g, '\n');
     //调整格式	以压栈方式递归调整缩进
-    var rgx = /\n(<(([^\?]).+?)(?:\s|\s*?>|\s*?(\/)>)(?:.*?(?:(?:(\/)>)|(?:<(\/)\2>)))?)/mg;
+    var rgx = /\n(<(([^?]).+?)(?:\s|\s*?>|\s*?(\/)>)(?:.*?(?:(?:(\/)>)|(?:<(\/)\2>)))?)/mg;
     var nodeStack = [];
     var output = text.replace(rgx, function ($0, all, name, isBegin, isCloseFull1, isCloseFull2, isFull1, isFull2) {
         var isClosed = (isCloseFull1 === '/') || (isCloseFull2 === '/') || (isFull1 === '/') || (isFull2 === '/');
@@ -29,18 +28,16 @@ function formatXml(xmlStr) {
                 prefix = setPrefix(nodeStack.length);
             }
         }
-        var ret = '\n' + prefix + all;
-        return ret;
+        return '\n' + prefix + all;
     });
-    var prefixSpace = -1;
-    var outputText = output.substring(1);
+    let prefixSpace = -1;
+    let outputText = output.substring(1);
     //还原注释内容
     outputText = outputText.replace(/\n/g, '\r').replace(/(\s*)<!--(.+?)-->/g, function ($0, prefix, text) {
-        if (prefix.charAt(0) == '\r')
+        if (prefix.charAt(0) === '\r')
             prefix = prefix.substring(1);
         text = unescape(text).replace(/\r/g, '\n');
-        var ret = '\n' + prefix + '<!--' + text.replace(/^\s*/mg, prefix) + '-->';
-        return ret;
+        return '\n' + prefix + '<!--' + text.replace(/^\s*/mg, prefix) + '-->';
     });
     outputText = outputText.replace(/\s+$/g, '').replace(/\r/g, '\r\n');
     return outputText;
@@ -99,8 +96,182 @@ function createXMLFile(){
     // 创建proto标签
     const protoElement = xmlDoc.createElement('proto');
     paramElement.appendChild(protoElement);
+
+    // 获取XML模板
+    // 获取information的tag
+    // 设置文件名和文件id
+    informationElement.getElementsByTagName("name")[0].textContent = document.getElementsByClassName('title')[0].textContent;
+    informationElement.getElementsByTagName("id")[0].textContent = generateUUID();
+
+    // components标签里面的变量设置
+    const componentElement = xmlDoc.getElementsByTagName("components")[0];
+
+    window.app.componentManager.instances.forEach((classNameMap, itemType) => {
+        classNameMap.forEach((instanceMap, className) => {
+                // 创建并添加 <object> 元素 这里的添加元素组件列表的所有元素
+                const tempElement = xmlDoc.createElement(itemType);
+                tempElement.setAttribute("name", className);
+                tempElement.setAttribute("id", itemType + generateUUID());
+                componentElement.appendChild(tempElement);
+                instanceMap.forEach((instance, instanceName) => {
+                    const itemElement= xmlDoc.createElement('item');
+                    itemElement.setAttribute('posx', instance.getLat());
+                    itemElement.setAttribute('posy', instance.getLng());
+                    itemElement.setAttribute('type', instance.getItemType());
+                    itemElement.setAttribute('id', instance.getName());
+                    sceneElement.appendChild(itemElement);
+                })
+            }
+        )
+    });
+
+
+    // envi标签里面的变量设置， 保存当前态势所有组件和状态
+    const lat = window.app.mapController.map.getCenter().lat;
+    const lng = window.app.mapController.map.getCenter().lng;
+    enviElement.setAttribute('proto_num', String(window.app.componentManager.instanceNumber));
+    enviElement.setAttribute('clutter_type', document.getElementById('dropDownClutterType').value);
+    enviElement.setAttribute('thread_num', document.getElementById('threadNum').value);
+    enviElement.setAttribute('timer_clkrate', document.getElementById('timeClkRate').value);
+    // TODO 态势根目录路径，暂时不知道设置成什么
+    enviElement.setAttribute('ssc_root', '');
+    enviElement.setAttribute('timer_clkrate', document.getElementById('timeClkRate').value);
+    // TODO 海图环境类型，暂时不知道设置成什么
+    enviElement.setAttribute('type', 'SDP_RCT_SEA');
+    enviElement.setAttribute('ip', document.getElementById('IP').value);
+    enviElement.setAttribute('clutter_model', document.getElementById('dropDownClutterModel').value);
+    enviElement.setAttribute('time_scalar', document.getElementById('timeScalar').value);
+    enviElement.setAttribute('Origin', '(' + lat + ',' + lng + ')');
+    enviElement.setAttribute('clutter_grade', document.getElementById('clutterGrade').value);
+    enviElement.setAttribute('refresh', document.getElementById('refresh').value);
+    // proto标签里面的变量设置
+    window.app.componentManager.instances.forEach((classNameMap, itemType) => {
+        classNameMap.forEach((instanceMap, className) => {
+                // 创建并添加 <object> 元素 这里的添加元素组件列表的所有元素
+                instanceMap.forEach((instance, instanceName) => {
+                    protoNum++;
+                    const itemElement= xmlDoc.createElement('item');
+                    itemElement.setAttribute('type_name', instance.getItemType());
+                    itemElement.setAttribute('ipoint', String(instance.getTrack().length));
+                    itemElement.setAttribute('rcs', instance.getRcs());
+                    itemElement.setAttribute('model', instance.getModel());
+                    itemElement.setAttribute('pos', instance.getTrack().map(([lat, lng]) => `(${lat}, ${lng})`).join(';'));
+                    // TODO proto_boot_delay 不知道是什么，先设置成0
+                    itemElement.setAttribute('proto_boot_delay', '0');
+                    itemElement.setAttribute('proto_use', instance.getUse());
+                    itemElement.setAttribute('rcs_file', instance.getRCSFile());
+                    itemElement.setAttribute('acceleration', instance.getAcceleration());
+                    itemElement.setAttribute('speed', instance.getSpeed());
+                    let typeString;
+                    switch (instance.getItemType()) {
+                        case 'object':
+                            typeString = "SYS_PROTO_TARGET";
+                            break;
+                        case 'radar':
+                            typeString = "SYS_PROTO_RADAR";
+                            break;
+                        case 'reconnoissance':
+                            typeString = "SYS_PROTO_ECM";
+                            break;
+                        case 'jamming':
+                            typeString = "SYS_PROTO_JAM";
+                            break;
+                        default:
+                            typeString = 'Unknown Type';
+                    }
+                    itemElement.setAttribute('type', typeString);
+                    itemElement.setAttribute('identity', instance.getIdentity());
+                    itemElement.setAttribute('nBatch', instance.getBatch());
+                    itemElement.setAttribute('name', instance.getName());
+                    itemElement.setAttribute('status', instance.getStatus());
+                    itemElement.setAttribute('band1', instance.getBand1());
+                    protoElement.appendChild(itemElement);
+                })
+            }
+        )
+    });
     return xmlDoc;
 }
+
+function parseXML(xmlDoc) {
+    window.app.componentManager.reset();
+    window.app.sidebar.clearAllItems();
+    const rootElement = xmlDoc.getElementsByTagName('project-root')[0];
+
+    // 获取 <information> 中的内容
+    const informationElement = rootElement.getElementsByTagName('information')[0];
+    const projectName = informationElement.getElementsByTagName('name')[0].textContent;
+    // TODO，这里获取id的意义在哪里呢，好像确实没有地方设置
+    const projectId = informationElement.getElementsByTagName('id')[0].textContent;
+
+    const titleElement = document.querySelector('.title');
+    titleElement.textContent = `${projectName}`;
+
+
+    // 获取 <components> 中的元素
+    processSidebarItems(rootElement, 'nav-radar', 'radar', 'radar');
+    processSidebarItems(rootElement, 'nav-reconnoissance', 'reconnoissance', 'reconnoissance');
+    processSidebarItems(rootElement, 'nav-object', 'object', 'object');
+    processSidebarItems(rootElement, 'nav-jamming', 'jamming', 'jamming');
+
+    // 获取 <scene> 中的元素
+    const scene = rootElement.getElementsByTagName('scene')[0];
+    const sceneItems = scene.getElementsByTagName('item');
+    let array = [];
+    Array.from(sceneItems).forEach(item => {
+        const posx = parseFloat(item.getAttribute('posx'));
+        const posy = parseFloat(item.getAttribute('posy'));
+        const itemTye = item.getAttribute('type');
+        const instanceName = item.getAttribute('id');
+
+
+        // 这里是为了还原componentManager的index做准备
+        const numberMatch = instanceName.match(/(\d+)$/);
+        if (numberMatch && numberMatch[1]) {
+            const number = parseInt(numberMatch[1], 10);
+            array.push(number);
+        }
+        const className = instanceName.match(/^\D*/)[0];
+        let position = { lat: posx, lng: posy };
+        window.app.mapController.addComponent(itemTye, className, instanceName, position);
+    });
+    window.app.componentManager.resetIndex(array);
+
+    // 获取 <param> 中的 <envi> 和 <proto> 设置
+    const param = rootElement.getElementsByTagName('param')[0];
+    const enviElement = param.getElementsByTagName('envi')[0];
+    const protoElement = param.getElementsByTagName('proto')[0];
+
+    // TODO ssc_root 和 type这两个还没设置
+
+    document.getElementById("simulationCenter").textContent = enviElement.getAttribute("Origin");
+    const centre = enviElement.getAttribute("Origin");
+    const numbers = centre.match(/\d+/g); // 匹配所有连续的数字
+    window.app.mapController.map.setCenter(numbers[0], numbers[1]);
+
+    document.getElementById("instanceNumber").textContent = enviElement.getAttribute("proto_num");
+    document.getElementById("threadNum").value = enviElement.getAttribute("thread_num");
+    document.getElementById("dropDownClutterType").value = enviElement.get("clutter_type");
+    document.getElementById("timeScalar").value = enviElement.get("time_scalar");
+    document.getElementById("timeClkRate").value = enviElement.get("timer_clkrate");
+    document.getElementById("dropDownClutterModel").value = enviElement.get("clutter_model");
+    document.getElementById("clutterGrade").value = enviElement.get("clutter_grade");
+    document.getElementById("refresh").value = enviElement.get("refresh");
+    document.getElementById("IP").value = enviElement.get("ip");
+
+
+
+    const protoNum = enviElement.getAttribute('proto_num');
+    console.log(`Proto num: ${protoNum}`);
+
+    const protoItems = protoElement.getElementsByTagName('item');
+    Array.from(protoItems).forEach(item => {
+        const typeName = item.getAttribute('type_name');
+        const rcs = item.getAttribute('rcs');
+        console.log(`Proto item: ${typeName}, RCS: ${rcs}`);
+    });
+}
+
 
 function saveXMLToFile(xmlDoc) {
     // 使用 XMLSerializer 将文档序列化为字符串
@@ -116,8 +287,50 @@ function saveXMLToFile(xmlDoc) {
     // 创建下载链接
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'project.xml'; // 文件名，可以自定义
+    link.download = 'project.dpsp'; // 文件名，可以自定义
 
     // 模拟点击下载链接
     link.click();
 }
+
+function handleFileInputChange(event){
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const fileContent = e.target.result;
+            console.log("文件内容:", fileContent);
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(fileContent, "application/xml");
+
+            // 关闭所有子菜单
+            const subMenus = document.querySelectorAll('.menu-bar .sub-menu');
+            subMenus.forEach(function(menu) {
+                menu.style.display = 'none';
+            });
+
+            parseXML(xmlDoc);
+
+        };
+        reader.readAsText(file);
+    }
+}
+
+
+function processSidebarItems(rootElement, buttonId, itemTag, itemType) {
+    // 获取 <components> 元素
+    const components = rootElement.getElementsByTagName('components')[0];
+
+    // 获取指定标签的子元素
+    const items = components.getElementsByTagName(itemTag);
+
+    // 获取对应的按钮
+    const button = document.getElementById(buttonId);
+
+    // 遍历子元素，创建子菜单项
+    Array.from(items).forEach(item => {
+        const name = item.getAttribute('name');
+        window.app.sidebar.createSubMenuLi(button, itemType, name);
+    });
+}
+
