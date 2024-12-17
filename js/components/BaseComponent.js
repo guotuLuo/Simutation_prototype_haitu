@@ -1,5 +1,5 @@
 class BaseComponent {
-    constructor(latitude, longitude, altitude, name = null, itemType = null, batch = null, identity = 2, model = 'dgn', speed = 0, rcs = 1000, rcsFile = null, acceleration = 0, status = 0, use = null, band = 0, band1 = null, track = null) {
+    constructor(latitude = 0, longitude = 0, altitude = 0, name = 'undefined', itemType = null, batch = null, identity = 2, model = 'dgn', speed = 0, rcs = 1000, rcsFile = null, acceleration = 0, status = 0, use = null, band = 0, band1 = null, track = null) {
         this.name = name;
         this.itemType = itemType;
         this.batch = batch;

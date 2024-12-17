@@ -21,7 +21,7 @@ class Reconnoissance extends BaseComponent{
         this.longitude = position.lng;
         this.altitude = 0;
 
-        this.batch = parseInt(this.name.substring(this.itemType.length));
+        this.batch = parseInt(this.name.substring(this.className.length));
         this.use = 2;
         // 将纬度和经度格式化为字符串
         this.track = [];
@@ -285,7 +285,10 @@ class Reconnoissance extends BaseComponent{
         if (this.marker) {
             this.marker.remove();
         }
-        componentManager.deleteInstance(this.itemType, this.className, this.name);
+
+        window.app.componentManager.deleteInstance(this.itemType, this.className, this.name);
+        window.app.componentManager.instanceNumber--;
+
         removeObjectFromList(this.itemType, this.className, this.name);
         // 不能用异步axios，要不然关闭页面的时候来不及发送删除请求，
         // 导致下一次打开页面的时候保存的侦察样机数量不对

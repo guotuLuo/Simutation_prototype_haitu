@@ -17,7 +17,7 @@ class Jamming extends BaseComponent{
         this.altitude = 0;
 
         // nBatch 不知道干啥的，先留在这
-        this.batch = parseInt(this.name.substring(this.itemType.length));
+        this.batch = parseInt(this.name.substring(this.className.length));
         this.use = 3;
         this.track = [];
         const lat = position.lat.toFixed(5);
@@ -51,7 +51,10 @@ class Jamming extends BaseComponent{
         if (jammingItem) {
             jammingItem.remove();
         }
-        componentManager.deleteInstance(this.itemType, this.className, this.name);
+
+        window.app.componentManager.deleteInstance(this.itemType, this.className, this.name);
+        window.app.componentManager.instanceNumber--;
+
         removeObjectFromList(this.itemType, this.className, this.name);
         // 相比于使用axios发送前端请求，使用sendBeacon可以保证发送的请求在关闭当前标签的时候仍然可以成功发送
         const url = `http://127.0.0.1:8081/api/jamming/delete?uuid=${encodeURIComponent(this.id)}`;

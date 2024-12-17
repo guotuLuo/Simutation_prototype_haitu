@@ -24,7 +24,7 @@ class Airplane extends BaseComponent{
         this.altitude = 0;
 
         // nBatch 不知道干啥的，先留在这
-        this.batch = parseInt(this.name.substring(this.itemType.length));
+        this.batch = parseInt(this.name.substring(this.className.length));
         this.use = 0;
         this.track = [];
         const lat = position.lat.toFixed(5);
@@ -287,7 +287,12 @@ class Airplane extends BaseComponent{
         if (this.marker) {
             this.marker.remove();
         }
-        componentManager.deleteInstance(this.itemType, this.className, this.name);
+
+        // TODO 这里看着很不舒服，感觉耦合程度太高了， 实例嵌套全部变量怎么看怎么不对
+        window.app.componentManager.deleteInstance(this.itemType, this.className, this.name);
+        window.app.componentManager.instanceNumber--;
+
+
         removeObjectFromList(this.itemType, this.className, this.name);
         // 不能用异步axios，要不然关闭页面的时候来不及发送删除请求，
         // 导致下一次打开页面的时候保存的飞机数量不对
