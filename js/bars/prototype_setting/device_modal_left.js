@@ -5,7 +5,7 @@ let selectedLi = null; // Store the currently selected li
 function saveHandler() {
     if (!selectedLi) return;
 
-    let selectedComponent = componentManager.getInstance(
+    let selectedComponent = window.app.componentManager.getInstance(
         selectedLi.getAttribute('data-itemType'),
         selectedLi.getAttribute('data-className'),
         selectedLi.getAttribute('data-name')
@@ -62,7 +62,7 @@ function saveHandler() {
 function resetHandler() {
     if (!selectedLi) return;
 
-    let selectedComponent = componentManager.getInstance(
+    let selectedComponent = window.app.componentManager.getInstance(
         selectedLi.getAttribute('data-itemType'),
         selectedLi.getAttribute('data-className'),
         selectedLi.getAttribute('data-name')
@@ -142,7 +142,7 @@ function addObjectToList(component) {
     li.addEventListener('click', () => {
         selectedLi = li; // 记录当前选择的 li
 
-        let selectedComponent = componentManager.getInstance(
+        let selectedComponent = window.app.componentManager.getInstance(
             li.getAttribute('data-itemType'),
             li.getAttribute('data-className'),
             li.getAttribute('data-name')

@@ -99,7 +99,7 @@
     max-width: 24%;  /* 设置最大宽度，确保不占据过多空间 */
     padding: 1rem;
     border-right: 1px solid #ddd;
-    overflow-y: auto;
+    max-height: 55vh; /* 或者设置为具体的像素值，比如 500px */
 }
 
 
@@ -131,6 +131,7 @@
     max-width: 38%;  /* 设置最大宽度，确保不占据过多空间 */
     flex-direction: column;
     gap: 1rem;  /* 设置每个表单项之间的间距 */
+    max-height: 100%; /* 限制高度 */
 }
 
 .modal__right button {
@@ -154,6 +155,7 @@
     max-width: 40%;  /* 设置最大宽度，确保不占据过多空间 */
     flex-direction: column;
     gap: 1rem;  /* 设置每个表单项之间的间距 */
+    max-height: 100%; /* 限制高度 */
 }
 
 .envi__modal__left button {
@@ -175,6 +177,7 @@
     max-width: 40%;  /* 设置最大宽度，确保不占据过多空间 */
     flex-direction: column;
     gap: 1rem;  /* 设置每个表单项之间的间距 */
+    max-height: 100%; /* 限制高度 */
 }
 
 .envi__modal__right button {
@@ -334,10 +337,10 @@ select[multiple] option:checked {
 }
 
 #objectList {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+    max-height: 100%; /* 限制 ul 的高度 */
+    overflow-y: auto; /* 内容超出时显示滚动条 */
 }
+
 
 .object-item {
     padding: 0.5rem;
@@ -369,6 +372,7 @@ select[multiple] option:checked {
     border-radius: 5px;
     cursor: pointer;
 }
+
 
 #objectPropertiesForm button:hover {
     background-color: #45a049;
