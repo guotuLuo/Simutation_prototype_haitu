@@ -149,7 +149,7 @@ function createXMLFile(){
         classNameMap.forEach((instanceMap, className) => {
                 // 创建并添加 <object> 元素 这里的添加元素组件列表的所有元素
                 instanceMap.forEach((instance, instanceName) => {
-                    protoNum++;
+
                     const itemElement= xmlDoc.createElement('item');
                     itemElement.setAttribute('type_name', instance.getItemType());
                     itemElement.setAttribute('ipoint', String(instance.getTrack().length));
@@ -184,6 +184,7 @@ function createXMLFile(){
                     itemElement.setAttribute('nBatch', instance.getBatch());
                     itemElement.setAttribute('name', instance.getName());
                     itemElement.setAttribute('status', instance.getStatus());
+                    itemElement.setAttribute('band', instance.getBand());
                     itemElement.setAttribute('band1', instance.getBand1());
                     protoElement.appendChild(itemElement);
                 })
@@ -247,28 +248,66 @@ function parseXML(xmlDoc) {
     document.getElementById("simulationCenter").textContent = enviElement.getAttribute("Origin");
     const centre = enviElement.getAttribute("Origin");
     const numbers = centre.match(/\d+/g); // 匹配所有连续的数字
-    window.app.mapController.map.setCenter(numbers[0], numbers[1]);
+    window.app.toolbar.setCenterWithCentre(numbers[0], numbers[1]);
 
     document.getElementById("instanceNumber").textContent = enviElement.getAttribute("proto_num");
     document.getElementById("threadNum").value = enviElement.getAttribute("thread_num");
-    document.getElementById("dropDownClutterType").value = enviElement.get("clutter_type");
-    document.getElementById("timeScalar").value = enviElement.get("time_scalar");
-    document.getElementById("timeClkRate").value = enviElement.get("timer_clkrate");
-    document.getElementById("dropDownClutterModel").value = enviElement.get("clutter_model");
-    document.getElementById("clutterGrade").value = enviElement.get("clutter_grade");
-    document.getElementById("refresh").value = enviElement.get("refresh");
-    document.getElementById("IP").value = enviElement.get("ip");
+    document.getElementById("dropDownClutterType").value = enviElement.getAttribute("clutter_type");
+    document.getElementById("timeScalar").value = enviElement.getAttribute("time_scalar");
+    document.getElementById("timeClkRate").value = enviElement.getAttribute("timer_clkrate");
+    document.getElementById("dropDownClutterModel").value = enviElement.getAttribute("clutter_model");
+    document.getElementById("clutterGrade").value = enviElement.getAttribute("clutter_grade");
+    document.getElementById("refresh").value = enviElement.getAttribute("refresh");
+    document.getElementById("IP").value = enviElement.getAttribute("ip");
 
 
 
-    const protoNum = enviElement.getAttribute('proto_num');
-    console.log(`Proto num: ${protoNum}`);
-
+    // TODO protoItem拆包 ipoint可以根据track直接求到, protoBootDelay和type不知道可以用来干嘛
     const protoItems = protoElement.getElementsByTagName('item');
     Array.from(protoItems).forEach(item => {
-        const typeName = item.getAttribute('type_name');
+        const itemType = item.getAttribute('type_name');
+        const ipoint = item.getAttribute('ipoint');
         const rcs = item.getAttribute('rcs');
-        console.log(`Proto item: ${typeName}, RCS: ${rcs}`);
+        const model = item.getAttribute('model');
+        const posString = item.getAttribute('pos');  // 获取pos属性
+
+        const positions = posString
+            .replace(/[()]/g, '') // 去掉括号
+            .split(';')           // 按分号分割
+            .map(pos => {
+                const [lat, lng] = pos.split(',').map(Number); // 分割并转换为数字
+                return { lat, lng };
+            });
+
+        const protoBootDelay = item.getAttribute('proto_boot_delay');
+        const protoUse = item.getAttribute('proto_use');
+        const rcsFile = item.getAttribute('rcs_file');
+        const acceleration = item.getAttribute('acceleration');
+        const speed = item.getAttribute('speed');
+        const type = item.getAttribute('type');
+        const identity = item.getAttribute('identity');
+        const nBatch = item.getAttribute('nBatch');
+        const name = item.getAttribute('name');
+        const className = name.match(/^\D*/)[0];
+        const status = item.getAttribute('status');
+        const band = item.getAttribute('band');
+        const band1 = item.getAttribute('band1');
+        let instance = window.app.componentManager.getInstance(itemType, className, name);
+        if(itemType === 'object' || itemType === 'reconnoissance'){
+            instance.setTrackAndPaintRoutes(positions);
+        }else{
+            instance.setBand(band);
+        }
+        instance.setRcs(rcs);
+        instance.setModel(model);
+        instance.setUse(protoUse);
+        instance.setRCSFile(rcsFile);
+        instance.setAcceleration(acceleration);
+        instance.setSpeed(speed);
+        instance.setIdentity(identity);
+        instance.setBatch(nBatch);
+        instance.setStatus(status);
+        instance.setBand1(band1);
     });
 }
 
