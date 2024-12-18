@@ -1,6 +1,10 @@
 class OutlineManager {
-    constructor(map) {
-        this.map = map; // 地图实例
+    constructor() {
+
+    }
+
+    initOutlineManager(){
+        this.map = window.app.mapController.map; // 地图实例
         this.currentOutline = null; // 当前虚线框实例
         this.currentTarget = null; // 当前选中的目标对象（如飞机实例）
     }
@@ -37,7 +41,7 @@ class OutlineManager {
     // 显示虚线框
     showOutline(latLng, iconSize, target) {
         // 如果当前已有虚线框，且选中的目标不是当前目标，移除虚线框
-        if (this.currentOutline && this.currentTarget !== target) {
+        if (this.currentOutline) {
             this.hideOutline();
         }
 

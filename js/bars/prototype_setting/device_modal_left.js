@@ -147,7 +147,8 @@ function addObjectToList(component) {
             li.getAttribute('data-name')
         );
 
-
+        // 选中当前marker
+        selectedComponent.marker.fire('click');
         // 更新表单内容
         document.getElementById('objectName').textContent = selectedComponent.getName();
         document.getElementById('objectType').textContent = selectedComponent.getClassName();

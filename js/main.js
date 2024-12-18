@@ -14,7 +14,7 @@ class App {
         this.initMenuBar();
         this.initToolBar();
         this.initEnvi();
-
+        this.initOutlineManager();
         // 页面卸载前清理所有对象
         window.addEventListener("beforeunload", () => {
             window.app.componentManager.deleteAllObjects();
@@ -52,8 +52,13 @@ class App {
     }
 
     initEnvi(){
-        this.envi = new Envi(this.mapController, this.componentManager);
+        this.envi = new Envi();
         this.envi.initEnvi();
+    }
+
+    initOutlineManager(){
+        this.outlineManager = new OutlineManager();
+        this.outlineManager.initOutlineManager();
     }
 }
 

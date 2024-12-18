@@ -30,6 +30,7 @@ class Airplane extends BaseComponent{
         const lng = position.lng.toFixed(5);
         this.track.push([lat, lng]);
         this.sys_proto_type = 'SYS_PROTO_TARGET';
+        this.outlineManager = window.app.outlineManager;
     }
     backToStart(){
         this.marker.setLatLng(this.startposition);
@@ -40,11 +41,15 @@ class Airplane extends BaseComponent{
         this.id = generateUUID();
         this.marker = L.marker(this.position, {icon: this.icon, draggable: true}).addTo(this.map);
         this.marker.bindPopup("飞机: " + this.id).openPopup();
+        const iconSize = this.icon.options.iconSize;
+
         // 绑定拖动事件
         this.marker.on('drag', (event) => {
             const latLng = event.target.getLatLng();
             this.marker.setPopupContent("飞机: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6));
             this.marker.openPopup();
+            this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
+
 
             // 更新 track 数组中的初始位置（如果有路径点，更新初始位置的坐标）
             if (this.track.length > 0) {
@@ -70,7 +75,25 @@ class Airplane extends BaseComponent{
 
         this.marker.on('contextmenu', (event) => {
             event.originalEvent.preventDefault();
+            const latLng = event.target.getLatLng();
+            this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
             this.contextMenu.show(event, this);
+        });
+
+        this.marker.on("click", (event) => {
+            const latLng = event.target.getLatLng();
+            this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
+        });
+
+        // 地图缩放时更新虚线框
+        this.map.on("zoomend", () => {
+            const latLng = this.marker.getLatLng();
+            this.outlineManager.updateOutline(latLng, iconSize);
+        });
+
+        // 点击地图空白处隐藏虚线框
+        this.map.on("click", () => {
+            this.outlineManager.hideOutline();
         });
 
 

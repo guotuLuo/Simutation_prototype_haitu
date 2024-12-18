@@ -1,5 +1,6 @@
 class Envi{
     constructor() {
+
     }
     initEnvi(){
         // 获取并转换输入值

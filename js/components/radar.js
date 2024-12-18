@@ -41,6 +41,8 @@ class Radar extends BaseComponent{
         const lng = position.lng.toFixed(5);
         this.track.push([lat, lng]);
         this.sys_proto_type = 'SYS_PROTO_RADAR';
+        this.outlineManager = window.app.outlineManager;
+
     }
 
     initializeRadarCenter() {
@@ -317,19 +319,39 @@ class Radar extends BaseComponent{
         this.id = generateUUID();
         this.marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
         const latLng = this.marker.getLatLng();
+        const iconSize = this.icon.options.iconSize;
         this.marker.bindPopup("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6) ).openPopup();
 
         // 监听拖动过程中的事件
         this.marker.on('drag', (event) => {
             const latLng = event.target.getLatLng();  // 获取当前经纬度
+            this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
+
             this.marker.setPopupContent("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6));
             this.marker.openPopup();  // 更新并重新打开弹出窗口
         });
 
-        // 绑定右键菜单显示事件
         this.marker.on('contextmenu', (event) => {
             event.originalEvent.preventDefault();
+            const latLng = event.target.getLatLng();
+            this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
             this.contextMenu.show(event, this);
+        });
+
+        this.marker.on("click", (event) => {
+            const latLng = event.target.getLatLng();
+            this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
+        });
+
+        // 地图缩放时更新虚线框
+        this.map.on("zoomend", () => {
+            const latLng = this.marker.getLatLng();
+            this.outlineManager.updateOutline(latLng, iconSize);
+        });
+
+        // 点击地图空白处隐藏虚线框
+        this.map.on("click", () => {
+            this.outlineManager.hideOutline();
         });
 
         // 创建雷达组件容器
