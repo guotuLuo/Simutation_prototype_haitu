@@ -1,7 +1,6 @@
 
 class Toolbar {
     constructor() {
-        this.toolbarElement = document.querySelector(".tool-bar");
         this.centerMarker = null; // 用于存储中心标记
         this.centerCoordinates = null; // 用于存储中心坐标
     }
@@ -77,37 +76,45 @@ class Toolbar {
                 console.log("Unknown tool action", action);
         }
     }
+
     setCenter() {
         // 获取当前地图中心
         let map = window.app.mapController.getMap();
-        map.once('contextmenu', function(e) {
-            // 获取右键点击的位置（经纬度）
-            const lat = e.latlng.lat;
-            const lng = e.latlng.lng;
+        const center = map.getCenter();
+        this.centerCoordinates = [center.lat, center.lng];
 
-            // 将右键点击的位置设置为地图的中心点
-            map.setView([lat, lng]);
+        // 如果已经有中心标记，先移除它
+        if (this.centerMarker) {
+            map.removeLayer(this.centerMarker);
+        }
 
-            // 更新 this.centerCoordinates
-            this.centerCoordinates = [lat, lng];
+        // 创建新的中心标记
+        const icon = L.icon({
+            iconUrl: 'images/center50.png',
+            iconSize: [50, 50], // 图标大小
+            iconAnchor: [25, 25] // 图标锚点
+        });
 
-            // 如果已经有中心标记，先移除它
-            if (this.centerMarker) {
-                map.removeLayer(this.centerMarker);
-            }
+        this.centerMarker = L.marker(this.centerCoordinates, { icon: icon }).addTo(map);
+    }
 
-            // 创建新的中心标记
-            const icon = L.icon({
-                iconUrl: 'images/center50.png',
-                iconSize: [50, 50], // 图标大小
-                iconAnchor: [25, 25] // 图标锚点
-            });
+    setCenterWithCentre(lat, lng) {
+        // 获取当前地图中心
+        let map = window.app.mapController.getMap();
+        this.centerCoordinates = [lat, lng];
 
-            this.centerMarker = L.marker(this.centerCoordinates, { icon: icon }).addTo(map);
+        // 如果已经有中心标记，先移除它
+        if (this.centerMarker) {
+            map.removeLayer(this.centerMarker);
+        }
 
-            console.log("右键点击位置：", this.centerCoordinates);
-        }.bind(this)); // 确保 this 指向当前对象
+        // 创建新的中心标记
+        const icon = L.icon({
+            iconUrl: 'images/center50.png',
+            iconSize: [50, 50], // 图标大小
+            iconAnchor: [25, 25] // 图标锚点
+        });
 
-
+        this.centerMarker = L.marker(this.centerCoordinates, { icon: icon }).addTo(map);
     }
 }
