@@ -35,7 +35,6 @@ function saveHandler() {
         .filter(checkbox => checkbox.checked)
         .map(checkbox => checkbox.value)  // 显式返回 checkbox.value
         .join(' ');
-    console.log(band1);
 
 
 
@@ -148,6 +147,7 @@ function addObjectToList(component) {
             li.getAttribute('data-name')
         );
 
+
         // 更新表单内容
         document.getElementById('objectName').textContent = selectedComponent.getName();
         document.getElementById('objectType').textContent = selectedComponent.getClassName();
@@ -195,11 +195,7 @@ function addObjectToList(component) {
 // 在更新表单时控制 speed 输入框的禁用状态
 function updateFormFields(selectedComponent) {
     const speedInput = document.getElementById('objectSpeed');
-    if (selectedComponent.getItemType() !== 'object' && selectedComponent.getItemType() !== 'reconnoissance') {
-        speedInput.disabled = true; // Disable speed input for other types
-    } else {
-        speedInput.disabled = false; // Enable speed input for object and reconnoissance
-    }
+    speedInput.disabled = selectedComponent.getItemType() !== 'object' && selectedComponent.getItemType() !== 'reconnoissance';
 }
 
 
