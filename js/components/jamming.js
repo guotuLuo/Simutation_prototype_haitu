@@ -23,6 +23,7 @@ class Jamming extends BaseComponent{
         const lat = position.lat.toFixed(5);
         const lng = position.lng.toFixed(5);
         this.track.push([lat, lng]);
+        this.sys_proto_type = 'SYS_PROTO_JAM';
     }
 
     createMarker() {

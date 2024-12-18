@@ -40,6 +40,7 @@ class Radar extends BaseComponent{
         const lat = position.lat.toFixed(5);
         const lng = position.lng.toFixed(5);
         this.track.push([lat, lng]);
+        this.sys_proto_type = 'SYS_PROTO_RADAR';
     }
 
     initializeRadarCenter() {
@@ -48,8 +49,6 @@ class Radar extends BaseComponent{
             // 假设 radarBackground 是一个固定大小的正方形容器
             const width = this.radarBackground.offsetWidth;
             const height = this.radarBackground.offsetHeight;
-            console.log("radar background width is:", width);
-            console.log("radar background height is:", height);
             this.radarCenter = {
                 x: width / 2,
                 y: height / 2
@@ -355,7 +354,7 @@ class Radar extends BaseComponent{
         radarText.textContent = `雷达 UUID: ${this.id.replace(/-/g, '').substring(0, 18)}`;
 
         // 创建按钮数组
-        const buttonLabels = ["标准显示", "空心显示", "切换线段显示"]; // 新的按钮文本内容，加入切换线段显示
+        const buttonLabels = ["标准显示", "空心显示", "航迹显示"]; // 新的按钮文本内容，加入切换线段显示
         let currentDisplayType = "标准显示"; // 全局变量跟踪当前显示状态
         const displayTypes = ['standard', 'hollow'];
         const radarContainer = document.getElementById("radar-container");
@@ -372,7 +371,7 @@ class Radar extends BaseComponent{
 
             // 为每个按钮绑定事件
             button.addEventListener('click', (event) => {
-                if (label === "切换线段显示") {
+                if (label === "航迹显示") {
                     this.toggleLines(); // 当点击“切换线段显示”按钮时，切换线段显示状态
                 } else {
                     currentDisplayType = label; // 更新当前显示状态

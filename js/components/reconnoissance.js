@@ -28,6 +28,7 @@ class Reconnoissance extends BaseComponent{
         const lat = position.lat.toFixed(5);
         const lng = position.lng.toFixed(5);
         this.track.push([lat, lng]);
+        this.sys_proto_type = 'SYS_PROTO_ECM';
     }
     backToStart(){
         this.marker.setLatLng(this.startposition);
@@ -65,7 +66,6 @@ class Reconnoissance extends BaseComponent{
                 const secondMarkerLatLng = this.routeMarkers[2].getLatLng();
                 this.routeMarkers[1].remove();
                 this.routeMarkers[1] = L.polyline([firstMarkerLatLng, secondMarkerLatLng], {color: 'red'}).addTo(this.map);
-                console.log(this.routeMarkers);
             }
         });
 
@@ -149,6 +149,43 @@ class Reconnoissance extends BaseComponent{
         this.map.on("contextmenu", endRouteSetting);
     }
 
+    setTrackAndPaintRoutes(value) {
+        // 如果 value 是有效的坐标数组
+        if (Array.isArray(value) && value.length > 0) {
+            // 清空当前路径和标记
+            this.track = [];
+            this.routeMarkers.forEach(marker => marker.remove()); // 移除之前的路径标记
+            this.routeMarkers = []; // 清空标记数组
+
+            // 将传入的路径点添加到 track 中
+            for (let i = 0; i < value.length; i++) {
+                const {lat, lng} = value[i];
+                // 将每个路径点添加到 track 数组
+                this.track.push([lat, lng]);
+
+                // 如果不是第一个点，绘制路径线段
+                if (i > 0) {
+                    const previousLatLng = this.track[i - 1]; // 上一个点
+                    const polyline = L.polyline([previousLatLng, [lat, lng]], {color: 'red'}).addTo(this.map);
+                    this.routeMarkers.push(polyline); // 将线段添加到 routeMarkers 数组中
+                }
+
+                // 添加路径标记
+                this.addRoutesMarker({lat, lng}, "red"); // 标记路径点为红色
+                //
+                // TODO 暂时没用到上传路径点到服务器
+                // axios.post("http://127.0.0.1:8081/api/airplanes/uploadCoordinates", {
+                //     id: this.id,
+                //     lat: lat,
+                //     lon: lng
+                // }).then(response => {
+                //     console.log(`路径点 ${this.id} 坐标已成功上传到服务器: ${lat}, ${lng}`);
+                // }).catch(error => {
+                //     console.error(`路径点 ${this.id} 坐标上传失败:`, error);
+                // });
+            }
+        }
+    }
     // 添加标记点的辅助函数
     addRoutesMarker(latLng, color) {
         if (!latLng || isNaN(latLng.lat) || isNaN(latLng.lng)) {
