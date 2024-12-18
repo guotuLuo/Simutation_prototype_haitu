@@ -48,9 +48,6 @@ class componentManager{
 
     // 获取指定类名和实例名称的实例
     getInstance(itemType, className, name) {
-        console.log(itemType);
-        console.log(className);
-        console.log(name);
         if (this.instances.get(itemType).has(className)) {
             return this.instances.get(itemType).get(className).get(name);
         }else{
