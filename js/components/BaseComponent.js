@@ -1,5 +1,5 @@
 class BaseComponent {
-    constructor(latitude = 0, longitude = 0, altitude = 0, name = 'undefined', itemType = null, batch = null, identity = 2, model = 'dgn', speed = 0, rcs = 1000, rcsFile = null, acceleration = 0, status = 0, use = null, band = 0, band1 = null, track = null) {
+    constructor(latitude = 0, longitude = 0, altitude = 0, name = 'undefined', itemType = null, batch = null, identity = 2, model = 'dgn', speed = 0, rcs = 1000, rcsFile = null, acceleration = 0, status = 0, use = null, band = 0, band1 = null, track = null, sys_proto_type = '') {
         this.name = name;
         this.itemType = itemType;
         this.batch = batch;
@@ -17,6 +17,7 @@ class BaseComponent {
         this.latitude = latitude;
         this.longitude = longitude;
         this.altitude = altitude;
+        this.sys_proto_type = sys_proto_type;
     }
 
     // Getter 和 Setter 方法
@@ -161,5 +162,13 @@ class BaseComponent {
 
     setAcceleration(value){
         this.altitude = value;
+    }
+
+    getSysProtoType(){
+        return this.sys_proto_type;
+    }
+
+    setSysProtoType(value){
+        this.sys_proto_type = value;
     }
 }
