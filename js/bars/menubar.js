@@ -23,7 +23,8 @@ class Menubar {
         const action = link.textContent.trim(); // 获取菜单项文字
         switch (action) {
             case "本地打开":
-                this.triggerFileInput();
+                const fileInput = document.getElementById('file-input');
+                fileInput.click();
                 break;
             case "保存到本地":
                 const localXMLDoc = createXMLFile();
@@ -33,17 +34,14 @@ class Menubar {
                 const cloudXMLDoc = createXMLFile();
                 saveToCloud(cloudXMLDoc);
                 break;
+            case "新建文件":
+                // 跳转到新建文件页面
+                // 打开新标签页并加载 index.html
+                window.open('index.html', '_blank');
+                break;
             default:
                 break;
         }
-    }
-
-    /**
-     * 触发文件输入框
-     */
-    triggerFileInput() {
-        const fileInput = document.getElementById('file-input');
-        fileInput.click();
     }
 }
 

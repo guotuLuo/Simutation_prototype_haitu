@@ -55,8 +55,7 @@ function setPrefix(prefixIndex) {
     return result;
 }
 
-
-function createXMLFile(){
+function createEmptyXMLFile(){
     // 创建一个 XML 文档对象
     const xmlDoc = document.implementation.createDocument('', '', null);
     // 创建根元素
@@ -71,10 +70,11 @@ function createXMLFile(){
 
     // // 创建并添加 <name> 和 <id> 元素
     const nameElement = xmlDoc.createElement('name');
+    nameElement.textContent = 'undefined.dpsp';
     informationElement.appendChild(nameElement);
 
     const idElement = xmlDoc.createElement('id');
-    idElement.textContent = ''; // 可以为空，或者填充动态数据
+    idElement.textContent = generateUUID(); // 可以为空，或者填充动态数据
     informationElement.appendChild(idElement);
 
     // 创建 <components> 元素
@@ -96,15 +96,25 @@ function createXMLFile(){
     // 创建proto标签
     const protoElement = xmlDoc.createElement('proto');
     paramElement.appendChild(protoElement);
+    return xmlDoc;
+}
+
+function createXMLFile(){
+    // 创建一个 XML 文档对象
+    const xmlDoc = createEmptyXMLFile();
+    const informationElement = xmlDoc.getElementsByTagName('information')[0];
+    const nameElement = informationElement.getElementsByTagName('name')[0];
+    const componentElement = xmlDoc.getElementsByTagName('components')[0];
+    const sceneElement = xmlDoc.getElementsByTagName('scene')[0];
+    const enviElement = xmlDoc.getElementsByTagName('envi')[0];
+    const protoElement = xmlDoc.getElementsByTagName('proto')[0];
+
+
 
     // 获取XML模板
     // 获取information的tag
     // 设置文件名和文件id
-    informationElement.getElementsByTagName("name")[0].textContent = document.getElementsByClassName('title')[0].textContent;
-    informationElement.getElementsByTagName("id")[0].textContent = generateUUID();
-
-    // components标签里面的变量设置
-    const componentElement = xmlDoc.getElementsByTagName("components")[0];
+    nameElement.textContent = document.getElementsByClassName('title')[0].textContent;
 
     window.app.componentManager.instances.forEach((classNameMap, itemType) => {
         classNameMap.forEach((instanceMap, className) => {
@@ -247,8 +257,10 @@ function parseXML(xmlDoc) {
 
     document.getElementById("simulationCenter").textContent = enviElement.getAttribute("Origin");
     const centre = enviElement.getAttribute("Origin");
-    const numbers = centre.match(/\d+/g); // 匹配所有连续的数字
-    window.app.toolbar.setCenterWithCentre(numbers[0], numbers[1]);
+    if(centre !== null){
+        const numbers = centre.match(/\d+/g); // 匹配所有连续的数字
+        window.app.toolbar.setCenterWithCentre(numbers[0], numbers[1]);
+    }
 
     document.getElementById("instanceNumber").textContent = enviElement.getAttribute("proto_num");
     document.getElementById("threadNum").value = enviElement.getAttribute("thread_num");
@@ -366,7 +378,6 @@ function handleFileInputChange(event){
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(fileContent, "application/xml");
             parseXML(xmlDoc);
-
         };
         reader.readAsText(file);
     }
