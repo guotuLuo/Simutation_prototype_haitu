@@ -48,20 +48,23 @@
 }
 
 
-/* 内容部分：存储方式和本地项目 */
+/* 确保 .open-dialog-form-row 正确使用 Flex 布局 */
 .open-dialog-form-row {
-    display: flex;
-    align-items: center; /* 垂直居中 */
-    gap: 3rem; /* 设置 label 和 dropdown 之间的间距 */
-    width: 100%; /* 确保占据整个父容器的宽度 */
-    box-sizing: border-box; /* 确保宽度计算包含边框和内边距 */
+    display: flex; /* 设置弹性布局 */
+    align-items: flex-start; /* 垂直方向顶部对齐 */
+    justify-content: flex-start; /* 确保水平方向从左对齐 */
+    gap: 2rem; /* 子元素之间的间距 */
+    width: 100%; /* 父容器占满 */
+    box-sizing: border-box; /* 包括 padding 和边框 */
 }
 
-/* 存储方式部分：宽度比例1 */
+/* 存储方式部分 */
 .storage-section {
-    flex: 2; /* 占 1 份 */
+    flex: 2; /* 占 2 份宽度 */
     display: flex;
     flex-direction: column;
+    width: 100%; /* 确保占满父容器分配的空间 */
+    box-sizing: border-box; /* 包括 padding 和边框 */
 }
 
 .storage-section label {
@@ -71,17 +74,18 @@
 }
 
 #storageType {
-    flex: 1;
     padding: 10px;
     font-size: 14px;
+    width: 100%; /* 确保下拉框宽度一致 */
 }
 
-/* 最近项目列表样式 */
+/* 最近项目部分 */
 .project-section {
-    flex: 8; /* 占 6 份空间 */
+    flex: 5; /* 占 5 份宽度 */
     display: flex;
     flex-direction: column;
-    height: 100%;
+    width: 100%; /* 确保占满父容器分配的空间 */
+    box-sizing: border-box;
 }
 
 .project-section label {
@@ -95,11 +99,10 @@
     background: #f9f9f9;
     border: 1px solid #ddd;
     padding: 10px;
-    height: 300px; /* 调高最近项目区域高度 */
-    overflow-y: auto; /* 允许滚动 */
+    height: auto; /* 根据内容自动调整高度 */
+    overflow-y: auto; /* 内容溢出时可滚动 */
     border-radius: 4px;
 }
-
 .project-item {
     padding: 10px 5px;
     margin-bottom: 5px;
@@ -114,17 +117,6 @@
     background-color: rgb(234, 234, 246);
     text-decoration: none;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* 操作按钮区域 */
