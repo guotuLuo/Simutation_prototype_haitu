@@ -41,7 +41,7 @@
 
         <!-- 内容部分 -->
         <div class="dialog-content">
-            <div class=".open-dialog-form-row">
+            <div class="open-dialog-form-row">
                 <!-- 存储方式 -->
                 <div class="storage-section">
                     <label for="storageType">存储方式</label>
@@ -79,18 +79,24 @@
                 <!-- 菜单栏 -->
                 <div class="menu-bar">
                     <ul>
-                        <li>
+                        <li class="menu-item" data-menu="file">
                             <a href="#">文件</a>
                             <ul class="sub-menu">
-                                <li><a href="#" >保存文件</a></li>
-                                <li>
-                                    <a href="#">打开文件</a>
+                                <li class="menu-item" data-menu="save-file">
+                                    <a href="#" data-action="save-file">保存文件</a>
                                     <ul class="sub-menu">
-                                        <li><a href="#" id="open-local">本地打开</a></li>
-                                        <li><a href="#">云端打开</a></li>
+                                        <li><a href="#" data-action="save-local">保存到本地</a></li>
+                                        <li><a href="#" data-action="save-cloud">保存到云端</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="#">新建文件</a></li>
+                                <li class="menu-item" data-menu="open-file">
+                                    <a href="#" data-action="open-file">打开文件</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="#" data-action="open-local">本地打开</a></li>
+                                        <li><a href="#" data-action="open-cloud">云端打开</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#" data-action="new-file">新建文件</a></li>
                             </ul>
                         </li>
                         <li><a href="#">编辑</a></li>
@@ -102,7 +108,6 @@
                         <li><a href="#">帮助</a></li>
                     </ul>
                 </div>
-                <!-- 隐藏的文件输入框 -->
                 <input type="file" id="file-input" style="display: none;" />
             </div>
         </div>

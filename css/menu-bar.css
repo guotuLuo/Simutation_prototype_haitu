@@ -37,20 +37,14 @@
     padding: 10px;
     z-index: 1900;
 }
-/* 当父菜单项悬停或聚焦时显示子菜单 */
 
-.menu-bar li:focus .sub-menu {
-    display: block;
-    z-index: 1800;
-}
 /* 调整子菜单项的样式 */
 .menu-bar .sub-menu li {
     width: 80px; /* 设置子菜单项的宽度 */
     margin-right: 0;
 }
 /* 可选：为父菜单项添加背景色以突出显示 */
-.menu-bar li:hover,
-.menu-bar li:focus {
+.menu-bar li:hover {
     background-color: #bdc3c7;
 }
 
@@ -62,8 +56,7 @@
 }
 
 /* 当父菜单项悬停或聚焦时显示子菜单 */
-.menu-bar li:hover > .sub-menu,
-.menu-bar li:focus-within > .sub-menu {
+.menu-bar li:hover > .sub-menu {
     display: block; /* 显示子菜单 */
 }
 
@@ -89,8 +82,8 @@
 }
 
 /* 可选：为父菜单项添加背景色以突出显示 */
-.menu-bar li:hover,
-.menu-bar li:focus {
+.menu-bar li:hover {
     background-color: #e0e0e0;
 }
+
 

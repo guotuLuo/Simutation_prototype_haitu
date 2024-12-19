@@ -332,6 +332,30 @@ function saveXMLToFile(xmlDoc) {
     link.click();
 }
 
+function saveToCloud(xmlDoc) {
+    const serializer = new XMLSerializer();
+    const xmlString = serializer.serializeToString(xmlDoc);
+
+    fetch('https://your-server-endpoint/upload', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/xml'
+        },
+        body: xmlString
+    })
+        .then(response => {
+            if (response.ok) {
+                alert("XML 文件已保存到云端！");
+            } else {
+                throw new Error("保存到云端失败");
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            alert("上传失败，请检查网络或服务器！");
+        });
+}
+
 function handleFileInputChange(event){
     const file = event.target.files[0];
     if (file) {
@@ -341,13 +365,6 @@ function handleFileInputChange(event){
             console.log("文件内容:", fileContent);
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(fileContent, "application/xml");
-
-            // 关闭所有子菜单
-            const subMenus = document.querySelectorAll('.menu-bar .sub-menu');
-            subMenus.forEach(function(menu) {
-                menu.style.display = 'none';
-            });
-
             parseXML(xmlDoc);
 
         };
