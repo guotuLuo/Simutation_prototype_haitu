@@ -53,6 +53,7 @@ class MapController {
         return map;
     }
 
+
     addComponent(itemType, className, instanceName, position){
         const Icon = L.icon({
             iconUrl: 'images/' + itemType + '.png',

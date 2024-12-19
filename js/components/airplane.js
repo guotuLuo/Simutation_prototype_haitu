@@ -252,7 +252,7 @@ class Airplane extends BaseComponent{
         this.moving = false;
     }
 
-    // 修改 moveToNextPoint 方法
+// 修改 moveToNextPoint 方法
     moveToNextPoint() {
         if (!this.moving) {
             return;
@@ -262,11 +262,10 @@ class Airplane extends BaseComponent{
             this.moving = false;
             return;
         }
-        const startPoint = this.marker.getLatLng();//开始点应该是什么呢？
+        const startPoint = this.marker.getLatLng(); // 开始点
         const endPoint = L.latLng(this.track[this.currentRouteIndex + 1]);
         const totalDistance = this.map.distance(startPoint, endPoint); // 计算总距离
         const updateInterval = 50; // 每步50ms
-        let currentStep = 0;
         let startTime = Date.now();
 
         const moveStep = () => {
@@ -289,12 +288,30 @@ class Airplane extends BaseComponent{
                 const newLat = startPoint.lat + deltaLat * currentStep;
                 const newLng = startPoint.lng + deltaLng * currentStep;
                 this.marker.setLatLng([newLat, newLng]);
-                //currentStep++;
+
+                // 计算当前的航向角（行进方向）
+                const heading = calculateBearing(startPoint, endPoint);  // 计算从当前点到目标点的方位角
+
+                // 更新飞机图标的旋转角度
+                this.updateMarkerRotation(heading);
+
                 setTimeout(moveStep, updateInterval); // 调用下一步
             }
         };
         moveStep(); // 开始移动
     }
+
+// 更新飞机图标的旋转角度
+    updateMarkerRotation(heading) {
+        const icon = L.divIcon({
+            className: 'rotate-icon',
+            html: `<img src="images/${this.itemType}.png" style="width: 32px; height: 32px; transform: rotate(${heading - 45}deg);">`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
+        });
+        this.marker.setIcon(icon);  // 设置新的图标
+    }
+
 
     // 设置速度应该重载BaseComponent，这里需要换一个名字
     setItemSpeed() {
