@@ -324,7 +324,7 @@ function parseXML(xmlDoc) {
 }
 
 
-function saveXMLToFile(xmlDoc) {
+function saveXMLToLocal(xmlDoc) {
     // 使用 XMLSerializer 将文档序列化为字符串
     const serializer = new XMLSerializer();
     let xmlString = serializer.serializeToString(xmlDoc);
@@ -344,29 +344,52 @@ function saveXMLToFile(xmlDoc) {
     link.click();
 }
 
-function saveToCloud(xmlDoc) {
+function saveXMLToCloud(xmlDoc) {
     const serializer = new XMLSerializer();
     const xmlString = serializer.serializeToString(xmlDoc);
 
-    fetch('https://your-server-endpoint/upload', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/xml'
-        },
-        body: xmlString
+    // 创建项目请求对象
+    const projectReqDTO = {
+        id: xmlDoc.getElementsByTagName('information')[0].getElementsByTagName('id')[0].textContent,  // 这里你可以动态生成或传入对应的ID
+        name: xmlDoc.getElementsByTagName('information')[0].getElementsByTagName('name')[0].textContent,  // 这里可以设置项目名称
+        xmlString: xmlString  // 将 XML 字符串添加到请求体中
+    };
+
+    // 使用 axios 发送 POST 请求到云端
+    axios.post('http://127.0.0.1:8081/api/project/save', projectReqDTO)
+    .then(response => {
+        alert("XML 文件已保存到云端！");
     })
+    .catch(error => {
+        console.error(error);
+        alert("上传失败，请检查网络或服务器！");
+    });
+}
+
+function openXMLFromCloud(projectId) {
+    // 通过项目 ID 请求对应的 XML 数据
+    axios.post('http://127.0.0.1:8081/api/project/query', new URLSearchParams({ id: projectId }))
         .then(response => {
-            if (response.ok) {
-                alert("XML 文件已保存到云端！");
+            // 假设返回的数据结构包含项目信息和 XML 字符串
+            const projectData = response.data.data;
+            console.log(projectData);
+            if (projectData) {
+                const xmlString = projectData.xmlString; // 获取返回的 XML 字符串
+
+                // 解析 XML 字符串为 DOM 对象
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+                parseXML(xmlDoc);
             } else {
-                throw new Error("保存到云端失败");
+                alert('未找到对应的项目或 XML 数据为空！');
             }
         })
         .catch(error => {
-            console.error(error);
-            alert("上传失败，请检查网络或服务器！");
+            console.error('从云端获取 XML 数据失败:', error);
+            alert('获取数据失败，请检查网络或服务器！');
         });
 }
+
 
 function handleFileInputChange(event){
     const file = event.target.files[0];

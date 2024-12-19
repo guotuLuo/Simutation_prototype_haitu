@@ -26,13 +26,16 @@ class Menubar {
                 const fileInput = document.getElementById('file-input');
                 fileInput.click();
                 break;
+            case "云端打开":
+                openXMLFromCloud("cbc2be90-7729-47f5-b855-2c780e2ec788");
+                break;
             case "保存到本地":
                 const localXMLDoc = createXMLFile();
-                saveXMLToFile(localXMLDoc);
+                saveXMLToLocal(localXMLDoc);
                 break;
             case "保存到云端":
                 const cloudXMLDoc = createXMLFile();
-                saveToCloud(cloudXMLDoc);
+                saveXMLToCloud(cloudXMLDoc);
                 break;
             case "新建文件":
                 // 跳转到新建文件页面
