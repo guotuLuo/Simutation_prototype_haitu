@@ -1,13 +1,9 @@
-import { MapController } from "./mapController.js";
-import { Sidebar } from "./bars/sidebar.js";
-import { Toolbar } from "./bars/toolbar.js";
-import { componentManager } from "./components/componentManager.js";
-//import { ComponentFactory } from "./factories/ComponentFactory.js";
-
-document.addEventListener("DOMContentLoaded", () => {
-    const mapController = new MapController();
-    const sidebar = new Sidebar();
-    const toolbar = new Toolbar(mapController);
+// 定义全局管理器类 App
+class App {
+    constructor() {
+        window.app = this;
+        this.initApplication();
+    }
 
     initApplication(){
         this.initOpenDialog();
@@ -19,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.initToolBar();
         this.initEnvi();
         this.initOutlineManager();
+        this.initCloudInputDialog();
         // 页面卸载前清理所有对象
         window.addEventListener("beforeunload", () => {
             window.app.componentManager.deleteAllObjects();
@@ -63,6 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
     initOutlineManager(){
         this.outlineManager = new OutlineManager();
         this.outlineManager.initOutlineManager();
+    }
+
+    initCloudInputDialog(){
+        this.cloudInputDialog = new CloudInputDialog();
+        this.cloudInputDialog.initializeCloudInputDialog();
     }
 }
 

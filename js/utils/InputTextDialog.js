@@ -1,5 +1,3 @@
-import { disablePageInteractions } from './PageEventControl.js';
-import { enablePageInteractions } from './PageEventControl.js';
 function customDialog(button) {
     // 禁用页面所有点击事件
     disablePageInteractions();
@@ -87,4 +85,3 @@ function customDialog(button) {
         });
     });
 }
-export { customDialog };

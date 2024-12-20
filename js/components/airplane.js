@@ -1,6 +1,5 @@
 // Airplane 类，用于管理飞机对象的创建、飞行和删除
-import {ContextMenu} from "../contextMenus/contextMenu.js";
-class Airplane {
+class Airplane extends BaseComponent{
     constructor(map, position, icon, contextMenu, itemType, className, name) {
         super();
         this.map = map;
@@ -50,6 +49,7 @@ class Airplane {
             this.marker.setPopupContent("飞机: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6));
             this.marker.openPopup();
             this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
+            window.app.sidebar.showFlightInfo(this);
 
 
             // 更新 track 数组中的初始位置（如果有路径点，更新初始位置的坐标）
@@ -78,18 +78,23 @@ class Airplane {
             event.originalEvent.preventDefault();
             const latLng = event.target.getLatLng();
             this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
+            window.app.sidebar.showFlightInfo(this);
+
             this.contextMenu.show(event, this);
         });
 
         this.marker.on("click", (event) => {
             const latLng = event.target.getLatLng();
             this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
+            window.app.sidebar.showFlightInfo(this);
+
         });
 
         // 地图缩放时更新虚线框
         this.map.on("zoomend", () => {
             const latLng = this.marker.getLatLng();
             this.outlineManager.updateOutline(latLng, iconSize);
+            window.app.sidebar.showFlightInfo(this);
         });
 
         // 点击地图空白处隐藏虚线框
@@ -410,4 +415,3 @@ class Airplane {
         return this.className;
     }
 }
-export default Airplane;

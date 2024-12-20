@@ -118,4 +118,3 @@ class Toolbar {
         this.centerMarker = L.marker(this.centerCoordinates, { icon: icon }).addTo(map);
     }
 }
-export { Toolbar };

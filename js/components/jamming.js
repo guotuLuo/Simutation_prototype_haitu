@@ -1,6 +1,5 @@
 // Jamming 类
-import {ContextMenu} from "../contextMenus/contextMenu.js";
-class Jamming {
+class Jamming extends BaseComponent{
     constructor(map, position, icon, contextMenu, itemType, className, name) {
         super();
         this.map = map;
