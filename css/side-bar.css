@@ -1,5 +1,5 @@
 .side-bar {
-    width: 300px;
+    width: 350px;
     background-color: #f8f9fa;
     padding-right: 10px;
     overflow-y: auto;
@@ -120,51 +120,107 @@ input, button, label {
 }
 
 
-/*覆盖层容器信息*/
+
+
 .overlay-content {
-    display: none; /* 默认隐藏 */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff; /* 背景为白色 */
-    z-index: 1002; /* 高于 side-bar */
+    width: 350px;
+    background-color: #f8f9fa;
+    padding-right: 10px;
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+    display: none;
     flex-direction: column;
+    position: fixed;  /* 固定在页面上，浮动在地图上方 */
+    transition: transform 0.3s ease; /* 滑动动画 */
+    transform: translateX(0); /* 默认显示 */
+    z-index:1001 !important; /* 确保侧边栏在地图上方 */
+    height: 100vh;  /* 确保侧边栏高度铺满全屏 */
+    left: 0;
 }
+
 
 .overlay-header {
     display: flex;
     justify-content: flex-end;
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #ddd;
+    padding: 3px;
+    background-color: #ffffff;
 }
 
 .close-overlay-btn {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: #fff;
+    position: absolute;
+    top: 85%; /* 垂直居中 */
+    right: 3px; /* 超出右边框 */
+    transform: translateY(-50%); /* 修正垂直居中 */
+    z-index: 1100; /* 确保按钮在内容上方 */
+    background-color: transparent; /* 透明背景 */
     border: none;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
+    padding: 5px;
 }
 
 .close-overlay-btn:hover {
-    background-color: #0056b3;
+    color: #555;
 }
 
-.overlay-body {
-    padding: 15px;
-    flex-grow: 1;
+.close-overlay-btn:active {
+    color: black;
+    transform: scale(1);
+}
+
+.section {
+
+}
+
+.section-header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    cursor: pointer;
+    background-color: #ffffff;
 }
 
-.flight-image {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* 确保图片按比例显示 */
+.section-header:hover {
+    background-color: #ffffff;
+}
+
+.section-header.open {
+    background-color: #ffffff; /* 默认展开时背景颜色 */
+}
+
+.section-content {
+    display: block; /* 默认展开 */
+    max-height: 400px; /* 限制最大高度 */
+    overflow: hidden; /* 内容超出时隐藏 */
+    transition: max-height 0.3s ease;
+}
+
+.toggle-btn {
+    background-color: #e0e0e0;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    font-size: 15px;
+    outline: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease; /* 平滑的背景色变化 */
+}
+
+.toggle-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    margin-right: 10px;  /* 将展开图标与文字之间的间距稍微增大 */
+}
+
+
+.toggle-btn:hover {
+    opacity: 0.6;  /* 图标悬停时变得稍微透明，进一步加深视觉效果 */
+}
+
+/* When collapsed, reduce height and hide content */
+.section-header:not(.open) + .section-content {
+    display: none;
 }

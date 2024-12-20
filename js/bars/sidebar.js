@@ -26,11 +26,35 @@ class Sidebar {
             item.addEventListener('dragstart', this.handleDragStart);
         });
 
+        // 初始化主导航按钮，点击时展开或折叠次级菜单
+        document.querySelectorAll('.toggle-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const target = e.target;  // 获取点击的目标元素
+
+                const content = button.parentNode.nextElementSibling; // .section-content
+                if (content) {
+                    // Toggle display
+                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+                    // Toggle icon
+                    const icon = button.querySelector('.toggle-icon');  // 在点击的按钮上查找图标
+                    if (icon) {  // 确保图标存在
+                        if (icon.src.includes('images/down.png')) {
+                            icon.src = 'images/up.png';  // 设置为上箭头
+                        } else {
+                            icon.src = 'images/down.png';  // 设置为下箭头
+                        }
+                    } else {
+                        console.log("图标未找到");
+                    }
+                }
+            });
+        });
+
 
         // 点击关闭按钮时恢复原内容
         document.querySelector('.close-overlay-btn').addEventListener('click', () => {
             const overlayContent = document.querySelector('.overlay-content'); // 覆盖层
-            const originalContent = document.querySelector('.original-content'); // 原内容
+            const originalContent = document.querySelector('.origin-content'); // 原内容
             overlayContent.style.display = 'none'; // 隐藏覆盖层
             originalContent.style.display = 'block'; // 显示原内容
         });
@@ -39,7 +63,6 @@ class Sidebar {
     // 切换子菜单显示
     toggleSubmenu(id) {
         const submenu = document.getElementById(id);
-        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
     }
 
 
@@ -143,45 +166,18 @@ class Sidebar {
     showFlightInfo(selectComponent){
         document.getElementById('flight-number').textContent = 'MU6985';
         document.getElementById('airline-name').textContent = '中国东方航空';
-        document.getElementById('departure-code').textContent = 'XNN';
-        document.getElementById('departure-airport').textContent = '西安咸阳';
-        document.getElementById('arrival-code').textContent = 'PVG';
-        document.getElementById('arrival-airport').textContent = '上海浦东';
-        document.getElementById('scheduled-time').textContent = '10:55';
-        document.getElementById('actual-time').textContent = '10:50';
-        document.getElementById('arrival-time').textContent = '13:21';
-        document.getElementById('registration-number').textContent = 'B-1234';
-        document.getElementById('plane-age').textContent = '14年';
-        document.getElementById('plane-type').textContent = 'Airbus A320-232';
         document.getElementById('altitude').textContent = '10698.00 m';
+        document.getElementById('latitude').textContent = '10698.00 m';
+        document.getElementById('longitude').textContent = '10698.00 m';
         document.getElementById('speed').textContent = '1000.00 km/h';
-        document.getElementById('distance').textContent = '7064 km';
+        document.getElementById('direction').textContent = '7064 km';
 
         // 显示图表
-        this.loadChart();
+        PaintChart();
         const overlayContent = document.querySelector('.overlay-content'); // 覆盖层
-        const originalContent = document.querySelector('.original-content'); // 原内容
+        const originalContent = document.querySelector('.origin-content'); // 原内容
         // 显示覆盖层
         originalContent.style.display = 'none';
         overlayContent.style.display = 'flex';
-    }
-
-    loadChart() {
-        const chart = echarts.init(document.getElementById('chart'));
-        const option = {
-            title: { text: '高度与速度图' },
-            tooltip: { trigger: 'axis' },
-            legend: { data: ['高度 (m)', '速度 (km/h)'] },
-            xAxis: { type: 'category', data: ['10:30', '11:00', '11:30'] },
-            yAxis: [
-                { type: 'value', name: '高度 (m)' },
-                { type: 'value', name: '速度 (km/h)' }
-            ],
-            series: [
-                { name: '高度 (m)', type: 'line', data: [0, 10000, 12000] },
-                { name: '速度 (km/h)', type: 'line', yAxisIndex: 1, data: [0, 800, 900] }
-            ]
-        };
-        chart.setOption(option);
     }
 }

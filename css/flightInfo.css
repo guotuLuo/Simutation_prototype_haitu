@@ -2,70 +2,59 @@
     padding: 15px;
     border-bottom: 1px solid #ddd;
     background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif; /* 使用清晰的字体 */
 }
 
 .flight-title h2 {
-    font-size: 20px;
-    color: #333;
+    font-size: 18px; /* 增大字体 */
+    color: #2c3e50; /* 使用更深的灰色，更显高级感 */
+    font-weight: bold; /* 加粗标题 */
+    margin-bottom: 5px;
 }
 
 .flight-title h3 {
-    font-size: 16px;
-    color: #555;
+    font-size: 16px; /* 保持次级标题稍小 */
+    color: #7f8c8d; /* 使用浅灰色增加层次感 */
+    font-style: italic; /* 添加斜体，更具区分度 */
     margin-top: 5px;
 }
 
-.flight-route {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.flight-route .departure, .flight-route .arrival {
-    text-align: center;
-}
-
-.flight-route h3 {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0;
-}
-
-.flight-route p {
-    font-size: 14px;
-    color: #777;
-}
-
-.flight-time p {
-    font-size: 14px;
-    color: #555;
-    margin: 5px 0;
-}
-
 .chart-container {
-    padding: 15px;
+    width: 300px;
+    height: 300px; /* 保持高度设置 */
+    background-color: #ffffff; /* 给容器一个白色背景 */
+    border: 1px solid #ddd; /* 边框更明显 */
+    border-radius: 8px; /* 圆角效果 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影提升质感 */
 }
 
 .flight-details {
-    padding: 15px;
     background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif; /* 使用一致的字体 */
+    line-height: 1.6; /* 增加行高，提升可读性 */
 }
 
 .flight-details h3 {
-    font-size: 16px;
+    font-size: 18px; /* 增大标题字体 */
+    color: #2c3e50; /* 使用深灰色提升层次 */
     margin-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
+    border-bottom: 2px solid #ddd; /* 增加边框厚度 */
+    padding-bottom: 8px; /* 增加下边距，让内容更宽松 */
 }
 
 .flight-details p {
-    font-size: 14px;
-    color: #555;
-    margin: 5px 0;
+    font-size: 15px; /* 稍微增大内容字体 */
+    color: #34495e; /* 使用深灰色，显得更稳重 */
+    margin: 8px 0; /* 增加间距，内容显得更松散 */
+    font-family: 'Roboto', sans-serif; /* 使用现代无衬线字体，改善可读性 */
 }
 
 .arrow {
     font-size: 24px;
     color: #333;
+    transition: color 0.3s ease; /* 添加平滑的颜色变化效果 */
+}
+
+.arrow:hover {
+    color: #555; /* 悬停时颜色变浅 */
 }
