@@ -1,63 +1,50 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const fileMenu = document.querySelector('.menu-bar li:first-child'); // 选择第一个li元素
-    const subMenu = fileMenu.querySelector('.sub-menu');
+class Menubar {
+    constructor() {
+        // 绑定文件输入框事件
+        document.getElementById('file-input').addEventListener('change', handleFileInputChange);
 
-    fileMenu.addEventListener('click', function(event) {
-        event.preventDefault();
-        if (subMenu.style.display === 'block') {
-            subMenu.style.display = 'none';
-        } else {
-            subMenu.style.display = 'block';
-        }
-    });
+    }
 
-    document.addEventListener('click', function(event) {
-        if (!fileMenu.contains(event.target)) {
-            subMenu.style.display = 'none';
-        }
-    });
-
-    const subMenuLinks = document.querySelectorAll('.sub-menu a');
-    subMenuLinks.forEach(function(link) {
-        link.addEventListener('click', function(event) {
-            event.preventDefault(); // 阻止默认链接行为
-            document.getElementById('saveButton').addEventListener('click', function () {
-                // 获取XML模板
-                const xmlDoc = createXMLFile();
-
-                // 获取information的tag
-                const informationElement = xmlDoc.getElementsByTagName("information")[0];
-                // 设置文件名和文件id
-                const title = document.getElementsByClassName('title')[0].textContent;
-                informationElement.getElementsByTagName("name")[0].setAttribute(title);
-                informationElement.getElementsByTagName("id")[0].setAttribute(generateUUID());
-
-
-                const componentElement = xmlDoc.getElementsByTagName("components")[0];
-                const sceneElement = xmlDoc.getElementsByTagName("scene")[0];
-
-                componentManager.instances.forEach((classNameMap, itemType) => {
-                    classNameMap.forEach((instanceMap, className) => {
-                            // 创建并添加 <object> 元素 这里的添加元素组件列表的所有元素
-                            const tempElement = xmlDoc.createElement(itemType);
-                            tempElement.setAttribute("name", className);
-                            componentElement.appendChild(tempElement);
-                            instanceMap.forEach((instance, instanceName) => {
-                                const itemElement = xmlDoc.createElement('item');
-                                itemElement.setAttribute('posx', instance.position.getLat());
-                                itemElement.setAttribute('posy', instance.position.getLng());
-                                itemElement.setAttribute('type', itemType);
-                                itemElement.setAttribute('id', className);
-                                sceneElement.appendChild(itemElement);
-                            })
-                        }
-                    )
-                });
-
-
-
-
+    initializeMenubar() {
+        // 子菜单点击事件分发
+        const subMenuLinks = document.querySelectorAll('.sub-menu a');
+        subMenuLinks.forEach((link) => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                this.handleMenuAction(link);
             });
         });
-    });
-});
+    }
+
+    /**
+     * 菜单操作处理
+     */
+    handleMenuAction(link) {
+        const action = link.textContent.trim(); // 获取菜单项文字
+        switch (action) {
+            case "本地打开":
+                const fileInput = document.getElementById('file-input');
+                fileInput.click();
+                break;
+            case "云端打开":
+                openXMLFromCloud("cbc2be90-7729-47f5-b855-2c780e2ec788");
+                break;
+            case "保存到本地":
+                const localXMLDoc = createXMLFile();
+                saveXMLToLocal(localXMLDoc);
+                break;
+            case "保存到云端":
+                const cloudXMLDoc = createXMLFile();
+                saveXMLToCloud(cloudXMLDoc);
+                break;
+            case "新建文件":
+                // 跳转到新建文件页面
+                // 打开新标签页并加载 index.html
+                window.open('index.html', '_blank');
+                break;
+            default:
+                break;
+        }
+    }
+}
+

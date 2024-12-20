@@ -1,6 +1,7 @@
 import {ContextMenu} from "../contextMenus/contextMenu.js"
 class Radar {
     constructor(map, position, icon, contextMenu, itemType, className, name) {
+        super();
         this.map = map;
         this.position = position;
         this.icon = icon;
@@ -27,6 +28,22 @@ class Radar {
         this.scanning=false;
         this.displayType='standard';
         this.lines=[];
+
+        // 经度维度海拔
+        this.latitude = position.lat;
+        this.longitude = position.lng;
+        this.altitude = 0;
+
+        // nBatch 不知道干啥的，先留在这
+        this.batch = parseInt(this.name.substring(this.className.length));
+        this.use = 1;
+        this.track = [];
+        const lat = position.lat.toFixed(5);
+        const lng = position.lng.toFixed(5);
+        this.track.push([lat, lng]);
+        this.sys_proto_type = 'SYS_PROTO_RADAR';
+        this.outlineManager = window.app.outlineManager;
+
     }
 
     initializeRadarCenter() {
@@ -35,8 +52,6 @@ class Radar {
             // 假设 radarBackground 是一个固定大小的正方形容器
             const width = this.radarBackground.offsetWidth;
             const height = this.radarBackground.offsetHeight;
-            console.log("radar background width is:", width);
-            console.log("radar background height is:", height);
             this.radarCenter = {
                 x: width / 2,
                 y: height / 2
@@ -305,61 +320,81 @@ class Radar {
         this.id = generateUUID();
         this.marker = L.marker(this.position, { icon: this.icon, draggable: true }).addTo(this.map);
         const latLng = this.marker.getLatLng();
+        const iconSize = this.icon.options.iconSize;
         this.marker.bindPopup("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6) ).openPopup();
 
         // 监听拖动过程中的事件
         this.marker.on('drag', (event) => {
             const latLng = event.target.getLatLng();  // 获取当前经纬度
+            this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
+
             this.marker.setPopupContent("雷达: " + this.id + "<br>经纬度: " + latLng.lat.toFixed(6) + ", " + latLng.lng.toFixed(6));
             this.marker.openPopup();  // 更新并重新打开弹出窗口
         });
 
-        // 绑定右键菜单显示事件
         this.marker.on('contextmenu', (event) => {
             event.originalEvent.preventDefault();
+            const latLng = event.target.getLatLng();
+            this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
             this.contextMenu.show(event, this);
         });
-    
+
+        this.marker.on("click", (event) => {
+            const latLng = event.target.getLatLng();
+            this.outlineManager.showOutline(latLng, iconSize, this); // 调用虚线框管理器
+        });
+
+        // 地图缩放时更新虚线框
+        this.map.on("zoomend", () => {
+            const latLng = this.marker.getLatLng();
+            this.outlineManager.updateOutline(latLng, iconSize);
+        });
+
+        // 点击地图空白处隐藏虚线框
+        this.map.on("click", () => {
+            this.outlineManager.hideOutline();
+        });
+
         // 创建雷达组件容器
         const radarItem = document.createElement("div");
         radarItem.className = "radar-item";
         radarItem.id = this.id;
-    
+
         // 创建雷达背景并设置唯一 id
         const radarBackground = document.createElement("div");
         radarBackground.className = "radar-background";
         radarBackground.id = `radar-background-${this.id}`; // 设置唯一 id
-    
+
         // 创建扫描线
         const radarScanline = document.createElement("div");
         radarScanline.className = "radar-scanline";
         radarScanline.id = `radar-scanline-${this.id}`;
         // 将扫描线和目标点添加到雷达背景
         radarBackground.appendChild(radarScanline);
-        
+
         // 创建 UUID 显示区域
         const radarText = document.createElement("p");
         radarText.textContent = `雷达 UUID: ${this.id.replace(/-/g, '').substring(0, 18)}`;
 
         // 创建按钮数组
-        var buttonLabels = ["标准显示", "空心显示", "切换线段显示"]; // 新的按钮文本内容，加入切换线段显示
-        var currentDisplayType = "标准显示"; // 全局变量跟踪当前显示状态
-        var displayTypes = ['standard', 'hollow'];
-        var radarContainer = document.getElementById("radar-container");
+        const buttonLabels = ["标准显示", "空心显示", "航迹显示"]; // 新的按钮文本内容，加入切换线段显示
+        let currentDisplayType = "标准显示"; // 全局变量跟踪当前显示状态
+        const displayTypes = ['standard', 'hollow'];
+        const radarContainer = document.getElementById("radar-container");
 
         // 创建一个容器来放置这些按钮
-        var buttonContainer = document.createElement("div");
+        const buttonContainer = document.createElement("div");
         buttonContainer.classList.add("button-container"); // 给按钮容器添加一个类名
 
         buttonLabels.forEach((label) => {
-            var button = document.createElement("button");
+            const button = document.createElement("button");
             button.innerHTML = label; // 按钮显示的文本
             button.classList.add("radar-button"); // 给按钮添加样式类
             this.displayType = displayTypes[buttonLabels.indexOf(currentDisplayType)];
 
             // 为每个按钮绑定事件
             button.addEventListener('click', (event) => {
-                if (label === "切换线段显示") {
+                if (label === "航迹显示") {
                     this.toggleLines(); // 当点击“切换线段显示”按钮时，切换线段显示状态
                 } else {
                     currentDisplayType = label; // 更新当前显示状态
@@ -379,7 +414,7 @@ class Radar {
         // 将按钮容器添加到页面中
         radarContainer.appendChild(buttonContainer);
 
-        
+
 
         // 将按钮容器添加到 radar-container 中
         // 将所有元素添加到雷达组件
@@ -667,20 +702,18 @@ class Radar {
         if (radarItem) {
             radarItem.remove();
         }
-        componentManager.deleteInstance(this.itemType, this.className, this.name);
+
+        window.app.componentManager.deleteInstance(this.itemType, this.className, this.name);
+        window.app.componentManager.instanceNumber--;
+
         removeObjectFromList(this.itemType, this.className, this.name);
         // 相比于使用axios发送前端请求，使用sendBeacon可以保证发送的请求在关闭当前标签的时候仍然可以成功发送
         const url = `http://127.0.0.1:8081/api/radars/delete?uuid=${encodeURIComponent(this.id)}`;
         navigator.sendBeacon(url);
     }
 
-    getItemType(){
-        return this.itemType;
-    }
     getClassName(){
         return this.className;
     }
-    getName(){
-        return this.name;
-    }
+
 }

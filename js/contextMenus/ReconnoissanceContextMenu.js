@@ -1,6 +1,11 @@
+<<<<<<< HEAD:js/contextMenus/ReconnaissanceContextMenu.js
 // ReconnaissanceContextMenu.js
 import {ContextMenu} from "./contextMenu.js";
 class ReconnaissanceContextMenu extends ContextMenu {
+=======
+// ReconnoissanceContextMenu.js
+class ReconnoissanceContextMenu extends ContextMenu {
+>>>>>>> 0e8f73d151ef60fa07fb6f0f5c5961ca6428c42c:js/contextMenus/ReconnoissanceContextMenu.js
     constructor(map) {
         super(map);
     }
@@ -38,7 +43,7 @@ class ReconnaissanceContextMenu extends ContextMenu {
         setSpeedItem.textContent = "设置速度";
         setSpeedItem.onclick = () => {
             if (this.currentItem) {
-                this.currentItem.setSpeed();
+                this.currentItem.setItemSpeed();
                 this.hide();
             }
         };

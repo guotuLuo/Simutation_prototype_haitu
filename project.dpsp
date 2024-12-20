@@ -1,0 +1,12 @@
+<project-root>
+    <information>
+        <name>undefined.dpsp</name>
+        <id>a444e5c1-6f4f-4a65-adb9-2ea7be2c716e</id>
+    </information>
+    <components/>
+    <scene/>
+    <param>
+        <envi  proto_num="0" clutter_type="0" thread_num="1" timer_clkrate="1000" ssc_root="" type="SDP_RCT_SEA" ip="127.0.0.1" clutter_model="0" time_scalar="1000" Origin="(35.8617,104.1954)" clutter_grade="1" refresh="100"/>
+        <proto/>
+    </param>
+</project-root>

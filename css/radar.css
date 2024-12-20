@@ -53,7 +53,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 11px;
     text-align: center;
     box-sizing: border-box; /* 确保按钮大小计算包含内边距 */
 }

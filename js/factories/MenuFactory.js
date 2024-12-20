@@ -5,8 +5,8 @@ class MenuFactory {
                 return new AirplaneContextMenu(map);
             case "radar":
                 return new RadarContextMenu(map);
-            case "reconnaissance":
-                return new ReconnaissanceContextMenu(map);
+            case "reconnoissance":
+                return new ReconnoissanceContextMenu(map);
             case "jamming":
                 return new JammingContextMenu(map);
             default:

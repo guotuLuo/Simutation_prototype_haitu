@@ -37,19 +37,53 @@
     padding: 10px;
     z-index: 1900;
 }
-/* 当父菜单项悬停或聚焦时显示子菜单 */
 
-.menu-bar li:focus .sub-menu {
-    display: block;
-    z-index: 1800;
-}
 /* 调整子菜单项的样式 */
 .menu-bar .sub-menu li {
     width: 80px; /* 设置子菜单项的宽度 */
     margin-right: 0;
 }
 /* 可选：为父菜单项添加背景色以突出显示 */
-.menu-bar li:hover,
-.menu-bar li:focus {
+.menu-bar li:hover {
     background-color: #bdc3c7;
 }
+
+
+/* 为嵌套子菜单设置右侧显示 */
+.menu-bar .sub-menu .sub-menu {
+    top: 0;       /* 嵌套子菜单与父菜单项顶部对齐 */
+    left: 100%;   /* 显示在右侧 */
+}
+
+/* 当父菜单项悬停或聚焦时显示子菜单 */
+.menu-bar li:hover > .sub-menu {
+    display: block; /* 显示子菜单 */
+}
+
+/* 子菜单项的样式 */
+.menu-bar .sub-menu li {
+    width: auto; /* 子菜单宽度自适应 */
+    margin-right: 0;
+    white-space: nowrap; /* 防止子菜单项文字换行 */
+}
+
+/* 子菜单项的链接样式 */
+.menu-bar .sub-menu a {
+    display: block;      /* 设置为块级元素，方便点击 */
+    padding: 5px 10px;   /* 内边距调整 */
+    color: black;        /* 文本颜色 */
+    text-decoration: none;
+    font-size: 14px;     /* 字体大小 */
+}
+
+/* 鼠标悬停时，子菜单项的背景色 */
+.menu-bar .sub-menu a:hover {
+    background-color: #bdc3c7;
+}
+
+/* 可选：为父菜单项添加背景色以突出显示 */
+.menu-bar li:hover {
+    background-color: #e0e0e0;
+}
+
+

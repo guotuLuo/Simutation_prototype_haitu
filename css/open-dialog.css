@@ -1,0 +1,159 @@
+/* 遮罩层 */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /*模糊背景的性能要求较高*/
+    /*backdrop-filter: blur(1px);*/
+    z-index: 1900;  /* 确保在页面内容上面 */
+}
+
+/* 遮罩层打开时 */
+.overlay.open {
+    opacity: 1;
+    visibility: visible;  /* 显示遮罩层 */
+}
+
+/* 弹出框样式 */
+.dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 52vw;  /* 设置宽度为视口宽度的一半 */
+    height: 70vh;  /* 设置高度为视口高度的 70% */
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1999;
+    padding: 10px;
+}
+
+/* dialog-content 布局 */
+.dialog-header {
+    display: flex; /* 使用弹性布局 */
+    justify-content: space-between; /* 两侧对齐 */
+    align-items: center; /* 垂直居中对齐 */
+}
+
+/* dialog-content 布局 */
+.dialog-content {
+    display: flex; /* 使用弹性布局 */
+    justify-content: space-between; /* 两侧对齐 */
+    align-items: center; /* 垂直居中对齐 */
+    padding: 5px;
+}
+
+
+/* 确保 .open-dialog-form-row 正确使用 Flex 布局 */
+.open-dialog-form-row {
+    display: flex; /* 设置弹性布局 */
+    align-items: flex-start; /* 垂直方向顶部对齐 */
+    justify-content: flex-start; /* 确保水平方向从左对齐 */
+    gap: 2rem; /* 子元素之间的间距 */
+    width: 100%; /* 父容器占满 */
+    box-sizing: border-box; /* 包括 padding 和边框 */
+}
+
+/* 存储方式部分 */
+.storage-section {
+    flex: 2; /* 占 2 份宽度 */
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* 确保占满父容器分配的空间 */
+    box-sizing: border-box; /* 包括 padding 和边框 */
+}
+
+.storage-section label {
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#storageType {
+    padding: 10px;
+    font-size: 14px;
+    width: 100%; /* 确保下拉框宽度一致 */
+}
+
+/* 最近项目部分 */
+.project-section {
+    flex: 5; /* 占 5 份宽度 */
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* 确保占满父容器分配的空间 */
+    box-sizing: border-box;
+}
+
+.project-section label {
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.project-list {
+    flex: 1;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    height: auto; /* 根据内容自动调整高度 */
+    overflow-y: auto; /* 内容溢出时可滚动 */
+    border-radius: 4px;
+}
+.project-item {
+    padding: 10px 5px;
+    margin-bottom: 5px;
+    font-size: 16px; /* 字号调大 */
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.project-item:hover {
+    background-color: rgb(234, 234, 246);
+    text-decoration: none;
+}
+
+
+/* 操作按钮区域 */
+.action-buttons {
+    display: flex;
+    gap: 15px; /* 按钮之间的间距 */
+}
+
+.action-btn {
+    padding: 8px 15px;
+    background-color: #292931;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.action-btn:hover {
+    background-color: #101018;
+}
+
+/* 关闭按钮 */
+.open-dialog-btn-close {
+    background-color: transparent; /* 透明背景 */
+    color: black; /* 黑色叉 */
+    font-size: 2.5em; /* 适当放大叉的字体 */
+    border: none; /* 取消边框 */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.open-dialog-btn-close:hover {
+    color: #555; /* 悬停时颜色变为深灰 */
+}
+
+.open-dialog-btn-close:active {
+    color: black; /* 点击时颜色保持黑色 */
+    transform: scale(1); /* 点击时恢复正常大小 */
+}

@@ -16,7 +16,7 @@ class MapController {
         this.contextMenus = {
             "object": new AirplaneContextMenu(this.map),
             "radar": new RadarContextMenu(this.map),
-            "reconnaissance": new ReconnaissanceContextMenu(this.map),
+            "reconnoissance": new ReconnoissanceContextMenu(this.map),
             "jamming": new JammingContextMenu(this.map)
         };
         this.initializeDragAndDrop();
@@ -134,13 +134,11 @@ class MapController {
             iconSize: [32, 32],
             iconAnchor: [16, 16]
         });
-        const instanceName = itemType + String(componentManager.getNextInstanceName());
+
         const instance = ComponentFactory.createComponent(this.map, position, Icon, this.contextMenus[itemType], itemType, className, instanceName)
-
-
         // TODO 这里组件的组织需要想想,怎么管理所有组件
         // 每一次调用工厂创建新的对象都要将对象加入组件，删除的时候调用删除函数
-        componentManager.addInstance(itemType, className, instanceName, instance);
+        window.app.componentManager.addInstance(itemType, className, instanceName, instance);
         addObjectToList(instance);
 
         // 根据不同的类初始化特定菜单， 这里的itemType是一级菜单的类
@@ -159,8 +157,7 @@ class MapController {
             const dragData = e.dataTransfer.getData('text/plain');
 
             // 分割数据（假设数据是以'|'分隔的）
-            const [itemType, className, instanceName] = dragData.split('|');
-            console.log(itemType,className,instanceName);
+            const [itemType, className] = dragData.split('|');
             // 获取拖放位置的地理坐标
             const latLng = this.map.mouseEventToLatLng(e);
             this.addComponent(itemType, className, latLng);

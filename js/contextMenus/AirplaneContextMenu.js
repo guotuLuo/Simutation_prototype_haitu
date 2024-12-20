@@ -39,7 +39,7 @@ class AirplaneContextMenu extends ContextMenu {
         setSpeedItem.textContent = "设置速度";
         setSpeedItem.onclick = () => {
             if (this.currentItem) {
-                this.currentItem.setSpeed();
+                this.currentItem.setItemSpeed();
                 this.hide();
             }
         };
