@@ -385,5 +385,7 @@ class Reconnoissance extends BaseComponent{
         return this.className;
     }
 
-
+    getId(){
+        return this.id;
+    }
 }
