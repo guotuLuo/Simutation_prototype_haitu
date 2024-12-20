@@ -233,4 +233,3 @@ class componentManager{
         this.nextIndex = max + 1;
     }
 }
-export { componentManager };

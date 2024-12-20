@@ -1,5 +1,4 @@
-import {ContextMenu} from "../contextMenus/contextMenu.js"
-class Radar {
+class Radar extends BaseComponent{
     constructor(map, position, icon, contextMenu, itemType, className, name) {
         super();
         this.map = map;

@@ -27,7 +27,7 @@ class Menubar {
                 fileInput.click();
                 break;
             case "云端打开":
-                openXMLFromCloud("cbc2be90-7729-47f5-b855-2c780e2ec788");
+                window.app.cloudInputDialog.openCloudInputDialog();
                 break;
             case "保存到本地":
                 const localXMLDoc = createXMLFile();

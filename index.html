@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Simulation</title>
+    <link rel="stylesheet" href="css/flightInfo.css">
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/custom-dialog.css">
     <link rel="stylesheet" href="css/open-dialog.css">
@@ -16,9 +17,14 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/title-bar.css" />
     <link rel="stylesheet" href="leaflet/leaflet.css" />
+
     <script src="leaflet/leaflet.js"></script>
+    <script src="threejs/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </head>
 <body>
     <!-- 遮罩层 -->
@@ -55,6 +61,29 @@
                 <div class="project-section">
                     <label for="recentProjects">最近项目</label>
                     <div id="recentProjects" class="project-list">
+                        <!-- 动态生成的项目列表 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹出对话框 -->
+    <div id="cloudInputDialog" class="dialog">
+
+        <!-- 内容部分 -->
+        <div class="dialog-header">
+            <!-- 关闭按钮放在右侧 -->
+            <button class="open-dialog-btn-close" id="closeCloudInputButton">&times;</button>
+        </div>
+
+        <!-- 内容部分 -->
+        <div class="dialog-content">
+            <div class="open-dialog-form-row">
+                <!-- 最近项目 -->
+                <div class="project-section">
+                    <label for="recentProjects">云端项目</label>
+                    <div id="cloudProjects" class="project-list">
                         <!-- 动态生成的项目列表 -->
                     </div>
                 </div>
@@ -193,47 +222,101 @@
 
     <div class="main-container">
         <div class="side-bar">
-            <button class="nav-button" id="nav-radar" data-submenu="submenu1">
-                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
-                <span class="button-text" data-action="expand">Radar</span>
-                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
-            </button>
+            <div class="origin-content">
+                <button class="nav-button" id="nav-radar" data-submenu="submenu1">
+                    <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                    <span class="button-text" data-action="expand">Radar</span>
+                    <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+                </button>
 
-            <ul id="submenu1" class="submenu" style="display: none;">
-<!--                <li draggable="true" data-type="radar">radar</li>-->
-            </ul>
+                <ul id="submenu1" class="submenu" style="display: none;">
+                    <!--                <li draggable="true" data-type="radar">radar</li>-->
+                </ul>
 
-            <button class="nav-button" id="nav-reconnoissance" data-submenu="submenu2">
-                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
-                <span class="button-text" data-action="expand">Reconnoissance</span>
-                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
-            </button>
+                <button class="nav-button" id="nav-reconnoissance" data-submenu="submenu2">
+                    <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                    <span class="button-text" data-action="expand">Reconnoissance</span>
+                    <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+                </button>
 
-            <ul id="submenu2" class="submenu" style="display: none;">
-<!--                <li draggable="true" data-type="reconnaissance">reconnaissance</li>-->
-            </ul>
+                <ul id="submenu2" class="submenu" style="display: none;">
+                    <!--                <li draggable="true" data-type="reconnaissance">reconnaissance</li>-->
+                </ul>
 
-            <button class="nav-button" id="nav-object" data-submenu="submenu3">
-                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
-                <span class="button-text" data-action="expand">Object</span>
-                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
-            </button>
+                <button class="nav-button" id="nav-object" data-submenu="submenu3">
+                    <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                    <span class="button-text" data-action="expand">Object</span>
+                    <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+                </button>
 
-            <ul id="submenu3" class="submenu" style="display: none;">
-<!--                <li draggable="true" data-type="object">object</li>-->
-            </ul>
+                <ul id="submenu3" class="submenu" style="display: none;">
+                    <!--                <li draggable="true" data-type="object">object</li>-->
+                </ul>
 
 
-            <button class="nav-button" id="nav-jamming" data-submenu="submenu4">
-                <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
-                <span class="button-text" data-action="expand">Jamming</span>
-                <img src="images/add.png" alt="add" class="add-icon" data-action="add">
-            </button>
+                <button class="nav-button" id="nav-jamming" data-submenu="submenu4">
+                    <img src="images/down.png" alt="expand" class="expand-icon" data-action="expand">
+                    <span class="button-text" data-action="expand">Jamming</span>
+                    <img src="images/add.png" alt="add" class="add-icon" data-action="add">
+                </button>
 
-            <ul id="submenu4" class="submenu" style="display: none;">
-<!--                <li draggable="true" data-type="jamming">jamming</li>-->
-            </ul>
+                <ul id="submenu4" class="submenu" style="display: none;">
+                    <!--                <li draggable="true" data-type="jamming">jamming</li>-->
+                </ul>
+            </div>
+
+            <div class="overlay-content" style="display: none;">
+                <div class="overlay-header">
+                    <button class="close-overlay-btn">关闭</button>
+                </div>
+                <div class="overlay-body">
+                    <!-- 航班信息内容 -->
+                    <div class="flight-info">
+                        <!-- 航班标题 -->
+                        <div class="flight-title">
+                            <h2 id="flight-number">MU6985</h2>
+                            <h3 id="airline-name">中国东方航空</h3>
+                        </div>
+                        <!-- 航班路线 -->
+                        <div class="flight-route">
+                            <div class="departure">
+                                <h3 id="departure-code">XNN</h3>
+                                <p id="departure-airport">西安咸阳</p>
+                            </div>
+                            <span class="arrow">→</span>
+                            <div class="arrival">
+                                <h3 id="arrival-code">PVG</h3>
+                                <p id="arrival-airport">上海浦东</p>
+                            </div>
+                        </div>
+                        <!-- 时间信息 -->
+                        <div class="flight-time">
+                            <p>计划时间: <span id="scheduled-time">10:55</span></p>
+                            <p>实际时间: <span id="actual-time">10:50</span></p>
+                            <p>预计到达: <span id="arrival-time">13:21</span></p>
+                        </div>
+                    </div>
+                    <!-- 图表 -->
+                    <div class="chart-container">
+                        <h3>高度与速度图</h3>
+                        <div id="chart" style="width: 100%; height: 200px;"></div>
+                    </div>
+                    <!-- 飞行详情 -->
+                    <div class="flight-details">
+                        <h3>飞行信息</h3>
+                        <p>飞机注册号: <span id="registration-number">B-1234</span></p>
+                        <p>机龄: <span id="plane-age">14年</span></p>
+                        <p>机型: <span id="plane-type">Airbus A320-232</span></p>
+                        <h3>飞行动态</h3>
+                        <p>高度: <span id="altitude">10698.00 m</span></p>
+                        <p>速度: <span id="speed">1000.00 km/h</span></p>
+                        <p>航程: <span id="distance">7064 km</span></p>
+                    </div>
+                </div>
+            </div>
         </div>
+
+<!--        地图容器-->
         <div class="map-container">
             <div id="map" style="height: 100%; width: 100%;"></div>
         </div>
@@ -481,43 +564,49 @@
 
 
     <!-- 引入各个模块的脚本 -->
-    <script src="leaflet/leaflet.js"></script>
-    <script src="json/three.js"></script>
-    <script type="module" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="module" src="js/utils/GenerateUUID.js"></script>
-    <script type="module" src="js/utils/InputTextDialog.js"></script>
-    <script type="module" src="js/utils/CreateSubMenuLi.js"></script>
-    <script type="module" src="js/utils/PageEventControl.js"></script>
-    <script type="module" src="js/utils/CreateXMLDoc.js"></script>
-
-    <script type="module" src="js/bars/setting/device_modal_left.js"></script>
-    <script type="module" src="js/bars/setting/device_modal_right.js"></script>
-    <script type="module" src="js/bars/setting/deivce_modal_header.js"></script>
-    <script type="module" src="js/bars/sidebar.js"></script>
-    <script type="module" src="js/bars/toolbar.js"></script>
-    <script type="module" src="js/bars/topIcon.js"></script>
-    <script type="module" src="js/bars/menubar.js"></script>
 
 
-    <script type="module" src="js/contextMenus/contextMenu.js"></script>
-    <script type="module" src="js/contextMenus/AirplaneContextMenu.js"></script>
-    <script type="module" src="js/contextMenus/RadarContextMenu.js"></script>
-    <script type="module" src="js/contextMenus/ReconnaissanceContextMenu.js"></script>
-    <script type="module" src="js/contextMenus/JammingContextMenu.js"></script>
 
-    <script type="module" type="module" src="js/mapController.js"></script>
-    <script type="module" src="js/point.js"></script>
+    <script src="js/utils/GenerateUUID.js"></script>
+    <script src="js/utils/InputTextDialog.js"></script>
+    <script src="js/utils/PageEventControl.js"></script>
+    <script src="js/utils/XMLDocHandler.js"></script>
+    <script src="js/utils/CalculateBearing.js"></script>
 
-    <script type="module" src="js/components/airplane.js"></script>
-    <script type="module" src="js/components/radar.js"></script>
-    <script type="module" src="js/components/reconnaissance.js"></script>
-    <script type="module" src="js/components/jamming.js"></script>
-    <script type="module" src="js/components/componentManager.js"></script>
+    <script src="js/bars/prototype_setting/device_modal_left.js"></script>
+    <script src="js/bars/prototype_setting/device_modal_form.js"></script>
+    <script src="js/bars/prototype_setting/device_modal_header.js"></script>
+    <script src="js/bars/environment_setting/envi.js"></script>
 
-    <script type="module" src="js/factories/ComponentFactory.js"></script>
-    <script type="module" src="js/factories/MenuFactory.js"></script>
+    <script src="js/bars/sidebar.js"></script>
+    <script src="js/bars/toolbar.js"></script>
+    <script src="js/bars/topIcon.js"></script>
+    <script src="js/bars/menubar.js"></script>
+    <script src="js/bars/open_dialog/openDialog.js"></script>
+    <script src="js/bars/open_dialog/cloudInputDialog.js"></script>
 
-    <script type="module" src="js/main.js"></script>
+    <script src="js/contextMenus/contextMenu.js"></script>
+    <script src="js/contextMenus/AirplaneContextMenu.js"></script>
+    <script src="js/contextMenus/RadarContextMenu.js"></script>
+    <script src="js/contextMenus/ReconnoissanceContextMenu.js"></script>
+    <script src="js/contextMenus/JammingContextMenu.js"></script>
+
+    <script src="js/mapController.js"></script>
+    <script src="js/point.js"></script>
+
+    <script src="js/components/OutlineManager.js"></script>
+    <script src="js/components/BaseComponent.js"></script>
+    <script src="js/components/airplane.js"></script>
+    <script src="js/components/radar.js"></script>
+    <script src="js/components/reconnoissance.js"></script>
+    <script src="js/components/jamming.js"></script>
+    <script src="js/components/componentManager.js"></script>
+
+    <script src="js/factories/ComponentFactory.js"></script>
+    <script src="js/factories/MenuFactory.js"></script>
+
+
+
+    <script src="js/main.js"></script>
 </body>
 </html>

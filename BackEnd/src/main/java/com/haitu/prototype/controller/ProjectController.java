@@ -8,6 +8,8 @@ import com.haitu.prototype.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/project")
@@ -22,5 +24,10 @@ public class ProjectController {
     @PostMapping("/query")
     public Result<ProjectRespDTO> getProjectXML(@RequestParam String id){
         return Results.success(projectService.queryProjectXML(id));
+    }
+
+    @PostMapping("/queryIds")
+    public Result<List<String>> getProjectXMLIds(){
+        return Results.success(projectService.getProjectXMLIds());
     }
 }

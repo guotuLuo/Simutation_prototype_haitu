@@ -39,6 +39,10 @@
     align-items: center; /* 垂直居中对齐 */
 }
 
+.dialog-header > *:last-child {
+    margin-left: auto; /* 将最后一个子元素推到最右边 */
+}
+
 /* dialog-content 布局 */
 .dialog-content {
     display: flex; /* 使用弹性布局 */

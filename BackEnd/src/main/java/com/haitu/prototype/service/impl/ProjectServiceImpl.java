@@ -11,6 +11,8 @@ import com.haitu.prototype.dto.response.ProjectRespDTO;
 import com.haitu.prototype.service.ProjectService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> implements ProjectService{
     @Override
@@ -34,5 +36,12 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
 
         // 将每个 ProjectDO 转换为 ProjectRespDTO 并返回
         return BeanUtil.toBean(projectDO, ProjectRespDTO.class);
+    }
+
+    @Override
+    public List<String> getProjectXMLIds() {
+        LambdaQueryWrapper<ProjectDO> lambdaQueryWrapper = Wrappers.lambdaQuery(ProjectDO.class);
+        List<ProjectDO> projectDOS = baseMapper.selectList(lambdaQueryWrapper);
+        return projectDOS.stream().map(ProjectDO::getId).toList();
     }
 }

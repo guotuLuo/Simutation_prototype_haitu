@@ -1,5 +1,3 @@
-
-import {ContextMenu} from "./contextMenu.js";
 // airplaneContextMenu.js
 class AirplaneContextMenu extends ContextMenu {
     constructor(map) {
@@ -86,4 +84,3 @@ class AirplaneContextMenu extends ContextMenu {
         menuList.appendChild(deleteRouteItem);
     }
 }
-export { AirplaneContextMenu };
