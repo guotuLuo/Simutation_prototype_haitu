@@ -1,4 +1,5 @@
 // Jamming 类
+import {ContextMenu} from "../contextMenus/contextMenu.js";
 class Jamming {
     constructor(map, position, icon, contextMenu, itemType, className, name) {
         this.map = map;

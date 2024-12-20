@@ -38,3 +38,5 @@ class ContextMenu {
         this.map.removeLayer();
     }
 }
+
+export {ContextMenu};

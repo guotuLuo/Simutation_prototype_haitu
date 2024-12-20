@@ -1,4 +1,5 @@
 // Airplane 类，用于管理飞机对象的创建、飞行和删除
+import {ContextMenu} from "../contextMenus/contextMenu.js";
 class Airplane {
     constructor(map, position, icon, contextMenu, itemType, className, name) {
         this.map = map;
@@ -308,3 +309,4 @@ class Airplane {
         return this.name;
     }
 }
+export default Airplane;

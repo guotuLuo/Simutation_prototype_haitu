@@ -5,7 +5,7 @@ function disablePageInteractions() {
             element.style.pointerEvents = 'none';
         });
     }
-
+export { disablePageInteractions };
 function enablePageInteractions() {
         // 恢复页面所有点击事件
         const allElements = document.querySelectorAll('body *');
@@ -13,3 +13,4 @@ function enablePageInteractions() {
             element.style.pointerEvents = 'auto';
         });
     }
+export { enablePageInteractions };

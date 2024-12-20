@@ -1,4 +1,5 @@
 // radarContextMenu.js
+import {ContextMenu} from "./contextMenu.js";
 class RadarContextMenu extends ContextMenu {
     constructor(map) {
         super(map);
@@ -44,3 +45,4 @@ class RadarContextMenu extends ContextMenu {
         menuList.appendChild(deleteItem);
     }
 }
+export {RadarContextMenu};

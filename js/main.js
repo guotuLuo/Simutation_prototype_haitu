@@ -1,3 +1,9 @@
+import { MapController } from "./mapController.js";
+import { Sidebar } from "./bars/sidebar.js";
+import { Toolbar } from "./bars/toolbar.js";
+import { componentManager } from "./components/componentManager.js";
+//import { ComponentFactory } from "./factories/ComponentFactory.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     const mapController = new MapController();
     const sidebar = new Sidebar();

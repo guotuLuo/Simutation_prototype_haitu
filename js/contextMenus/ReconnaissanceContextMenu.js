@@ -1,4 +1,5 @@
 // ReconnaissanceContextMenu.js
+import {ContextMenu} from "./contextMenu.js";
 class ReconnaissanceContextMenu extends ContextMenu {
     constructor(map) {
         super(map);
@@ -84,3 +85,4 @@ class ReconnaissanceContextMenu extends ContextMenu {
         menuList.appendChild(deleteRouteItem);
     }
 }
+export {ReconnaissanceContextMenu};

@@ -156,3 +156,4 @@ const componentManager = {
     }
 
 }
+export { componentManager };

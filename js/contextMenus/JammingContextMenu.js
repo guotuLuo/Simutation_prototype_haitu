@@ -1,4 +1,5 @@
 // JammingContextMenu.js
+import {ContextMenu} from "./contextMenu.js";
 class JammingContextMenu extends ContextMenu {
     constructor(map) {
         super(map);
@@ -18,3 +19,4 @@ class JammingContextMenu extends ContextMenu {
         menuList.appendChild(deleteItem);
     }
 }
+export {JammingContextMenu};

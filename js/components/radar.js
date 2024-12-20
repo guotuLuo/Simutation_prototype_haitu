@@ -1,3 +1,4 @@
+import {ContextMenu} from "../contextMenus/contextMenu.js"
 class Radar {
     constructor(map, position, icon, contextMenu, itemType, className, name) {
         this.map = map;

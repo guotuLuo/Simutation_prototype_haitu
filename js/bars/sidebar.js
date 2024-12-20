@@ -1,3 +1,5 @@
+import { customDialog } from '../utils/InputTextDialog.js';
+import { createSubMenuLi } from '../utils/CreateSubMenuLi.js';
 class Sidebar {
     constructor() {
         this.sidebarElement = document.querySelector('.sidebar');
@@ -71,3 +73,4 @@ class Sidebar {
         event.dataTransfer.setData("text/plain", event.target.getAttribute("data-type"));
     }
 }
+export { Sidebar };

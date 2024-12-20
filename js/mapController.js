@@ -1,7 +1,18 @@
-// MapController 类，用于地图初始化和管理
+import {ThreeLayer} from './threelayer.js';
+import { AirplaneContextMenu } from './contextMenus/AirplaneContextMenu.js';
+import { RadarContextMenu } from './contextMenus/RadarContextMenu.js';
+import { ReconnaissanceContextMenu } from './contextMenus/ReconnaissanceContextMenu.js';
+import { JammingContextMenu } from './contextMenus/JammingContextMenu.js';
+import { customDialog } from '../js/utils/InputTextDialog.js';
+import Airplane from './components/airplane.js';
+
+
 class MapController {
     constructor() {
         this.map = this.initializeMap();
+        this.initThreeJS();
+        this.threeLayer = new ThreeLayer();
+        this.map.addLayer(this.threeLayer);
         this.contextMenus = {
             "object": new AirplaneContextMenu(this.map),
             "radar": new RadarContextMenu(this.map),
@@ -9,13 +20,14 @@ class MapController {
             "jamming": new JammingContextMenu(this.map)
         };
         this.initializeDragAndDrop();
+
     }
     getMap() {
         return this.map;
     }
 
     initializeMap() {
-        const map = L.map('map').setView([35.8617, 104.1954], 10);
+        // const map = L.map('map').setView([35.8617, 104.1954], 10);
 
         // fetch('json/china.json') // 将路径替换为你的实际路径
         //     .then(response => response.json())
@@ -42,15 +54,80 @@ class MapController {
         // map.addLayer(layer);
 
 
-        // 分片加载地图
+        const map = L.map('map', {
+            crs: L.CRS.EPSG3857, // 使用 Leaflet 默认的坐标参考系统
+            zoomControl: true,
+            center: [35.8617, 104.1954],
+            zoom: 10
+        });
+        
+        // 加载瓦片图层
         L.tileLayer('tiles/{z}/{x}/{y}.png', {
             maxZoom: 10,
             minZoom: 0,
             attribution: 'map'
         }).addTo(map);
-        return map;
-    }
+        
+        // 设置初始视角，模拟 3D
+        map.setView([35.8617, 104.1954], 10);
+        
+        // 通过自定义 CSS 来模拟 3D 效果
+        map.getContainer().style.transform = 'perspective(1000px) rotateX(30deg)';
 
+        // 让地图倾斜一定角度，模拟 3D 效果
+        map.on('load', function() {
+            console.log('Map loaded with 3D view');
+        });
+        
+        // 返回 map 对象
+        return map;
+        
+    }
+    initThreeJS() {
+        // 创建 Three.js 场景
+        this.scene = new THREE.Scene();
+        //随便输入一个API，测试下是否已经正常引入three.js
+        console.log(THREE.Scene); 
+
+        // 创建相机
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera.position.set(0, 0, 500);
+
+        // 创建渲染器
+        this.renderer = new THREE.WebGLRenderer({ alpha: true });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(this.renderer.domElement);
+        // 禁用浏览器默认滚轮缩放行为
+        window.addEventListener('wheel', (event) => {
+            if (event.ctrlKey) {
+                event.preventDefault();
+                this.zoom(event.deltaY);
+            }
+        }, { passive: false });
+
+        // 创建一个平面几何体，将其作为地图的容器
+        const planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
+        const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.position.set(0, 0, 0);
+        this.scene.add(plane);
+
+        // 渲染循环
+        const animate = () => {
+            requestAnimationFrame(animate);
+            this.renderer.render(this.scene, this.camera);
+        };
+
+        animate();
+    }
+    zoom(deltaY) {
+        const zoomFactor = 1.1;
+        if (deltaY < 0) {
+            this.camera.position.z /= zoomFactor;
+        } else {
+            this.camera.position.z *= zoomFactor;
+        }
+    }
     addComponent(itemType, className, position){
         const Icon = L.icon({
             iconUrl: 'images/' + itemType + '.png',
@@ -87,6 +164,9 @@ class MapController {
             // 获取拖放位置的地理坐标
             const latLng = this.map.mouseEventToLatLng(e);
             this.addComponent(itemType, className, latLng);
+            this.threeLayer.addCube(latLng);
         });
     }
+
 }
+export { MapController };

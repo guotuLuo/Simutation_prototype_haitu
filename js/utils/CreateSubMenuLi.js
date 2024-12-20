@@ -1,3 +1,4 @@
+import { componentManager } from '../components/componentManager.js';
 function  createSubMenuLi(button, itemType, className){
     if(componentManager.instances.get(itemType).has(className)){
         alert("创建新项失败，请勿输入重名名称");
@@ -45,3 +46,4 @@ function  createSubMenuLi(button, itemType, className){
     submenu.appendChild(newItem);
     componentManager.addClassName(itemType, className);
 }
+export { createSubMenuLi };
