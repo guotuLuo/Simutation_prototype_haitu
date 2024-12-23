@@ -206,11 +206,12 @@ input, button, label {
     justify-content: space-between;
     align-items: center;
     transition: background-color 0.3s ease; /* 平滑的背景色变化 */
+    margin-bottom: 5px;
 }
 
 .toggle-icon {
-    width: 32px;
-    height: 32px;
+    width: 14px;
+    height: 14px;
     object-fit: contain;
     margin-right: 10px;  /* 将展开图标与文字之间的间距稍微增大 */
 }

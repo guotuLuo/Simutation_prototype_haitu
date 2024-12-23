@@ -8,7 +8,6 @@ class CloudInputDialog{
         const overlay = document.getElementById("overlay");
         const dialog = document.getElementById("cloudInputDialog");
         dialog.style.display = "none"; // 隐藏模态框
-        overlay.style.display = "none";
         // 关闭按钮点击事件
         closeDialogButton.addEventListener("click", () => {
             dialog.style.display = "none"; // 隐藏模态框

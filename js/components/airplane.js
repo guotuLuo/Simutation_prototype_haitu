@@ -414,4 +414,8 @@ class Airplane extends BaseComponent{
     getClassName() {
         return this.className;
     }
+
+    getId(){
+        return this.id;
+    }
 }

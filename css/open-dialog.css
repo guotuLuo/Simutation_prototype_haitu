@@ -6,6 +6,8 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
+    opacity: 0; /* 默认隐藏 */
+    visibility: hidden; /* 默认隐藏 */
     /*模糊背景的性能要求较高*/
     /*backdrop-filter: blur(1px);*/
     z-index: 1900;  /* 确保在页面内容上面 */
@@ -13,6 +15,7 @@
 
 /* 遮罩层打开时 */
 .overlay.open {
+    display: block; /* 显示时设置为块元素 */
     opacity: 1;
     visibility: visible;  /* 显示遮罩层 */
 }

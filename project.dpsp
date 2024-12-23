@@ -1,12 +1,40 @@
 <project-root>
     <information>
         <name>undefined.dpsp</name>
-        <id>a444e5c1-6f4f-4a65-adb9-2ea7be2c716e</id>
+        <id>89950629-4c89-476e-9e70-b64526140342</id>
     </information>
-    <components/>
-    <scene/>
+    <components>
+        <radar  name="ww" id="radar1237dab8-ef7a-433a-bdc0-e30429782d14"/>
+        <object  name="dd" id="objectaf3bbaae-3d30-4e17-bdda-e14be4a47035"/>
+        <reconnoissance  name="aa" id="reconnoissancef738076d-4ca0-48fa-9ada-4cdaf6d5cb93"/>
+        <jamming  name="ss" id="jamming9c7c476d-4dbe-4ef7-a4ea-5f0d260810ea"/>
+    </components>
+    <scene>
+        <item  posx="36.14102279228405" posy="103.79196166992189" type="radar" id="ww1"/>
+        <item  posx="36.144349007513064" posy="103.96911621093751" type="radar" id="ww5"/>
+        <item  posx="35.97675451942144" posy="103.57498168945312" type="object" id="dd3"/>
+        <item  posx="36.01674322294258" posy="104.00344848632814" type="object" id="dd7"/>
+        <item  posx="36.09776916271685" posy="104.20394897460939" type="reconnoissance" id="aa2"/>
+        <item  posx="36.0811268075485" posy="103.50357055664064" type="reconnoissance" id="aa6"/>
+        <item  posx="35.802122496414185" posy="103.86199951171876" type="jamming" id="ss4"/>
+        <item  posx="35.86668109326021" posy="103.99658203125001" type="jamming" id="ss8"/>
+    </scene>
     <param>
-        <envi  proto_num="0" clutter_type="0" thread_num="1" timer_clkrate="1000" ssc_root="" type="SDP_RCT_SEA" ip="127.0.0.1" clutter_model="0" time_scalar="1000" Origin="(35.8617,104.1954)" clutter_grade="1" refresh="100"/>
-        <proto/>
+        <envi  proto_num="8" clutter_type="0" thread_num="1" timer_clkrate="1000" ssc_root="" type="SDP_RCT_SEA" ip="127.0.0.1" clutter_model="0" time_scalar="1000" Origin="(35.8617,104.1954)" clutter_grade="1" refresh="100"/>
+        <proto>
+            <item  type_name="radar" ipoint="1" rcs="1000" model="dgn" pos="(36.14102, 103.79196)" proto_boot_delay="0" proto_use="1" rcs_file="null" acceleration="0" speed="0" type="SYS_PROTO_RADAR" identity="2" nBatch="1" name="ww1" status="0" band1="null"/>
+            <item  type_name="radar" ipoint="1" rcs="1000" model="dgn" pos="(36.14435, 103.96912)" proto_boot_delay="0" proto_use="1" rcs_file="null" acceleration="0" speed="0" type="SYS_PROTO_RADAR" identity="3" nBatch="5" name="ww5" status="0" band1=""/>
+            <item  type_name="object" ipoint="7" rcs="1000" model="dgn" pos="(35.97675, 103.57498);(35.8422, 103.564);(35.85555, 103.43353);(35.84665, 103.68896);(35.7141, 103.66425);(35.69738, 103.49533);(35.69738, 103.80707)" proto_boot_delay="0" proto_use="0" rcs_file="null" acceleration="0" speed="300" type="SYS_PROTO_TARGET" identity="1" nBatch="3" name="dd3" status="0" band1=""/>
+            <item  type_name="object" ipoint="6" rcs="1000" model="dgn" pos="(36.01674, 104.00345);(36.08889, 104.08997);(36.22192, 104.12704);(36.14878, 104.366);(36.02563, 104.41956);(35.94786, 104.16138)" proto_boot_delay="0" proto_use="0" rcs_file="null" acceleration="0" speed="1500" type="SYS_PROTO_TARGET" identity="2" nBatch="7" name="dd7" status="0" band1=""/>
+            <item  type_name="reconnoissance" ipoint="1" rcs="300" model="dgn" pos="(36.09777, 104.20395)" proto_boot_delay="0" proto_use="2" rcs_file="null" acceleration="0" speed="300" type="SYS_PROTO_ECM" identity="2" nBatch="2" name="aa2" status="0" band1="0 1 2"/>
+            <item  type_name="reconnoissance" ipoint="1" rcs="1000" model="dgn" pos="(36.08113, 103.50357)" proto_boot_delay="0" proto_use="2" rcs_file="null" acceleration="0" speed="300" type="SYS_PROTO_ECM" identity="2" nBatch="6" name="aa6" status="0" band1="null"/>
+            <item  type_name="jamming" ipoint="1" rcs="1000" model="dgn" pos="(35.80212, 103.86200)" proto_boot_delay="0" proto_use="3" rcs_file="null" acceleration="0" speed="0" type="SYS_PROTO_JAM" identity="2" nBatch="4" name="ss4" status="0" band1="null"/>
+            <item  type_name="jamming" ipoint="1" rcs="1000" model="dgn" pos="(35.86668, 103.99658)" proto_boot_delay="0" proto_use="3" rcs_file="null" acceleration="0" speed="0" type="SYS_PROTO_JAM" identity="2" nBatch="8" name="ss8" status="0" band1="null"/>
+        </proto>
     </param>
 </project-root>
+
+
+
+
+

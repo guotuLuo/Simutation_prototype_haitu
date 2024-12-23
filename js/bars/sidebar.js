@@ -34,7 +34,7 @@ class Sidebar {
                 const content = button.parentNode.nextElementSibling; // .section-content
                 if (content) {
                     // Toggle display
-                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+                    content.style.display = content.style.display === 'none' ? 'block' : 'none';
                     // Toggle icon
                     const icon = button.querySelector('.toggle-icon');  // 在点击的按钮上查找图标
                     if (icon) {  // 确保图标存在
@@ -164,13 +164,13 @@ class Sidebar {
     }
 
     showFlightInfo(selectComponent){
-        document.getElementById('flight-number').textContent = 'MU6985';
-        document.getElementById('airline-name').textContent = '中国东方航空';
-        document.getElementById('altitude').textContent = '10698.00 m';
-        document.getElementById('latitude').textContent = '10698.00 m';
-        document.getElementById('longitude').textContent = '10698.00 m';
-        document.getElementById('speed').textContent = '1000.00 km/h';
-        document.getElementById('direction').textContent = '7064 km';
+        document.getElementById('flight-number').textContent = 'id: ' + selectComponent.getId().substring(0, 8);
+        document.getElementById('airline-name').textContent = 'name: ' + selectComponent.getName();
+        document.getElementById('altitude').textContent = selectComponent.getAlt();
+        document.getElementById('latitude').textContent = selectComponent.getLat();
+        document.getElementById('longitude').textContent = selectComponent.getLng();
+        document.getElementById('speed').textContent = selectComponent.getSpeed();
+        document.getElementById('direction').textContent = '0';
 
         // 显示图表
         PaintChart();

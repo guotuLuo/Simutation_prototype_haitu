@@ -2,8 +2,9 @@ function PaintChart() {
     const chart = echarts.init(document.getElementById('chart'));
     // 获取父容器宽度
     // 获取父容器宽度
-    const parentWidth = document.getElementById('chart').style.width;
-    chart.resize({ width: parentWidth });
+    // const parentWidth = document.getElementById('chart').style.width;
+    // console.log(parentWidth);
+    // chart.resize({ width: parentWidth });
     // 设置图表宽度为父容器宽度
     const option = {
         tooltip: {

@@ -26,6 +26,7 @@ class OpenDialog{
         };
 
         // 显示弹窗和遮罩层
+        overlay.classList.add('open');
         overlay.style.display = "block";
         dialog.style.display = "block";
 
